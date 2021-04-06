@@ -5,11 +5,9 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView
 )
 from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
-# from .serializers import PublicUserSerializer, UserSerializer
+from users.serializers import CustomUserSerializer
 from users.models import CustomUser
 from common.functions import get_cookie
-
-# Authenticated View
 
 
 class CustomTokenObtainPairView(TokenObtainPairView):
@@ -79,7 +77,7 @@ class CustomTokenRefreshView(TokenRefreshView):
 class LogoutView(generics.RetrieveAPIView):
 
     queryset = CustomUser.objects.all()
-    serializer_class = UserSerializer
+    serializer_class = CustomUserSerializer
 
     def get(self, request, *args, **kwargs):
         auth_response = response.Response(status=status.HTTP_200_OK)
@@ -87,3 +85,33 @@ class LogoutView(generics.RetrieveAPIView):
         auth_response.delete_cookie("refresh_token")
         auth_response.delete_cookie("user_id")
         return auth_response
+
+
+class SignupView(generics.CreateAPIView):
+
+    queryset = CustomUser.objects.all()
+    serializer_class = CustomUserSerializer
+
+    def post(self, request):
+        try:
+            post_data = request.data
+            first_name = post_data['first_name']
+            email = post_data['email']
+            username = email
+            password = post_data['password']
+            password_confirm = post_data['passwordConfirm']
+            if(password != password_confirm):
+                return response.Response(status=400, data='password confirm not match')
+            if(CustomUser.objects.filter(email=email).exists()):
+                return response.Response(status=400, data='email already used')
+            new_object = CustomUser(
+                username=username,
+                first_name=first_name,
+                last_name="",
+                email=email,
+            )
+            new_object.set_password(password)
+            new_object.save()
+            return response.Response(status=201, data="Signed Up Successfully!")
+        except Exception:
+            return response.Response(status=500, data="Internal Server Error")
