@@ -1,5 +1,6 @@
 from django.core.checks.messages import DEBUG
-from rest_framework import response, generics, status
+from rest_framework import generics, status
+from rest_framework.response import Response
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView
@@ -22,7 +23,7 @@ class CustomTokenObtainPairView(TokenObtainPairView):
         except TokenError as e:
             raise InvalidToken(e.args[0])
 
-        auth_response = response.Response(
+        auth_response = Response(
             data={"user_id": user_id}, status=status.HTTP_200_OK)
 
         max_age_1day = 24*60*60
@@ -58,7 +59,7 @@ class CustomTokenRefreshView(TokenRefreshView):
         except TokenError as e:
             raise InvalidToken(e.args[0])
 
-        auth_response = response.Response(
+        auth_response = Response(
             serializer.validated_data, status=status.HTTP_200_OK)
 
         # max_age = 365 * 24 * 60 * 60
@@ -80,7 +81,7 @@ class LogoutView(generics.RetrieveAPIView):
     serializer_class = CustomUserSerializer
 
     def get(self, request, *args, **kwargs):
-        auth_response = response.Response(status=status.HTTP_200_OK)
+        auth_response = Response(status=status.HTTP_200_OK)
         auth_response.delete_cookie("access_token")
         auth_response.delete_cookie("refresh_token")
         auth_response.delete_cookie("user_id")
@@ -101,9 +102,9 @@ class SignupView(generics.CreateAPIView):
             password = post_data['password']
             password_confirm = post_data['passwordConfirm']
             if(password != password_confirm):
-                return response.Response(status=400, data='password confirm not match')
+                return Response(status=400, data='password confirm not match')
             if(CustomUser.objects.filter(email=email).exists()):
-                return response.Response(status=400, data='email already used')
+                return Response(status=400, data='email already used')
             new_object = CustomUser(
                 username=username,
                 first_name=first_name,
@@ -112,6 +113,6 @@ class SignupView(generics.CreateAPIView):
             )
             new_object.set_password(password)
             new_object.save()
-            return response.Response(status=201, data="Signed Up Successfully!")
+            return Response(status=201, data="Signed Up Successfully!")
         except Exception:
-            return response.Response(status=500, data="Internal Server Error")
+            return Response(status=500, data="Internal Server Error")

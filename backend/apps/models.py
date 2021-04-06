@@ -1,13 +1,12 @@
 from django.db import models
 from users.models import CustomUser
-from apps.functions import upload_to, validate_file_extension
+from apps.functions import upload_to
 
 
-class MyApp(models.Model):
+class App(models.Model):
 
     name = models.CharField(max_length=50)
     description = models.TextField(max_length=300)
-    app = models.FileField(upload_to=upload_to, validators=[
-                           validate_file_extension])
+    app = models.FileField(upload_to=upload_to)
     created = models.ForeignKey(CustomUser, related_name='myapp')
     exports = models.IntegerField(default=0)

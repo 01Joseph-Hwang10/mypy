@@ -1,10 +1,10 @@
 from rest_framework.serializers import PrimaryKeyRelatedField, HyperlinkedModelSerializer
 from rest_framework import serializers
-from apps.models import MyApp
+from apps.models import App
 from apps.functions import validate_file_extension
 
 
-class MyAppSerializer(HyperlinkedModelSerializer):
+class AppSerializer(HyperlinkedModelSerializer):
 
     name = serializers.CharField(max_length=50)
     description = serializers.CharField(max_length=300)
@@ -13,5 +13,5 @@ class MyAppSerializer(HyperlinkedModelSerializer):
     app = serializers.FileField(validators=[validate_file_extension])
 
     class Meta:
-        model = MyApp
+        model = App
         fields = '__all__'
