@@ -28,5 +28,6 @@ class CreateAppView(generics.CreateAPIView):
             exports = 0
             with zipfile.ZipFile(app_source, 'r') as zip_ref:  # r, w, a, x
                 zip_ref.extractall(os.path.join(MEDIA_ROOT, f'{user_id}/'))
+            return Response(status=201)
         except Exception:
             return Response(status=400, data='Failed creating app')

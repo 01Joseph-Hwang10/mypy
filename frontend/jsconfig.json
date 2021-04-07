@@ -14,8 +14,9 @@
           "@pages/*":["pages/*"],
           "@styles/*":["styles/*"],
           "@redux/*":["redux/*"],
+          "@slices/*":["redux/slices/*"],
           "@actions/*":["redux/actions/*"],
-          "@reducers/*":["redux/reducers/*"],
+          "@src/*":["src/*"],
       }
     }
   }

@@ -15,6 +15,7 @@ from datetime import timedelta
 
 from pathlib import Path
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -45,7 +46,7 @@ DJANGO_APPS = [
 PROJECT_APPS = [
     'common.apps.CommonConfig',
     'apps.apps.AppsConfig',
-    'auth.apps.AuthConfig',
+    'authentication.apps.AuthenticationConfig',
     'mail.apps.MailConfig',
     'users.apps.UsersConfig',
 ]
