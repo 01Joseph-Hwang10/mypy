@@ -1,22 +1,25 @@
 import { createApp } from '@slices/craete-app';
-import doCreateApp from '@actions/doCreateApp';
+import createAppDataForm from '@form/createAppDataForm';
 import { connect } from 'react-redux';
 
 function create({ 
     createApp
  }) {
-     console.log(createApp)
+
+    const createAppSubmit = (e) => {
+        e.preventDefault();
+        const postData = createAppDataForm(e)
+        createApp(postData);
+    }
+
     return (
         <div>
-            <form onSubmit={(e) => {
-                e.preventDefault();
-                doCreateApp(createApp);
-            }}>
+            <form onSubmit={createAppSubmit}>
                 <input id='name' placeholder='name' type='text' required />
                 <input id='description' placeholder='description' type='textarea' />
                 <input id='app' type='file' accept='.zip' required />
                 <button>Create</button>
-            </form>            
+            </form>
         </div>
     )
 }

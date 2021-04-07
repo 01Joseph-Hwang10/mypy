@@ -3,7 +3,7 @@ import axios from 'axios';
 import { CREATE_APP } from '@src/urls';
 
 export const createAppSlice = createSlice({
-    name: 'createAppReducer',
+    name: 'createAppSlice',
     initialState: {
         isSuccessful: false
     },
@@ -17,6 +17,7 @@ export const createAppSlice = createSlice({
 const { setIsSuccessful } = createAppSlice.actions
 
 export const createApp = (postData) => async dispatch => {
+    console.log(setIsSuccessful)
 
     axios
     .post(CREATE_APP, postData)

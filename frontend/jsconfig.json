@@ -15,7 +15,7 @@
           "@styles/*":["styles/*"],
           "@redux/*":["redux/*"],
           "@slices/*":["redux/slices/*"],
-          "@actions/*":["redux/actions/*"],
+          "@form/*":["redux/form/*"],
           "@src/*":["src/*"],
       }
     }
