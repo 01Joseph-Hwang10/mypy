@@ -17,10 +17,13 @@ export const createAppSlice = createSlice({
 const { setIsSuccessful } = createAppSlice.actions
 
 export const createApp = (postData) => async dispatch => {
-    console.log(setIsSuccessful)
 
     axios
-    .post(CREATE_APP, postData)
+    .post(CREATE_APP, postData, {
+        headers: { 
+            'Content-Type': 'multipart/form-data' ,
+        }
+    })
     .then(response => {
         console.log(response)
         dispatch(setIsSuccessful(true))

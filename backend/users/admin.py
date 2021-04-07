@@ -1,3 +1,10 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
+from users.models import CustomUser
+from apps.admin import AppInline
 
-# Register your models here.
+
+@admin.register(CustomUser)
+class CustomUserAdmin(UserAdmin):
+
+    inlines = (AppInline,)
