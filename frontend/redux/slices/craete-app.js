@@ -4,13 +4,28 @@ import { CREATE_APP } from '@src/urls';
 
 export const createAppSlice = createSlice({
     name: 'createAppReducer',
-    initialState: {},
-    reducers: {}
+    initialState: {
+        isSuccessful: false
+    },
+    reducers: {
+        setIsSuccessful: (state, action) => {
+            state.isSuccessful = action.payload
+        }
+    }
 })
 
+const { setIsSuccessful } = createAppSlice.actions
+
 export const createApp = (postData) => async dispatch => {
-    await axios
+
+    axios
     .post(CREATE_APP, postData)
-    .then(response => console.log(response.status))
-    .catch(error => console.error(error))
+    .then(response => {
+        console.log(response)
+        dispatch(setIsSuccessful(true))
+    })
+    .catch(error => {
+        console.error(error)
+        dispatch(setIsSuccessful(false))
+    })
 }

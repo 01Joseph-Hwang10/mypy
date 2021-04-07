@@ -10,7 +10,7 @@ class MyDocument extends Document {
     return (
       <Html>
         <Head />
-        <body onLoad={brython}>
+        <body onLoad='brython()'>
           <Main />
           <NextScript />
           <script type="text/javascript"
