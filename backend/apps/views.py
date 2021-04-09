@@ -3,10 +3,11 @@ import os
 import shutil
 from zipfile import ZipFile
 from apps.functions import extract_recursively
+from common.pagination import ThreeFigurePagination
 from rest_framework.parsers import MultiPartParser
 from common.functions import get_cookie
 from config.settings import MEDIA_ROOT, STATIC_ROOT
-from rest_framework import generics
+from rest_framework.generics import CreateAPIView, ListAPIView, DestroyAPIView, UpdateAPIView
 from rest_framework.response import Response
 from apps.models import App
 from apps.serializers import AppSerializer
@@ -14,7 +15,7 @@ from users.models import CustomUser
 from apps.models import App
 
 
-class CreateAppView(generics.CreateAPIView):
+class CreateAppView(CreateAPIView):
 
     queryset = App.objects.all()
     serializer_class = AppSerializer
@@ -53,7 +54,42 @@ class CreateAppView(generics.CreateAPIView):
             return Response(status=400, data='Failed creating app')
 
 
-# ListAppView
-# RetrieveAppView
-# UpdateAppView
-# DeleteAppView
+class ListAppView(ListAPIView):
+
+    queryset = App.objects.all().order_by('-updated')
+    serializer_class = AppSerializer
+    pagination_class = ThreeFigurePagination
+
+
+class RetrieveAppView(CreateAPIView):
+
+    queryset = App.objects.all()
+    serializer_class = AppSerializer
+
+    def post(self, request, *args, **kwargs):
+
+        # Send the app file
+        return Response(status=200, data='app successfully retrieved')
+
+
+class UpdateAppView(UpdateAPIView):
+
+    queryset = App.objects.all()
+    serializer_class = AppSerializer
+
+    def patch(self, request, *args, **kwargs):
+
+        # Partial update
+        return Response(status=200, data='app successfully updated')
+
+
+class DeleteAppView(DestroyAPIView):
+
+    queryset = App.objects.all()
+    serializer_class = AppSerializer
+
+    def delete(self, request, *args, **kwargs):
+
+        # Delete every source of app
+        self.destroy(request, *args, **kwargs)
+        return Response(status=200, data='app successfully deleted')

@@ -8,8 +8,8 @@ export const createAppSlice = createSlice({
         isSuccessful: false
     },
     reducers: {
-        setIsSuccessful: (state, action) => {
-            state.isSuccessful = action.payload
+        setIsSuccessful: ({ isSuccessful }, { payload }) => {
+            isSuccessful = payload
         }
     }
 })

@@ -1,3 +1,4 @@
+import AppList from '@components/AppList';
 import Link from 'next/link';
 
 export default function Home() {
@@ -16,6 +17,7 @@ export default function Home() {
       </header>
       <section>
         <Link href='/create'>Create new app</Link>
+        <AppList />
       </section>
     </div>
   )
