@@ -1,55 +1,66 @@
-import React, { Component } from 'react'
+import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
-import { listApp } from '@slices/list-app'
+import { 
+    listApp,
+    loadListSuccessful,
+    loadListError,
+    loading
+} from '@slices/list-app'
+import AppCard from '@components/AppCard'
 
-class AppList extends Component {
+function AppList({
+    isLoading: IsLoading,
+    appList: AppList,
+    loadListSuccessful: LoadListSuccessful,
+    loadListError: LoadListError,
+    loading: Loading,
+    errorMessage: ErrorMessage,
+    isSuccessful: IsSuccessful,
+}) {
 
-    componentDidMount() {
-        const { axiosApp } = this.props
-        axiosApp()
+    const axiosAppList = async () => {
+        Loading();
+        const { ok, data } = await listApp();
+        if(ok) {
+            LoadListSuccessful(data);
+        } else {
+            LoadListError(data);
+        }
     }
 
-    render() {
+    useEffect(() => {
+        axiosAppList();
+    }, [])
 
-        const { appList, isLoading } = this.props
-
-        return (
-            <div>
-                {
-                    !isLoading 
-                    ? 
-                    <div>
-                        {
-                            appList.map(app => {
-                                return (
-                                    <AppList>
-                                        {app.name}
-                                    </AppList>
-                                )
-                            })
-                        }
-                    </div> 
-                    : 
-                    <div>Loading...</div>
-                }
-            </div>
-        )
+    if (IsLoading || !AppList) {
+        return <div>Loading...</div>
     }
+    if (IsSuccessful && AppList.length === 0) return <div>No data found</div>
+    if (!IsSuccessful) return <div>{ErrorMessage}</div>
+    return (
+        AppList.map(app => (
+            <AppCard key={app.id} {...app}>
+                {app.name}
+            </AppCard>
+        ))
+    )
 }
-
 
 const mapStateToProps = state => {
     return {
         appList: state.listApp.appList,
         isSuccessful: state.listApp.isSuccessful,
-        isLoading: state.listApp.loading
+        isLoading: state.listApp.loading,
+        errorMessage: state.listApp.errorMessage
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        axiosApp: () => dispatch(listApp())
-    }
+        loadListSuccessful: (appList) => dispatch(loadListSuccessful(appList)),
+        loadListError: (error) => dispatch(loadListError(error)),
+        loading: () => dispatch(loading()),
+    }   
 }
 
 

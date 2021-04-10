@@ -3,13 +3,20 @@ import createAppDataForm from '@form/createAppDataForm';
 import { connect } from 'react-redux';
 
 function create({ 
-    createApp
+    loading: Loading,
+    setIsSuccessful: SetIsSuccessful
  }) {
 
-    const createAppSubmit = (e) => {
+    const createAppSubmit = async (e) => {
         e.preventDefault();
-        const postData = createAppDataForm(e)
-        createApp(postData);
+        Loading();
+        const postData = createAppDataForm(e);
+        const status = await createApp(postData);
+        if (status) {
+            SetIsSuccessful(true);
+        } else {
+            SetIsSuccessful(false);
+        }
     }
 
     return (
@@ -24,4 +31,11 @@ function create({
     )
 }
 
-export default connect(null,{ createApp })(create);
+const mapDispatchToProps = (dispatch) => {
+    return {
+        loading: () => dispatch(loading()),
+        setIsSuccessful: (bool) => dispatch(setIsSuccessful(bool)),
+    }
+}
+
+export default connect(null,mapDispatchToProps)(create);

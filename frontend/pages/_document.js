@@ -1,3 +1,4 @@
+import NavBar from '@components/NavBar'
 import Document, { Html, Head, Main, NextScript } from 'next/document'
 
 class MyDocument extends Document {
@@ -10,12 +11,10 @@ class MyDocument extends Document {
     return (
       <Html>
         <Head />
-        <body onLoad='brython()'>
+        <body>
+          <NavBar />
           <Main />
           <NextScript />
-          <script type="text/javascript"
-            src="https://cdn.jsdelivr.net/npm/brython@3.9.1/brython.min.js">
-          </script>
         </body>
       </Html>
     )

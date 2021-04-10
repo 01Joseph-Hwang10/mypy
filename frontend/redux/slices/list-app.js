@@ -8,38 +8,49 @@ export const listAppSlice = createSlice({
     initialState: {
         isSuccessful: false,
         appList: [],
-        loading: true
+        loading: true,
+        errorMessage: null
     },
     reducers: {
-        loadListSuccessful: ({ isSuccessful, loading, appList }, { payload }) => {
-            appList = payload;
-            isSuccessful = true;
-            loading = false;
+        loadListSuccessful: ( state, { payload }) => {
+            state.appList = payload
+            state.isSuccessful = true
+            state.loading = false
         },
-        loadListError: ({ isSuccessful, loading }) => {
-            isSuccessful = false;
-            loading = false;
+        loadListError: ( state, { payload }) => {
+            state.isSuccessful = false
+            state.loading = False
+            state.errorMessage = payload
         },
-        loading: ({ loading }) => {
-            loading = true;
+        loading: (state) => {
+            state.loading = false
         }
     }
 })
 
-const { loadListSuccessful, loadListError, loading } = listAppSlice.actions;
+export const { 
+    loadListSuccessful, 
+    loadListError, 
+    loading 
+} = listAppSlice.actions;
 
-export const listApp = () => dispatch => {
+export const listApp = async () => {
 
-    dispatch(loading())
-
-    axios
-    .get(LIST_APP)
-    .then(response => {
-        const appList = response.data.results
-        dispatch(loadListSuccessful(appList))
-    })
-    .catch(error => {
-        console.error(error)
-        dispatch(loadListError())
-    })
+    try {
+        const { 
+            data: { 
+                results 
+            } 
+        } = await axios.get(LIST_APP);
+        return {
+            ok: true,
+            data: results
+        }
+    } catch (error) {
+        console.error(error);
+        return {
+            ok: false,
+            data: error.message
+        };
+    }
 }

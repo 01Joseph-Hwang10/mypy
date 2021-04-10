@@ -17,6 +17,7 @@
           "@slices/*":["redux/slices/*"],
           "@form/*":["redux/form/*"],
           "@src/*":["src/*"],
+          "@hooks/*":["hooks/*"],
       }
     }
   }

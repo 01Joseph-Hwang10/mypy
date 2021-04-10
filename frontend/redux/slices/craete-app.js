@@ -5,31 +5,31 @@ import { CREATE_APP } from '@src/urls';
 export const createAppSlice = createSlice({
     name: 'createAppSlice',
     initialState: {
-        isSuccessful: false
+        isSuccessful: false,
+        loading: false,
     },
     reducers: {
-        setIsSuccessful: ({ isSuccessful }, { payload }) => {
-            isSuccessful = payload
+        setIsSuccessful: (state, { payload }) => {
+            state.isSuccessful = payload
+            state.loading = false
+        },
+        loading: (state) => {
+            state.loading = true
         }
     }
 })
 
-const { setIsSuccessful } = createAppSlice.actions
+export const { setIsSuccessful, loading } = createAppSlice.actions
 
-export const createApp = (postData) => async dispatch => {
+export const createApp = async (postData) => {
 
-    axios
+    const { status } = await axios
     .post(CREATE_APP, postData, {
         headers: { 
             'Content-Type': 'multipart/form-data' ,
         }
     })
-    .then(response => {
-        console.log(response)
-        dispatch(setIsSuccessful(true))
-    })
-    .catch(error => {
-        console.error(error)
-        dispatch(setIsSuccessful(false))
-    })
+    
+    if (status === 201) return true
+    return false
 }

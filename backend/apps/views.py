@@ -1,6 +1,7 @@
 import zipapp
 import os
 import shutil
+import runpy
 from zipfile import ZipFile
 from apps.functions import extract_recursively
 from common.pagination import ThreeFigurePagination
@@ -61,14 +62,20 @@ class ListAppView(ListAPIView):
     pagination_class = ThreeFigurePagination
 
 
-class RetrieveAppView(CreateAPIView):
+class ExecuteAppView(CreateAPIView):
 
     queryset = App.objects.all()
     serializer_class = AppSerializer
 
     def post(self, request, *args, **kwargs):
 
-        # Send the app file
+        post_data = request.data
+        app_path = post_data['app']
+        runpy.run_path(app_path)
+        # What you need to do:
+        # Convert print as return
+        # Convert input as input in frontend
+        # Mock FileSyste
         return Response(status=200, data='app successfully retrieved')
 
 
