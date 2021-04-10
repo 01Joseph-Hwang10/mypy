@@ -5,19 +5,18 @@ import { listApp } from '@slices/list-app'
 class AppList extends Component {
 
     componentDidMount() {
-        const { listApp } = this.props
-        listApp()
+        const { axiosApp } = this.props
+        axiosApp()
     }
 
     render() {
 
-        const { appList } = this.props
-        const isLoaded = appList.length > 0
+        const { appList, isLoading } = this.props
 
         return (
             <div>
                 {
-                    isLoaded 
+                    !isLoading 
                     ? 
                     <div>
                         {
@@ -42,12 +41,15 @@ class AppList extends Component {
 const mapStateToProps = state => {
     return {
         appList: state.listApp.appList,
-        isSuccessful: state.listApp.isSuccessful
+        isSuccessful: state.listApp.isSuccessful,
+        isLoading: state.listApp.loading
     }
 }
 
-const mapDispatchToProps = {
-    listApp,
+const mapDispatchToProps = dispatch => {
+    return {
+        axiosApp: () => dispatch(listApp())
+    }
 }
 
 

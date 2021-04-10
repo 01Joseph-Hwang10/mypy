@@ -7,27 +7,34 @@ export const listAppSlice = createSlice({
     name:' listAppSlice',
     initialState: {
         isSuccessful: false,
-        appList: []
+        appList: [],
+        loading: true
     },
     reducers: {
-        loadListSuccessful: ({ isSuccessful, appList }, { payload }) => {
+        loadListSuccessful: ({ isSuccessful, loading, appList }, { payload }) => {
             appList = payload;
             isSuccessful = true;
+            loading = false;
         },
-        loadListError: ({ isSuccessful }) => {
-            isSuccessful = false
+        loadListError: ({ isSuccessful, loading }) => {
+            isSuccessful = false;
+            loading = false;
+        },
+        loading: ({ loading }) => {
+            loading = true;
         }
     }
 })
 
-const { loadListSuccessful, loadListError } = listAppSlice.actions;
+const { loadListSuccessful, loadListError, loading } = listAppSlice.actions;
 
-export const listApp = () => async dispatch => {
+export const listApp = () => dispatch => {
+
+    dispatch(loading())
 
     axios
     .get(LIST_APP)
     .then(response => {
-        console.log(response)
         const appList = response.data.results
         dispatch(loadListSuccessful(appList))
     })
