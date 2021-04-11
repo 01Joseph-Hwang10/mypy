@@ -10,6 +10,7 @@ export default function Home() {
       </header>
       <section>
         <Link href='/create'>Create new app</Link>
+        <br></br>
         <AppList />
       </section>
     </div>
