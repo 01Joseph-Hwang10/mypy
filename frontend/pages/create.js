@@ -5,7 +5,10 @@ import { loading, setIsSuccessful } from '@slices/craete-app';
 
 function create({ 
     loading: Loading,
-    setIsSuccessful: SetIsSuccessful
+    setIsSuccessful: SetIsSuccessful,
+    isLoading: IsLoading,
+    isSuccessful: IsSuccessful,
+    isFirstTime: IsFirstTime
  }) {
 
     const createAppSubmit = async (e) => {
@@ -28,9 +31,38 @@ function create({
                 <input id='app' type='file' accept='.zip' required />
                 <button>Create</button>
             </form>
+            { IsFirstTime ? (<></>) : (
+                <>
+                {
+                    IsLoading ? (
+                        <div>Creating the app...</div>
+                    ) : (
+                        <>
+                        {
+                            IsSuccessful ? (
+                                <div>App successfully created</div>
+                            ) : (
+                                <div>App creation failed</div>
+                            )
+                        }
+                        </>
+                    )
+                }
+                </>
+            ) }
         </div>
     )
 }
+
+
+const mapStateToProps = (state) => {
+    return {
+        isLoading: state.createApp.loading,
+        isSuccessful: state.createApp.isSuccessful,
+        isFirstTime: state.createApp.isFirstTime,
+    }
+}
+
 
 const mapDispatchToProps = (dispatch) => {
     return {
@@ -39,4 +71,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(null,mapDispatchToProps)(create);
+export default connect(mapStateToProps,mapDispatchToProps)(create);

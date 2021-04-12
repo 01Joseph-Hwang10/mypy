@@ -7,14 +7,17 @@ export const createAppSlice = createSlice({
     initialState: {
         isSuccessful: false,
         loading: false,
+        isFirstTime: true
     },
     reducers: {
         setIsSuccessful: (state, { payload }) => {
             state.isSuccessful = payload
             state.loading = false
+            state.firstTime = false
         },
         loading: (state) => {
             state.loading = true
+            state.firstTime = false
         }
     }
 })

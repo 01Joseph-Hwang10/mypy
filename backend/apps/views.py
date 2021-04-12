@@ -6,7 +6,7 @@ from zipfile import ZipFile
 from apps.functions import extract_recursively
 from common.pagination import ThreeFigurePagination
 from rest_framework.parsers import MultiPartParser
-from common.functions import get_cookie
+# from common.functions import get_cookie
 from config.settings import MEDIA_ROOT, STATIC_ROOT
 from rest_framework.generics import CreateAPIView, ListAPIView, DestroyAPIView, UpdateAPIView
 from rest_framework.response import Response
@@ -26,7 +26,6 @@ class CreateAppView(CreateAPIView):
         try:
             # cookie = get_cookie(request)
             # user_id = cookie['user_id']
-            # post_data = request.data
             new_id = len(list(self.get_queryset())) + 1
             save_directory = os.path.join(MEDIA_ROOT, f'{new_id}/')
             post_data = request.data
@@ -47,8 +46,10 @@ class CreateAppView(CreateAPIView):
                 if item[-3] + item[-2] + item[-1] == '.py':
                     py_dirs.append(item)
             # Things to compile:
-            # print -> as log
             # input -> as input **IMPORTANT**
+            # Convert input as form input in frontend
+            # print -> as log
+            # Convert print as value for log
             zipapp.create_archive(root_directory)
             shutil.rmtree(root_directory)
             app = os.path.join(save_directory, f'{root_name}.pyz')
@@ -81,12 +82,13 @@ class ExecuteAppView(CreateAPIView):
         try:
             post_data = request.data
             app_path = post_data['app']
+            variables = post_data['variables']
             app_run = runpy.run_path(app_path)
+            app_run['set_sys_args'] = variables
             result = app_run['main']()
             # What you need to do:
-            # Convert print as return
-            # Convert input as input in frontend
-            # Mock FileSystem
+            # Mock static fileSystem
+            # Check if sys.argv is shared among apps uploaded
             return Response(status=200, data=result)
         except Exception:
             # Delete all files uploaded
