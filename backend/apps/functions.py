@@ -1,4 +1,5 @@
 import os
+from re import search, compile, findall
 from django.core.exceptions import ValidationError
 
 
@@ -24,3 +25,16 @@ def extract_recursively(basename, namelist, interface, save_directory):
                 extract_recursively(folder.name, new_namelist, interface)
         else:
             interface.extract(full_name, save_directory + basename)
+
+
+def input_to_dict(codeline):
+
+    count = len(compile('input(*)', codeline))
+    if count == 0:
+        return False
+
+
+def replace_with_appropriates(codeline):
+
+    has_input = False
+    # need has_print for logger

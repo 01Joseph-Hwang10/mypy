@@ -21,6 +21,14 @@
 # ( e.g. sys.argv['your_var_key'] = your_var_value )
 # ( e.g. sys.argv['your_sys_argv_list'] = ['var1','var2','var3','var4'] )
 # ( e.g. sys.argv['your_sys_argv_dict'] = { 'key1': 'value1', 'key2': 'value2' } )
+# 6. If your app receives input and assigns it as variable, please use one of the code formats like below
+# ( e.g. var1 = input('Please give the input name var1: ') )
+# ( e.g. var2 = int(input('Please give the input name var2[Integer]: ')) )
+# ( e.g. var3 = float(input('Please give the input name var3[Float]: ')) )
+# Types of following are available as input: str, int, float, complex, list, tuple, range, dict, set, frozenset, bool
+# bytes, bytearray, memoryview
+# Also, don't use input function repeatedly. For example,
+# while True: var=input('Give the input please: '); if some_expression: break;
 
 import sys
 from index import main

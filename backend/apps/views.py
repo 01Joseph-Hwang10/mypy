@@ -45,6 +45,12 @@ class CreateAppView(CreateAPIView):
             for item in dirs:
                 if item[-3] + item[-2] + item[-1] == '.py':
                     py_dirs.append(item)
+            for file_path in py_dirs:
+                with open(file_path, 'r') as f:
+                    codelines = f.readlines()
+                codelines = [codeline[:-1] for codeline in codelines]
+                for codeline in codelines:
+                    pass
             # Things to compile:
             # input -> as input **IMPORTANT**
             # Convert input as form input in frontend
@@ -84,7 +90,7 @@ class ExecuteAppView(CreateAPIView):
             app_path = post_data['app']
             variables = post_data['variables']
             app_run = runpy.run_path(app_path)
-            app_run['set_sys_args'] = variables
+            app_run['set_sys_args'](variables)
             result = app_run['main']()
             # What you need to do:
             # Mock static fileSystem
