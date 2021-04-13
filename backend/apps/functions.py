@@ -92,7 +92,7 @@ def input_to_sys_args(codeline):
                 input_paren_close_index.append(position)
 
     if len(input_paren_open_index) != len(input_paren_close_index):
-        raise Exception
+        raise SyntaxError
 
     input_start_index = [
         input_func_index[i] - 6 for i in range(len(input_func_index))
