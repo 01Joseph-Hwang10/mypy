@@ -26,9 +26,12 @@
 # ( e.g. var2 = int(input('Please give the input name var2[Integer]: ')) )
 # ( e.g. var3 = float(input('Please give the input name var3[Float]: ')) )
 # Types of following are available as input: str, int, float, complex, list, tuple, range, dict, set, frozenset, bool
-# bytes, bytearray, memoryview
+# bytes, bytearray, memoryview is not supported
 # Also, don't use input function repeatedly. For example,
-# while True: var=input('Give the input please: '); if some_expression: break;
+# while True:
+#   var=input('Give the input please: ')
+#   if some_expression:
+#       break
 
 import sys
 from index import main
@@ -36,4 +39,6 @@ from index import main
 
 def set_sys_args(sys_args):
 
-    sys.argv = sys_args
+    if sys.argv.length > 1:
+        sys.argv = [sys.argv[0]]
+    sys.argv.append(sys_args)
