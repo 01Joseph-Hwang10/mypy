@@ -3,7 +3,7 @@ import os
 import shutil
 import runpy
 from zipfile import ZipFile
-from apps.functions import extract_recursively
+from apps.functions import extract_recursively, input_to_sys_args
 from common.pagination import ThreeFigurePagination
 from rest_framework.parsers import MultiPartParser
 # from common.functions import get_cookie
@@ -50,7 +50,7 @@ class CreateAppView(CreateAPIView):
                     codelines = f.readlines()
                 codelines = [codeline[:-1] for codeline in codelines]
                 for codeline in codelines:
-                    pass
+                    _, converted = input_to_sys_args(codeline)
             # Things to compile:
             # input -> as input **IMPORTANT**
             # Convert input as form input in frontend
@@ -90,8 +90,7 @@ class ExecuteAppView(CreateAPIView):
             app_path = post_data['app']
             variables = post_data['variables']
             app_run = runpy.run_path(app_path)
-            app_run['set_sys_args'](variables)
-            result = app_run['main']()
+            result = app_run['execute'](variables)
             # What you need to do:
             # Mock static fileSystem
             # Check if sys.argv is shared among apps uploaded

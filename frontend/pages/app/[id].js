@@ -38,27 +38,15 @@ function AppDetail({
 
     return (
         <>
-        <Head>
-            <script src="https://cdn.jsdelivr.net/npm/brython@3.9.0/brython.min.js"></script>
-            <script src="https://cdn.jsdelivr.net/npm/brython@3.9.0/brython_stdlib.js"></script>
-        </Head>
         <div>
             <h2>{name}</h2>
             <h3>{description}</h3>
             <h3>Exports: {exports}</h3>
             <h4>Created by: {created}</h4>
             <button onClick={execute}>Run</button>
-            <section onLoad="brython()">
+            <section>
                 {Result}
             </section>
-            <script type='text/python'>
-                from runpy import run_module
-
-                app_run = run_module(app)
-                app_run['set_sys_args'](variables)
-                result = app_run['main']()
-                return result
-            </script>
         </div>
         </>
     )

@@ -37,8 +37,11 @@ import sys
 from index import main
 
 
-def set_sys_args(sys_args):
+def execute(sys_args):
 
     if sys.argv.length > 1:
         sys.argv = [sys.argv[0]]
     sys.argv.append(sys_args)
+
+    result = main()
+    return result
