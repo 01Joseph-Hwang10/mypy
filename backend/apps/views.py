@@ -117,21 +117,21 @@ class ExecuteAppView(CreateAPIView):
 
     def post(self, request, *args, **kwargs):
 
-        # try:
-        post_data = request.data
-        user_id = post_data['user_id']
-        app_path = post_data['app']
-        variables = post_data['variables']
-        app_run = runpy.run_path(app_path)
-        root_path = os.path.join(MEDIA_ROOT, f'{user_id}/')
-        result, log = app_run['execute'](variables, root_path)
-        # What you need to do:
-        # Mock static fileSystem
-        # Check if sys.argv is shared among apps uploaded -> They share one sys.argv
-        return Response(status=200, data={'result': result, 'log': log})
-        # except Exception:
-        # Delete all files uploaded
-        # return Response(status=500, data='Internal server error')
+        try:
+            post_data = request.data
+            user_id = post_data['user_id']
+            app_path = post_data['app']
+            variables = post_data['variables']
+            app_run = runpy.run_path(app_path)
+            root_path = os.path.join(MEDIA_ROOT, f'{user_id}/')
+            result, log = app_run['execute'](variables, root_path)
+            # What you need to do:
+            # Mock static fileSystem
+            # Check if sys.argv is shared among apps uploaded -> They share one sys.argv
+            return Response(status=200, data={'result': result, 'log': log})
+        except Exception:
+            # Delete all files uploaded
+            return Response(status=500, data='Internal server error')
 
 
 class UpdateAppView(UpdateAPIView):
@@ -152,8 +152,11 @@ class DeleteAppView(DestroyAPIView):
 
     def delete(self, request, *args, **kwargs):
 
-        # Delete every source of app
-        id = int(self.request.query_params.get('id'))
-        shutil.rmtree(os.path.join(MEDIA_ROOT, f'{id}/'))
-        self.destroy(request, *args, **kwargs)
-        return Response(status=200, data='app successfully deleted')
+        try:
+            # Delete every source of app
+            id = int(self.request.query_params.get('id'))
+            shutil.rmtree(os.path.join(MEDIA_ROOT, f'{id}/'))
+            self.destroy(request, *args, **kwargs)
+            return Response(status=200, data='app successfully deleted')
+        except Exception:
+            return Response(status=500, data='app deletation failed')
