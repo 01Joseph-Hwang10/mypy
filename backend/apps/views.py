@@ -56,13 +56,16 @@ class CreateAppView(CreateAPIView):
             # Convert input as form input in frontend
             # print -> as log
             # Convert print as value for log
-            zipapp.create_archive(root_directory)
-            shutil.rmtree(root_directory)
-            app = os.path.join(save_directory, f'{root_name}.pyz')
+            app_path = os.path.join(save_directory, f'{root_name}.zip')
+            with ZipFile(os.path.join(save_directory, app_path), 'w') as zf:
+                for folder, subfolders, files in os.walk(save_directory):
+                    for file in files:
+                        zf.write(os.path.join(folder, file), os.path.relpath(
+                            os.path.join(folder, file), save_directory))
             App.objects.create(
                 name=name,
                 description=description,
-                app=app,
+                app=app_path,
                 created=created,
             )
             return Response(status=201, data='Successfully created app')
