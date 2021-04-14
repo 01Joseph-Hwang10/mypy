@@ -62,9 +62,9 @@ def input_to_sys_args(codeline):
 
     for index in hash_index:
         new_single_quote_index = list(
-            filter(lambda x: x < index), single_quote_index)
+            filter(lambda x: x < index, single_quote_index))
         new_double_quote_index = list(
-            filter(lambda x: x < index), double_quote_index)
+            filter(lambda x: x < index, double_quote_index))
         if len(new_single_quote_index) % 2 == 0 or len(new_double_quote_index) % 2 == 0:
             new_codeline = codeline[:index]
             single_quote_index = new_single_quote_index
@@ -73,23 +73,31 @@ def input_to_sys_args(codeline):
 
     for index in input_paren_open_index:
         count_single_quote_index = len(
-            list(filter(lambda x: x < index), single_quote_index))
+            list(filter(lambda x: x < index, single_quote_index)))
         count_double_quote_index = len(
-            list(filter(lambda x: x < index), double_quote_index))
-        if count_single_quote_index % 2 == 0 or count_double_quote_index % 2 == 0:
+            list(filter(lambda x: x < index, double_quote_index)))
+        if (
+            count_single_quote_index and
+            count_double_quote_index
+        ) and (
+            count_single_quote_index % 2 == 0 or
+            count_double_quote_index % 2 == 0
+        ):
             input_func_index.append(index)
 
-    name = codeline[:equal_operator_index[0]].replace(' ', '')
+    if len(equal_operator_index) != 0:
+        name = codeline[:equal_operator_index[0]].replace(' ', '')
 
     for index in input_func_index:
         filtered_paren_close_index = list(
-            filter(lambda x: x > index), paren_close_index).sort()
-        for position in filtered_paren_close_index:
-            count_paren_close_index = position + 1
-            count_paren_open_index = len(
-                list(filter(lambda x: x < position), paren_open_index))
-            if count_paren_open_index + 1 == count_paren_close_index:
-                input_paren_close_index.append(position)
+            filter(lambda x: x > index, paren_close_index)).sort()
+        if filtered_paren_close_index:
+            for position in filtered_paren_close_index:
+                count_paren_close_index = position + 1
+                count_paren_open_index = len(
+                    list(filter(lambda x: x < position, paren_open_index)))
+                if count_paren_open_index + 1 == count_paren_close_index:
+                    input_paren_close_index.append(position)
 
     if len(input_paren_open_index) != len(input_paren_close_index):
         raise SyntaxError

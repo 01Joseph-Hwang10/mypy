@@ -3,41 +3,48 @@ import axios from 'axios';
 import { CREATE_APP } from '@src/urls';
 
 export const {
-    reducer,
-    actions: {
-        setIsSuccessful,
-        loading
-    }
-} = createSlice({
-    name: 'createAppSlice',
-    initialState: {
-        isSuccessful: false,
-        loading: false,
-        isFirstTime: true
-    },
-    reducers: {
-        setIsSuccessful: (state, { payload }) => {
-            state.isSuccessful = payload
-            state.loading = false
-            state.firstTime = false
-        },
-        loading: (state) => {
-            state.loading = true
-            state.firstTime = false
-        }
-    }
-})
+	reducer,
+	actions : {
+		createAppSuccessful,
+		createAppError,
+		loading,
+	},
+} = createSlice( {
+	name : 'createAppSlice',
+	initialState : {
+		isSuccessful : false,
+		loading : false,
+		isFirstTime : true,
+		error : null,
+	},
+	reducers : {
+		loading : ( state ) => {
+			state.loading = true;
+			state.firstTime = false;
+		},
+		createAppSuccessful : ( state ) => {
+			state.isSuccessful = true;
+			state.loading = false;
+			state.firstTime = false;
+		},
+		createAppError : ( state ) => {
+			state.isSuccessful = false;
+			state.loading = false;
+			state.firstTime = false;
+		},
+	},
+} );
 
 
-export const createApp = async (postData) => {
+export const createApp = async ( postData ) => {
 
-    const { status } = await axios
-    .post(CREATE_APP, postData, {
-        headers: { 
-            'Content-Type': 'multipart/form-data' ,
-        }
-    })
+	const { status, } = await axios
+		.post( CREATE_APP, postData, {
+			headers : { 
+				'Content-Type' : 'multipart/form-data',
+			},
+		} );
     
-    if (status === 201) return true
-    return false
-}
+	if ( status === 201 ) return true;
+	return false;
+};

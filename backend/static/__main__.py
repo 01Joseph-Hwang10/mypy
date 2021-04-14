@@ -34,14 +34,25 @@
 #       break
 
 import sys
+import os
 from index import main
 
 
-def execute(sys_args):
+def execute(sys_args, log_path):
 
-    if sys.argv.length > 1:
-        sys.argv = [sys.argv[0]]
-    sys.argv.append(sys_args)
+    log_file_path = os.path.join(log_path, 'log.txt')
 
-    result = main()
-    return result
+    with open(log_file_path, 'w') as f:
+        sys.stdout = f
+        if len(sys.argv) > 1:
+            sys.argv = [sys.argv[0]]
+        sys.argv.append(sys_args)
+
+        result = main()
+        sys.stdout = sys.__stdout__
+    with open(log_file_path, 'r') as f:
+        logs = f.readlines()
+        log_array = []
+        for i in range(len(logs)):
+            log_array.append({'id': i+1, 'log': logs[i]})
+    return result, log_array

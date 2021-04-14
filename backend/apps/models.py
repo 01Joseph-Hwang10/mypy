@@ -7,11 +7,14 @@ class App(TimeStampedModel):
 
     name = models.CharField(max_length=50)
     description = models.TextField(max_length=300, null=True, blank=True)
-    app = models.TextField()
+    app = models.TextField(null=True, blank=True)
     static = models.TextField(null=True, blank=True)
-    created = models.ForeignKey(
+    created_by = models.ForeignKey(
         CustomUser, related_name='myapp', on_delete=models.CASCADE)
     exports = models.IntegerField(default=0)
+
+    def get_inputs(self):
+        return self.input_spec.all()
 
 
 class InputSpec(TimeStampedModel):
@@ -46,4 +49,5 @@ class InputSpec(TimeStampedModel):
                             related_name='input_spec')
     name = models.CharField(max_length=200)
     description = models.TextField(null=True, blank=True)
-    type = models.CharField('type', choices=TYPES_CHOICES, default=STR)
+    type = models.CharField('type', choices=TYPES_CHOICES,
+                            default=STR, max_length=20)

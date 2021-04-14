@@ -2,11 +2,12 @@ import React from 'react';
 import { createApp } from '@slices/craete-app';
 import createAppDataForm from '@form/createAppDataForm';
 import { connect } from 'react-redux';
-import { loading, setIsSuccessful } from '@slices/craete-app';
+import { loading, createAppSuccessful, createAppError } from '@slices/craete-app';
 
 function create( { 
 	loading : Loading,
-	setIsSuccessful : SetIsSuccessful,
+	createAppSuccessful : CreateAppSuccessful,
+	createAppError : CreateAppError,
 	isLoading : IsLoading,
 	isSuccessful : IsSuccessful,
 	isFirstTime : IsFirstTime,
@@ -18,9 +19,9 @@ function create( {
 		const postData = createAppDataForm( e );
 		const status = await createApp( postData );
 		if ( status ) {
-			SetIsSuccessful( true );
+			CreateAppSuccessful();
 		} else {
-			SetIsSuccessful( false );
+			CreateAppError();
 		}
 	};
 
@@ -68,7 +69,8 @@ const mapStateToProps = ( state ) => {
 const mapDispatchToProps = ( dispatch ) => {
 	return {
 		loading : () => dispatch( loading() ),
-		setIsSuccessful : ( bool ) => dispatch( setIsSuccessful( bool ) ),
+		createAppSuccessful : () => dispatch( createAppSuccessful() ),
+		createAppError: () => dispatch( createAppError() )
 	};
 };
 

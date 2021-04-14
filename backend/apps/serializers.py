@@ -8,10 +8,11 @@ class AppSerializer(Serializer):
     id = serializers.IntegerField()
     name = serializers.CharField(max_length=50)
     description = serializers.CharField(max_length=300)
-    created = PrimaryKeyRelatedField(read_only=True)
+    created_by = PrimaryKeyRelatedField(read_only=True)
     exports = serializers.IntegerField(required=False)
-    app = serializers.CharField()
+    app = serializers.CharField(required=False)
     static = serializers.CharField(required=False)
+    get_inputs = serializers.ListField(required=False)
 
     class Meta:
         model = App
