@@ -3,7 +3,13 @@ import { EXECUTE_APP } from '@src/urls';
 import axios from 'axios';
 
 
-export const executeAppSlice = createSlice({
+export const {
+    reducer,
+    actions: {
+        loading,
+        setIsSuccessful
+    }
+} = createSlice({
     name:'executeAppSlice',
     initialState: {
         isSuccessful: false,
@@ -21,10 +27,6 @@ export const executeAppSlice = createSlice({
         }
     }
 })
-
-
-export const { loading, setIsSuccessful } = executeAppSlice.actions;
-
 
 export const executeApp = async (postData) => {
     

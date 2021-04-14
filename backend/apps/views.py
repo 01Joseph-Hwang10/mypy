@@ -8,9 +8,9 @@ from common.pagination import ThreeFigurePagination
 from rest_framework.parsers import MultiPartParser
 # from common.functions import get_cookie
 from config.settings import MEDIA_ROOT, STATIC_ROOT
-from rest_framework.generics import CreateAPIView, ListAPIView, DestroyAPIView, UpdateAPIView
+from rest_framework.generics import CreateAPIView, ListAPIView, DestroyAPIView, UpdateAPIView, RetrieveAPIView
 from rest_framework.response import Response
-from apps.models import App
+from apps.models import App, InputSpec
 from apps.serializers import AppSerializer
 from users.models import CustomUser
 from apps.models import App
@@ -28,16 +28,23 @@ class CreateAppView(CreateAPIView):
             # user_id = cookie['user_id']
             new_id = len(list(self.get_queryset())) + 1
             save_directory = os.path.join(MEDIA_ROOT, f'{new_id}/')
+            root_name = os.listdir(save_directory)[0]
             post_data = request.data
             user_id = int(post_data['user_id'])
             name = post_data['name']
             description = post_data['description']
             app_source = post_data['app']
             created = CustomUser.objects.get(id=user_id)
+            app_path = os.path.join(save_directory, f'{root_name}.pyz')
+            App.objects.create(
+                name=name,
+                description=description,
+                app=app_path,
+                created=created,
+            )
             with ZipFile(app_source) as zf:
                 dirs = zf.namelist()
                 extract_recursively('', zf.namelist(), zf, save_directory)
-            root_name = os.listdir(save_directory)[0]
             root_directory = os.path.join(save_directory, root_name)
             main_script = os.path.join(STATIC_ROOT, '__main__.py')
             shutil.copy(main_script, root_directory)
@@ -48,26 +55,34 @@ class CreateAppView(CreateAPIView):
             for file_path in py_dirs:
                 with open(file_path, 'r') as f:
                     codelines = f.readlines()
-                codelines = [codeline[:-1] for codeline in codelines]
-                for codeline in codelines:
-                    _, converted = input_to_sys_args(codeline)
+                # codelines = [codeline[:-1] for codeline in codelines]
+                # codelines = list(filter(lambda x: len(x) != 0, codelines))
+                with open(file_path, 'w') as f:
+                    f.write('import sys')
+                    for codeline in codelines:
+                        specs, converted = input_to_sys_args(codeline)
+                        f.write(converted)
+                for spec in specs:
+                    InputSpec.objects.create(
+                        name=spec['name'],
+                        description=spec['description'],
+                        # type = spec['type'],
+                        app=App.objects.get(id=new_id)
+                    )
             # Things to compile:
             # input -> as input **IMPORTANT**
             # Convert input as form input in frontend
             # print -> as log
+
             # Convert print as value for log
-            app_path = os.path.join(save_directory, f'{root_name}.zip')
-            with ZipFile(os.path.join(save_directory, app_path), 'w') as zf:
-                for folder, subfolders, files in os.walk(save_directory):
-                    for file in files:
-                        zf.write(os.path.join(folder, file), os.path.relpath(
-                            os.path.join(folder, file), save_directory))
-            App.objects.create(
-                name=name,
-                description=description,
-                app=app_path,
-                created=created,
-            )
+            # app_path = os.path.join(save_directory, f'{root_name}.zip')
+            # with ZipFile(os.path.join(save_directory, app_path), 'w') as zf:
+            #     for folder, subfolders, files in os.walk(save_directory):
+            #         for file in files:
+            #             zf.write(os.path.join(folder, file), os.path.relpath(
+            #                 os.path.join(folder, file), save_directory))
+            zipapp.create_archive(root_directory)
+            shutil.rmtree(root_directory)
             return Response(status=201, data='Successfully created app')
         except Exception:
             shutil.rmtree(save_directory)
@@ -79,6 +94,21 @@ class ListAppView(ListAPIView):
     queryset = App.objects.all().order_by('-updated')
     serializer_class = AppSerializer
     pagination_class = ThreeFigurePagination
+
+
+class RetrieveAppView(RetrieveAPIView):
+
+    queryset = App.objects.all()
+    serializer_class = AppSerializer
+
+    def get(self, request, *args, **kwargs):
+
+        try:
+            inputs = self.input_spec.all()
+            data = {'inputs': inputs, 'app': self}
+            return Response(status=200, data=data)
+        except Exception:
+            return Response(status=500, data='Internal server error')
 
 
 class ExecuteAppView(CreateAPIView):

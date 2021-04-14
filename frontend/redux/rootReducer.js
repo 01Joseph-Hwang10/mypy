@@ -1,12 +1,14 @@
 import { combineReducers } from 'redux';
-import { createAppSlice } from '@slices/craete-app';
-import { listAppSlice } from './slices/list-app';
-import { executeAppSlice } from './slices/execute-app';
+import { reducer as createAppReducer } from '@slices/craete-app';
+import { reducer as listAppReducer } from '@slices/list-app';
+import { reducer as ExecuteAppReducer } from '@slices/execute-app';
+import { reducer as RetrieveAppReducer } from '@slices/retrieve-app';
 
 const rootReducer = combineReducers({
-    createApp: createAppSlice.reducer,
-    listApp: listAppSlice.reducer,
-    executeApp: executeAppSlice.reducer
+    createApp: createAppReducer,
+    listApp: listAppReducer,
+    executeApp: ExecuteAppReducer,
+    retrieveApp: RetrieveAppReducer,
 });
 
 export default rootReducer;

@@ -101,6 +101,8 @@ def input_to_sys_args(codeline):
     inputs = [
         new_codeline[input_start_index[i]:input_paren_close_index[i] + 1] for i in range(len(input_start_index))
     ]
+    if len(inputs) == 0:
+        return [], codeline
 
     if len(inputs) == 1:
         new_codeline = new_codeline.replace(

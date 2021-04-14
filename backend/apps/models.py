@@ -12,3 +12,38 @@ class App(TimeStampedModel):
     created = models.ForeignKey(
         CustomUser, related_name='myapp', on_delete=models.CASCADE)
     exports = models.IntegerField(default=0)
+
+
+class InputSpec(TimeStampedModel):
+
+    STR = 'str'
+    INT = 'int'
+    FLOAT = 'float'
+    COMPLEX = 'complex'
+    LIST = 'list'
+    TUPLE = 'tuple'
+    RANGE = 'range'
+    DICT = 'dict'
+    SET = 'set'
+    FROZENSET = 'frozenset'
+    BOOL = 'bool'
+
+    TYPES_CHOICES = (
+        (STR, 'String'),
+        (INT, 'Integer'),
+        (FLOAT, 'Float'),
+        (COMPLEX, 'Complex Number'),
+        (LIST, 'List'),
+        (TUPLE, 'Tuple'),
+        (RANGE, 'Range'),
+        (DICT, 'Dictionary'),
+        (SET, 'Set'),
+        (FROZENSET, 'Frozenset'),
+        (BOOL, 'Boolean'),
+    )
+
+    app = models.ForeignKey(App, on_delete=models.CASCADE,
+                            related_name='input_spec')
+    name = models.CharField(max_length=200)
+    description = models.TextField(null=True, blank=True)
+    type = models.CharField('type', choices=TYPES_CHOICES, default=STR)

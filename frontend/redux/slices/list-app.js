@@ -3,7 +3,14 @@ import axios from 'axios';
 import { LIST_APP } from '@src/urls';
 
 
-export const listAppSlice = createSlice({
+export const {
+    reducer,
+    actions: {
+        loadListSuccessful,
+        loadListError,
+        loading
+    }
+} = createSlice({
     name:' listAppSlice',
     initialState: {
         isSuccessful: false,
@@ -27,12 +34,6 @@ export const listAppSlice = createSlice({
         }
     }
 })
-
-export const { 
-    loadListSuccessful, 
-    loadListError, 
-    loading 
-} = listAppSlice.actions;
 
 export const listApp = async () => {
 

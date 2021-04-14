@@ -2,7 +2,13 @@ import { createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { CREATE_APP } from '@src/urls';
 
-export const createAppSlice = createSlice({
+export const {
+    reducer,
+    actions: {
+        setIsSuccessful,
+        loading
+    }
+} = createSlice({
     name: 'createAppSlice',
     initialState: {
         isSuccessful: false,
@@ -22,7 +28,6 @@ export const createAppSlice = createSlice({
     }
 })
 
-export const { setIsSuccessful, loading } = createAppSlice.actions
 
 export const createApp = async (postData) => {
 
