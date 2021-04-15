@@ -1,6 +1,6 @@
 from rest_framework.serializers import PrimaryKeyRelatedField, Serializer
 from rest_framework import serializers
-from apps.models import App
+from apps.models import App, InputSpec
 
 
 class AppSerializer(Serializer):
@@ -12,8 +12,20 @@ class AppSerializer(Serializer):
     exports = serializers.IntegerField(required=False)
     app = serializers.CharField(required=False)
     static = serializers.CharField(required=False)
-    get_inputs = serializers.ListField(required=False)
 
     class Meta:
         model = App
+        fields = '__all__'
+
+
+class InputSpecSerializer(Serializer):
+
+    id = serializers.IntegerField()
+    app = serializers.CharField()
+    name = serializers.CharField(max_length=200)
+    description = serializers.CharField()
+    type = serializers.CharField(max_length=20)
+
+    class Meta:
+        model = InputSpec
         fields = '__all__'

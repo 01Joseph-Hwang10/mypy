@@ -20,11 +20,11 @@ export const {
 		inputs : [],
 	},
 	reducers : {
-		loadAppSuccessful : ( state, { payload, } ) => {
+		loadAppSuccessful : ( state, { payload : { app, inputs, }, } ) => {
 			state.isSuccessful = true;
 			state.loading = false;
-			state.inputs = payload.inputs;
-			state.appSpec = payload;
+			state.inputs = inputs;
+			state.appSpec = app;
 		},
 		loadAppError : ( state, { payload, } ) => {
 			state.isSuccessful = false;

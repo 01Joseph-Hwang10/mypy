@@ -3,12 +3,14 @@ import { reducer as createAppReducer } from '@slices/craete-app';
 import { reducer as listAppReducer } from '@slices/list-app';
 import { reducer as ExecuteAppReducer } from '@slices/execute-app';
 import { reducer as RetrieveAppReducer } from '@slices/retrieve-app';
+import { reducer as DeleteAppReducer } from '@slices/delete-app';
 
-const rootReducer = combineReducers({
-    createApp: createAppReducer,
-    listApp: listAppReducer,
-    executeApp: ExecuteAppReducer,
-    retrieveApp: RetrieveAppReducer,
-});
+const rootReducer = combineReducers( {
+	createApp : createAppReducer,
+	listApp : listAppReducer,
+	executeApp : ExecuteAppReducer,
+	retrieveApp : RetrieveAppReducer,
+	deleteApp : DeleteAppReducer,
+} );
 
 export default rootReducer;

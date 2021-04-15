@@ -3,6 +3,7 @@ import { createApp } from '@slices/craete-app';
 import createAppDataForm from '@form/createAppDataForm';
 import { connect } from 'react-redux';
 import { loading, createAppSuccessful, createAppError } from '@slices/craete-app';
+import { useRouter } from 'next/router';
 
 function create( { 
 	loading : Loading,
@@ -13,13 +14,17 @@ function create( {
 	isFirstTime : IsFirstTime,
 } ) {
 
+	const router = useRouter();
+
 	const createAppSubmit = async ( e ) => {
 		e.preventDefault();
 		Loading();
 		const postData = createAppDataForm( e );
-		const status = await createApp( postData );
-		if ( status ) {
+		const { ok, data, } = await createApp( postData );
+		if ( ok ) {
+			const { id, } = data;
 			CreateAppSuccessful();
+			router.push( `/app/${id}` );
 		} else {
 			CreateAppError();
 		}
@@ -70,7 +75,7 @@ const mapDispatchToProps = ( dispatch ) => {
 	return {
 		loading : () => dispatch( loading() ),
 		createAppSuccessful : () => dispatch( createAppSuccessful() ),
-		createAppError: () => dispatch( createAppError() )
+		createAppError : () => dispatch( createAppError() ),
 	};
 };
 

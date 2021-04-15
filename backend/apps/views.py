@@ -11,7 +11,7 @@ from config.settings import MEDIA_ROOT, STATIC_ROOT
 from rest_framework.generics import CreateAPIView, ListAPIView, DestroyAPIView, UpdateAPIView, RetrieveAPIView
 from rest_framework.response import Response
 from apps.models import App, InputSpec
-from apps.serializers import AppSerializer
+from apps.serializers import AppSerializer, InputSpecSerializer
 from users.models import CustomUser
 from apps.models import App
 
@@ -62,13 +62,13 @@ class CreateAppView(CreateAPIView):
                     for codeline in codelines:
                         specs, converted = input_to_sys_args(codeline)
                         f.write(converted)
-                for spec in specs:
-                    InputSpec.objects.create(
-                        name=spec['name'],
-                        description=spec['description'],
-                        # type = spec['type'],
-                        app=App.objects.get(id=new_id)
-                    )
+                        for spec in specs:
+                            InputSpec.objects.create(
+                                name=spec['name'],
+                                description=spec['description'],
+                                type=spec['type'],
+                                app=App.objects.get(id=new_id)
+                            )
             # app_path = os.path.join(save_directory, f'{root_name}.zip')
             # with ZipFile(os.path.join(save_directory, app_path), 'w') as zf:
             #     for folder, subfolders, files in os.walk(save_directory):
@@ -81,9 +81,15 @@ class CreateAppView(CreateAPIView):
             instance = App.objects.get(id=new_id)
             instance.app = app_path
             instance.save()
-            return Response(status=201, data='Successfully created app')
+            data = {
+                'message': 'Successfully created app',
+                'id': new_id
+            }
+            return Response(status=201, data=data)
         except Exception:
             shutil.rmtree(save_directory)
+            if new_id:
+                App.objects.filter(id=new_id).delete()
             return Response(status=400, data='Failed creating app')
 
 
@@ -103,9 +109,15 @@ class RetrieveAppView(RetrieveAPIView):
 
         try:
             id = int(self.request.query_params.get('id'))
-            app = App.objects.get(id=id)
-            result = AppSerializer(app).data
-            return Response(status=200, data=result)
+            app_source = App.objects.get(id=id)
+            app = AppSerializer(app_source).data
+            inputs = InputSpecSerializer(
+                app_source.input_spec.all(), many=True).data
+            data = {
+                'app': app,
+                'inputs': inputs
+            }
+            return Response(status=200, data=data)
         except Exception:
             return Response(status=500, data='Internal Server Error')
 
@@ -124,7 +136,8 @@ class ExecuteAppView(CreateAPIView):
             variables = post_data['variables']
             app_run = runpy.run_path(app_path)
             root_path = os.path.join(MEDIA_ROOT, f'{user_id}/')
-            result, log = app_run['execute'](variables, root_path)
+            result, log = app_run['execute'](
+                {'__args_input': variables}, root_path)
             # What you need to do:
             # Mock static fileSystem
             # Check if sys.argv is shared among apps uploaded -> They share one sys.argv
@@ -156,7 +169,7 @@ class DeleteAppView(DestroyAPIView):
             # Delete every source of app
             id = int(self.request.query_params.get('id'))
             shutil.rmtree(os.path.join(MEDIA_ROOT, f'{id}/'))
-            self.destroy(request, *args, **kwargs)
+            App.objects.filter(id=id).delete()
             return Response(status=200, data='app successfully deleted')
         except Exception:
             return Response(status=500, data='app deletation failed')

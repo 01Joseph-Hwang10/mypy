@@ -55,4 +55,5 @@ def execute(sys_args, log_path):
         log_array = []
         for i in range(len(logs)):
             log_array.append({'id': i+1, 'log': logs[i]})
+    sys.argv = [sys.argv[0]]
     return result, log_array

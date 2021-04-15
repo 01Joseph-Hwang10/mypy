@@ -13,9 +13,6 @@ class App(TimeStampedModel):
         CustomUser, related_name='myapp', on_delete=models.CASCADE)
     exports = models.IntegerField(default=0)
 
-    def get_inputs(self):
-        return self.input_spec.all()
-
 
 class InputSpec(TimeStampedModel):
 

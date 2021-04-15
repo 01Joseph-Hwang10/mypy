@@ -1,10 +1,12 @@
 import { loading as executeLoading, executeAppSuccessful, executeAppError } from '@redux/slices/execute-app';
 import { loading as retrieveLoading, loadAppSuccessful, loadAppError } from '@redux/slices/retrieve-app';
+import { loading as deleteLoading, deleteAppSuccessful, deleteAppError } from '@redux/slices/delete-app';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { executeApp } from '@slices/execute-app';
-import { retrieveApp } from '@slices/retrieve-app';
+import { executeApp as axiosExecuteApp } from '@slices/execute-app';
+import { retrieveApp as axiosRetrieveApp } from '@slices/retrieve-app';
+import { deleteApp as axiosDeleteApp } from '@slices/delete-app';
 
 function AppDetail( {
 	executeLoading : ExecuteLoading,
@@ -18,17 +20,17 @@ function AppDetail( {
 	loadAppError : LoadAppError,
 	loadAppSuccessful : LoadAppSuccessful,
 	retrieveIsLoading : RetrieveIsLoading,
+	// deleteIsLoading : DeleteIsLoading,
+	deleteLoading : DeleteLoading,
+	deleteAppSuccessful : DeleteAppSuccessful,
+	deleteAppError : DeleteAppError,
 } ) {
     
-	const {
-		query : {
-			id,
-		},
-	} = useRouter();
+	const router = useRouter();
 
-	const axiosApp = async () => {
+	const retrieveApp = async () => {
 		RetrieveLoading();
-		const { ok, data, } = await retrieveApp( id );
+		const { ok, data, } = await axiosRetrieveApp( router.query.id );
 		if ( ok ) {
 			LoadAppSuccessful( data );
 		} else {
@@ -37,17 +39,37 @@ function AppDetail( {
 	};
 
 	useEffect( ()=>{
-		axiosApp();
+		retrieveApp();
 	}, [] );
     
-	const execute = async () => {
+	const executeApp = async () => {
 		ExecuteLoading();
-		const postData = { app : AppSpec.app, variables : {}, user_id : AppSpec.id, };
-		const { ok, data, } = await executeApp( postData );
+		const forms = document.querySelectorAll( '.formElement' );
+		let variables = {};
+		for ( let i = 0; i < forms.length; i++ ) {
+			const input = forms[ i ].querySelector( 'input' );
+			const key = input.name;
+			const value = input.value;
+			variables[ key ] = value;
+		}
+
+		const postData = { app : AppSpec.app, variables, user_id : AppSpec.id, };
+		const { ok, data, } = await axiosExecuteApp( postData );
 		if ( ok ) {
 			ExecuteAppSuccessful( data );
 		} else {
 			ExecuteAppError( data );
+		}
+	};
+
+	const deleteApp = async () => {
+		DeleteLoading();
+		const { ok, data, } = await axiosDeleteApp( AppSpec.id );
+		if ( ok ) {
+			DeleteAppSuccessful();
+			router.push( '/' );
+		} else {
+			DeleteAppError( data );
 		}
 	};
 
@@ -63,12 +85,19 @@ function AppDetail( {
 						<h3>{AppSpec.description}</h3>
 						<h3>Exports: {AppSpec.exports}</h3>
 						<h4>Created by: {AppSpec.created_by}</h4>
-						{
-							Inputs && Inputs.map( input => {
-								console.log( input );
-							} )
-						}
-						<button onClick={execute}>Run</button>
+						<button onClick={deleteApp}>Delete</button>
+						<section>
+							{
+								Inputs && Inputs.map( input => (
+									<div className="formElement" key={input.id}>
+										<div>{input.name}</div>
+										<div>{input.description}</div>
+										<input name={input.name} placeholder={input.description}></input>
+									</div>
+								) )
+							}
+						</section>
+						<button onClick={executeApp}>Run</button>
 						<section>
 							<h2>Result</h2>
 							{Result}
@@ -94,6 +123,7 @@ const mapStateToProps = state => {
 		inputs : state.retrieveApp.inputs,
 		appSpec : state.retrieveApp.appSpec,
 		retrieveIsLoading : state.retrieveApp.loading,
+		// deleteIsLoading : state.deleteApp.loading,
 	};
 };
 
@@ -105,6 +135,9 @@ const mapDispatchToProps = dispatch => {
 		retrieveLoading : () => dispatch( retrieveLoading() ),
 		loadAppSuccessful : ( response ) => dispatch( loadAppSuccessful( response ) ),
 		loadAppError : ( response ) => dispatch( loadAppError( response ) ),
+		deleteLoading : () => dispatch( deleteLoading() ),
+		deleteAppSuccessful : () => dispatch( deleteAppSuccessful() ),
+		deleteAppError : ( response ) => dispatch( deleteAppError( response ) ),
 	};
 };
 
