@@ -1,4 +1,5 @@
 import os
+import re
 from django.core.exceptions import ValidationError
 
 
@@ -39,7 +40,7 @@ FROZENSET = 'frozenset'
 BOOL = 'bool'
 
 
-def input_to_sys_args(codeline):
+def input_to_sys_args(codeline, id):
 
     new_codeline = codeline
     name = ""
@@ -190,7 +191,7 @@ def input_to_sys_args(codeline):
 
     if len(inputs) == 1:
         new_codeline = new_codeline.replace(
-            inputs[0]["codeline"], f"sys.argv[1]['__args_input']['{str(name)}']"
+            inputs[0]["codeline"], f"sys.argv[-1]['__args_input_{id}']['{str(name)}']"
         )
         i = 0
         while inputs[0]["codeline"][i] == "(":
@@ -206,7 +207,7 @@ def input_to_sys_args(codeline):
         for index in range(len(inputs)):
             new_codeline = new_codeline.replace(
                 inputs[index]["codeline"],
-                f"sys.argv[1]['__args_input']['{str(name)+str('_')+str(index)}']",
+                f"sys.argv[-1]['__args_input_{id}']['{str(name)+str('_')+str(index)}']",
             )
             i = 0
             while inputs[index]["codeline"][i] == "(":
@@ -220,7 +221,32 @@ def input_to_sys_args(codeline):
         return input_specs, new_codeline
 
 
+def filter_banned_syntax(codeline):
+
+    banned = [
+        {
+            'syntax': 'argv',
+            'exception': ['argv']
+        },
+        {
+            'syntax': 'sys.argv',
+            'exception': ['sys.argv']
+        }
+    ]
+
+    for ban in banned:
+        if re.search(ban['syntax'], codeline).value != 0:
+            try:
+                stripped = codeline.strip()
+                parsed = stripped.split('=')
+                if parsed[1] not in ban['exception']:
+                    raise Exception
+            except Exception:
+                raise Exception
+
+
 def replace_with_appropriates(codeline):
 
-    has_input = False
-    # need has_print for logger
+    filter_banned_syntax(codeline)
+    result = input_to_sys_args(codeline)
+    return result

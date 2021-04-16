@@ -12,15 +12,15 @@
 # in this app interface so that you can give the value to them for your app.
 # Also, all print() statement will be logged and will be recorded as txt file,
 # which you can see at the 'log' button at the topright.
-# 5. You can't re-assign the sys.argv value.
-# sys.argv value is in state of object type,
-# and every variable you assigning as input function will be converted as
-# form input at your app interface and the variable will be stored at
-# sys.argv['--sys-args']. These below are some approaches recommended
-# for storing something in sys.argv
-# ( e.g. sys.argv['your_var_key'] = your_var_value )
-# ( e.g. sys.argv['your_sys_argv_list'] = ['var1','var2','var3','var4'] )
-# ( e.g. sys.argv['your_sys_argv_dict'] = { 'key1': 'value1', 'key2': 'value2' } )
+# 5. You can't re-assign or manipulate the sys.argv value
+# since we use that value as input receiver.
+# If you want to access to sys.argv value, please use the codeline like below:
+# First approach:
+# import sys
+# sys_store = sys.argv
+# Second approach:
+# from sys import argv
+# sys_store = argv
 # 6. If your app receives input and assigns it as variable, please use one of the code formats like below
 # ( e.g. var1 = input('Please give the input name var1: ') )
 # ( e.g. var2 = int(input('Please give the input name var2[Integer]: ')) )
@@ -35,18 +35,21 @@
 
 import sys
 import os
-from index import main
+from app.index import main
 
 
-def execute(sys_args, log_path):
+def execute(sys_args_key, sys_args_value, log_path):
 
     log_file_path = os.path.join(log_path, 'log.txt')
 
     with open(log_file_path, 'w') as f:
         sys.stdout = f
-        if len(sys.argv) > 1:
-            sys.argv = [sys.argv[0]]
-        sys.argv.append(sys_args)
+        sys_args_except_base = list(filter(lambda x: bool(
+            x not in ['manage.py', 'runserver']), sys.argv))
+        if len(sys_args_except_base) == 0:
+            sys.argv.append({})
+        print(sys.argv)
+        sys.argv[-1][sys_args_key] = sys_args_value
 
         result = main()
         sys.stdout = sys.__stdout__
@@ -55,5 +58,5 @@ def execute(sys_args, log_path):
         log_array = []
         for i in range(len(logs)):
             log_array.append({'id': i+1, 'log': logs[i]})
-    sys.argv = [sys.argv[0]]
+    del sys.argv[-1][sys_args_key]
     return result, log_array

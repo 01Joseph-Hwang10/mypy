@@ -53,7 +53,7 @@ function AppDetail( {
 			variables[ key ] = value;
 		}
 
-		const postData = { app : AppSpec.app, variables, user_id : AppSpec.id, };
+		const postData = { app : AppSpec.app, variables, id : AppSpec.id, };
 		const { ok, data, } = await axiosExecuteApp( postData );
 		if ( ok ) {
 			ExecuteAppSuccessful( data );

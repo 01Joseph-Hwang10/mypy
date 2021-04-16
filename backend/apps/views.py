@@ -1,4 +1,5 @@
 import zipapp
+import sys
 import os
 import shutil
 import runpy
@@ -40,27 +41,33 @@ class CreateAppView(CreateAPIView):
             )
             new_id = int(self.get_serializer(new)['id'].value)
             save_directory = os.path.join(MEDIA_ROOT, f'{new_id}/')
+            script_directory = os.path.join(save_directory, 'app/')
             app_source = post_data['app']
             with ZipFile(app_source) as zf:
                 dirs = zf.namelist()
-                extract_recursively('', zf.namelist(), zf, save_directory)
+                extract_recursively('', dirs, zf, save_directory)
             root_name = os.listdir(save_directory)[0]
-            app_path = os.path.join(save_directory, f'{root_name}.pyz')
             root_directory = os.path.join(save_directory, root_name)
-            main_script = os.path.join(STATIC_ROOT, '__main__.py')
+            os.rename(root_directory, script_directory)
             py_dirs = []
-            for item in dirs:
-                if item[-3] + item[-2] + item[-1] == '.py':
+            new_dirs = []
+            for path in dirs:
+                levels = path.split('/')
+                del levels[0]
+                new_path = '/'.join(levels)
+                new_dirs.append(new_path)
+            for item in new_dirs:
+                if len(item) > 3 and item[-3] + item[-2] + item[-1] == '.py':
                     py_dirs.append(item)
             for file_path in py_dirs:
-                with open(os.path.join(save_directory, file_path), 'r') as f:
+                with open(os.path.join(script_directory, file_path), 'r') as f:
                     codelines = f.readlines()
                 # codelines = [codeline[:-1] for codeline in codelines]
                 # codelines = list(filter(lambda x: len(x) != 0, codelines))
-                with open(os.path.join(save_directory, file_path), 'w') as f:
+                with open(os.path.join(script_directory, file_path), 'w') as f:
                     f.write('import sys\n')
                     for codeline in codelines:
-                        specs, converted = input_to_sys_args(codeline)
+                        specs, converted = input_to_sys_args(codeline, new_id)
                         f.write(converted)
                         for spec in specs:
                             InputSpec.objects.create(
@@ -75,11 +82,11 @@ class CreateAppView(CreateAPIView):
             #         for file in files:
             #             zf.write(os.path.join(folder, file), os.path.relpath(
             #                 os.path.join(folder, file), save_directory))
-            shutil.copy(main_script, root_directory)
-            zipapp.create_archive(root_directory)
-            shutil.rmtree(root_directory)
+            main_script = os.path.join(STATIC_ROOT, 'main.py')
+            shutil.copy(main_script, save_directory)
+            os.mkdir(os.path.join(save_directory, 'log'))
             instance = App.objects.get(id=new_id)
-            instance.app = app_path
+            instance.app = save_directory
             instance.save()
             data = {
                 'message': 'Successfully created app',
@@ -131,19 +138,30 @@ class ExecuteAppView(CreateAPIView):
 
         try:
             post_data = request.data
-            user_id = post_data['user_id']
+            id = post_data['id']
             app_path = post_data['app']
             variables = post_data['variables']
-            app_run = runpy.run_path(app_path)
-            root_path = os.path.join(MEDIA_ROOT, f'{user_id}/')
+            execute_path = os.path.join(app_path, 'main.py')
+            main_module_path = os.path.join(app_path, 'app')
+            sys.path.append(app_path)
+            sys.path.append(main_module_path)
+            app_run = runpy.run_path(execute_path)
+            print(sys.path)
+            print(app_run['execute'])
+            root_path = os.path.join(MEDIA_ROOT, f'{id}/log/')
             result, log = app_run['execute'](
-                {'__args_input': variables}, root_path)
+                f'__args_input_{id}', variables, root_path)
             # What you need to do:
             # Mock static fileSystem
             # Check if sys.argv is shared among apps uploaded -> They share one sys.argv
+            sys.path = list(filter(lambda x: bool(
+                x not in [app_path, main_module_path]), sys.path))
             return Response(status=200, data={'result': result, 'log': log})
         except Exception:
             # Delete all files uploaded
+            print(Exception)
+            sys.path = list(filter(lambda x: bool(
+                x not in [app_path, main_module_path]), sys.path))
             return Response(status=500, data='Internal server error')
 
 
