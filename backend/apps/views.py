@@ -65,7 +65,11 @@ class CreateAppView(CreateAPIView):
                 # codelines = [codeline[:-1] for codeline in codelines]
                 # codelines = list(filter(lambda x: len(x) != 0, codelines))
                 with open(os.path.join(script_directory, file_path), 'w') as f:
-                    f.write('import sys\n')
+                    f.write('import os\n')
+                    f.write(
+                        f"with open('{os.path.join(save_directory,'input/args.py')}', 'r') as f:\n")
+                    f.write('    code = f.read()\n')
+                    f.write('exec(code)\n')
                     for codeline in codelines:
                         specs, converted = input_to_sys_args(codeline, new_id)
                         f.write(converted)
@@ -82,9 +86,27 @@ class CreateAppView(CreateAPIView):
             #         for file in files:
             #             zf.write(os.path.join(folder, file), os.path.relpath(
             #                 os.path.join(folder, file), save_directory))
-            main_script = os.path.join(STATIC_ROOT, 'main.py')
-            shutil.copy(main_script, save_directory)
-            os.mkdir(os.path.join(save_directory, 'log'))
+            main_script = os.path.join(STATIC_ROOT, '__main__.py')
+            main_source = os.path.join(STATIC_ROOT, 'main.py')
+            args_script = os.path.join(STATIC_ROOT, 'args.py')
+            log_dir = os.path.join(save_directory, 'log')
+            input_dir = os.path.join(save_directory, 'input')
+            shutil.copy(main_script, script_directory)
+            old_index_name = os.path.join(script_directory, 'index.py')
+            new_index_name = os.path.join(
+                script_directory, f'index{new_id}.py')
+            os.rename(old_index_name, new_index_name)
+            with open(main_source, 'r') as f:
+                codelines = f.readlines()
+            with open(os.path.join(script_directory, '__main__.py'), 'w') as f:
+                f.write(f'from index{new_id} import main\n')
+                for codeline in codelines:
+                    f.write(codeline)  # \n already exists
+            zipapp.create_archive(script_directory)
+            shutil.rmtree(script_directory)
+            os.mkdir(log_dir)
+            os.mkdir(input_dir)
+            shutil.copy(args_script, input_dir)
             instance = App.objects.get(id=new_id)
             instance.app = save_directory
             instance.save()
@@ -136,33 +158,29 @@ class ExecuteAppView(CreateAPIView):
 
     def post(self, request, *args, **kwargs):
 
-        try:
-            post_data = request.data
-            id = post_data['id']
-            app_path = post_data['app']
-            variables = post_data['variables']
-            execute_path = os.path.join(app_path, 'main.py')
-            main_module_path = os.path.join(app_path, 'app')
-            sys.path.append(app_path)
-            sys.path.append(main_module_path)
-            app_run = runpy.run_path(execute_path)
-            print(sys.path)
-            print(app_run['execute'])
-            root_path = os.path.join(MEDIA_ROOT, f'{id}/log/')
-            result, log = app_run['execute'](
-                f'__args_input_{id}', variables, root_path)
-            # What you need to do:
-            # Mock static fileSystem
-            # Check if sys.argv is shared among apps uploaded -> They share one sys.argv
-            sys.path = list(filter(lambda x: bool(
-                x not in [app_path, main_module_path]), sys.path))
-            return Response(status=200, data={'result': result, 'log': log})
-        except Exception:
-            # Delete all files uploaded
-            print(Exception)
-            sys.path = list(filter(lambda x: bool(
-                x not in [app_path, main_module_path]), sys.path))
-            return Response(status=500, data='Internal server error')
+        # try:
+        post_data = request.data
+        app_path = post_data['app']
+        variables = post_data['variables']
+        input_path = os.path.join(app_path, 'input/args.py')
+        with open(input_path, 'w') as f:
+            f.write('__global_vars={\n')
+            for key in list(variables.keys()):
+                f.write(f"'{key}':'{variables[key]}',\n")
+            f.write('}\n')
+        execute_path = os.path.join(app_path, 'app.pyz')
+        app_run = runpy.run_path(execute_path)
+        root_path = os.path.join(app_path, 'log')
+        result, log = app_run['execute'](root_path)
+        if not result:
+            result = 'No return value made'
+        # What you need to do:
+        # Mock static fileSystem
+        return Response(status=200, data={'result': result, 'log': log})
+        # except Exception:
+        # Delete all files uploaded
+        # print(Exception)
+        # return Response(status=500, data='Internal server error')
 
 
 class UpdateAppView(UpdateAPIView):

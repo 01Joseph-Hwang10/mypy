@@ -191,7 +191,7 @@ def input_to_sys_args(codeline, id):
 
     if len(inputs) == 1:
         new_codeline = new_codeline.replace(
-            inputs[0]["codeline"], f"sys.argv[-1]['__args_input_{id}']['{str(name)}']"
+            inputs[0]["codeline"], f"__global_vars['{str(name)}']"
         )
         i = 0
         while inputs[0]["codeline"][i] == "(":
@@ -207,7 +207,7 @@ def input_to_sys_args(codeline, id):
         for index in range(len(inputs)):
             new_codeline = new_codeline.replace(
                 inputs[index]["codeline"],
-                f"sys.argv[-1]['__args_input_{id}']['{str(name)+str('_')+str(index)}']",
+                f"__global_vars['{str(name)+str('_')+str(index)}']",
             )
             i = 0
             while inputs[index]["codeline"][i] == "(":
@@ -247,6 +247,6 @@ def filter_banned_syntax(codeline):
 
 def replace_with_appropriates(codeline):
 
-    filter_banned_syntax(codeline)
+    # filter_banned_syntax(codeline)
     result = input_to_sys_args(codeline)
     return result

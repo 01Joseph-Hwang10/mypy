@@ -1,0 +1,2 @@
+__global_vars={
+}
