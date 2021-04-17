@@ -162,43 +162,43 @@ class ExecuteAppView(CreateAPIView):
 
     def post(self, request, *args, **kwargs):
 
-        # try:
-        root_path = False
-        post_data = json.loads(request.data)
-        app_path = post_data['app']
-        variables = post_data['variables']
-        print(type(variables))
-        files = post_data['files']
-        input_path = os.path.join(app_path, 'input')
-        args_path = os.path.join(input_path, '__args.py')
-        with open(args_path, 'w') as f:
-            f.write('__global_vars={\n')
-            for key in list(variables.keys()):
-                f.write(f"'{key}':'{variables[key]}',\n")
-            f.write('}\n')
-            if files:
-                with ZipFile(files) as zf:
-                    dirs = zf.namelist()
-                    extract_recursively('', dirs, zf, input_path)
-                root_name = os.listdir(input_path)[0]
-                root_path = os.path.join(input_path, root_name)
-                f.write(f"__file_root='{root_path}'")
-        execute_path = os.path.join(app_path, 'app.pyz')
-        app_run = runpy.run_path(execute_path)
-        root_path = os.path.join(app_path, 'log')
-        result, log = app_run['execute'](root_path)
-        if not result:
-            result = 'No return value made'
-        shutil.rmtree(root_path)
-        # What you need to do:
-        # Mock static fileSystem
-        return Response(status=200, data={'result': result, 'log': log})
-        # except Exception:
-        # Delete all files uploaded
-        # print(Exception)
-        # if root_path:
-        # shutil.rmtree(root_path)
-        # return Response(status=500, data='Internal server error')
+        try:
+            root_path = False
+            post_data = request.data
+            app_path = post_data['app']
+            variables = json.loads(post_data['variables'])
+            files = post_data['files']
+            input_path = os.path.join(app_path, 'input')
+            args_path = os.path.join(input_path, '__args.py')
+            with open(args_path, 'w') as f:
+                f.write('__global_vars={\n')
+                for key in list(variables.keys()):
+                    f.write(f"'{key}':'{variables[key]}',\n")
+                f.write('}\n')
+                if files != 'false':
+                    with ZipFile(files) as zf:
+                        dirs = zf.namelist()
+                        extract_recursively('', dirs, zf, input_path)
+                    root_name = os.listdir(input_path)[0]
+                    root_path = os.path.join(input_path, root_name)
+                    f.write(f"__file_root='{root_path}'")
+            execute_path = os.path.join(app_path, 'app.pyz')
+            app_run = runpy.run_path(execute_path)
+            log_path = os.path.join(app_path, 'log')
+            result, log = app_run['execute'](log_path)
+            if not result:
+                result = 'No return value made'
+            if root_path:
+                shutil.rmtree(root_path)
+            # What you need to do:
+            # Mock static fileSystem
+            return Response(status=200, data={'result': result, 'log': log})
+        except Exception:
+            # Delete all files uploaded
+            print(Exception)
+            if root_path:
+                shutil.rmtree(root_path)
+            return Response(status=500, data='Internal server error')
 
 
 class UpdateAppView(UpdateAPIView):

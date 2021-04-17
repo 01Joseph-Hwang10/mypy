@@ -39,7 +39,11 @@ export const {
 
 export const executeApp = async ( postData ) => {
     
-	const { status, data, } = await axios.post( EXECUTE_APP, postData );
+	const { status, data, } = await axios.post( EXECUTE_APP, postData, {
+		headers : {
+			'Content-Type' : 'multipart/form-data',
+		},
+	} );
 
 	if ( status === 200 ) {
 		return {

@@ -16,7 +16,7 @@ const executeAppDataForm = (  app, id  ) => {
 	}
 
 	formData.append( 'app', app );
-	formData.append( 'variables', variables );
+	formData.append( 'variables', JSON.stringify( variables ) );
 	formData.append( 'files', files );
 	formData.append( 'id', id );
 
