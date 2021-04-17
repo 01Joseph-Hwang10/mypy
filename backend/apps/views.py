@@ -4,7 +4,7 @@ import os
 import shutil
 import runpy
 from zipfile import ZipFile
-from apps.functions import extract_recursively, input_to_sys_args
+from apps.functions import extract_recursively, replace_with_appropriates
 from common.pagination import ThreeFigurePagination
 from rest_framework.parsers import MultiPartParser
 # from common.functions import get_cookie
@@ -67,11 +67,11 @@ class CreateAppView(CreateAPIView):
                 with open(os.path.join(script_directory, file_path), 'w') as f:
                     f.write('import os\n')
                     f.write(
-                        f"with open('{os.path.join(save_directory,'input/args.py')}', 'r') as f:\n")
+                        f"with open('{os.path.join(save_directory,'input/__args.py')}', 'r') as f:\n")
                     f.write('    code = f.read()\n')
                     f.write('exec(code)\n')
                     for codeline in codelines:
-                        specs, converted = input_to_sys_args(codeline, new_id)
+                        specs, converted = replace_with_appropriates(codeline)
                         f.write(converted)
                         for spec in specs:
                             InputSpec.objects.create(
@@ -88,9 +88,11 @@ class CreateAppView(CreateAPIView):
             #                 os.path.join(folder, file), save_directory))
             main_script = os.path.join(STATIC_ROOT, '__main__.py')
             main_source = os.path.join(STATIC_ROOT, 'main.py')
-            args_script = os.path.join(STATIC_ROOT, 'args.py')
+            args_script = os.path.join(STATIC_ROOT, '__args.py')
             log_dir = os.path.join(save_directory, 'log')
             input_dir = os.path.join(save_directory, 'input')
+            output_dir = os.path.join(save_directory, 'output')
+            data_dir = os.path.join(save_directory, 'data')
             shutil.copy(main_script, script_directory)
             old_index_name = os.path.join(script_directory, 'index.py')
             new_index_name = os.path.join(
@@ -106,6 +108,8 @@ class CreateAppView(CreateAPIView):
             shutil.rmtree(script_directory)
             os.mkdir(log_dir)
             os.mkdir(input_dir)
+            os.mkdir(output_dir)
+            os.mkdir(data_dir)
             shutil.copy(args_script, input_dir)
             instance = App.objects.get(id=new_id)
             instance.app = save_directory
@@ -158,29 +162,41 @@ class ExecuteAppView(CreateAPIView):
 
     def post(self, request, *args, **kwargs):
 
-        # try:
-        post_data = request.data
-        app_path = post_data['app']
-        variables = post_data['variables']
-        input_path = os.path.join(app_path, 'input/args.py')
-        with open(input_path, 'w') as f:
-            f.write('__global_vars={\n')
-            for key in list(variables.keys()):
-                f.write(f"'{key}':'{variables[key]}',\n")
-            f.write('}\n')
-        execute_path = os.path.join(app_path, 'app.pyz')
-        app_run = runpy.run_path(execute_path)
-        root_path = os.path.join(app_path, 'log')
-        result, log = app_run['execute'](root_path)
-        if not result:
-            result = 'No return value made'
-        # What you need to do:
-        # Mock static fileSystem
-        return Response(status=200, data={'result': result, 'log': log})
-        # except Exception:
-        # Delete all files uploaded
-        # print(Exception)
-        # return Response(status=500, data='Internal server error')
+        try:
+            post_data = request.data
+            app_path = post_data['app']
+            variables = post_data['variables']
+            files = post_data['files']
+            input_path = os.path.join(app_path, 'input')
+            args_path = os.path.join(input_path, '__args.py')
+            with open(args_path, 'w') as f:
+                f.write('__global_vars={\n')
+                for key in list(variables.keys()):
+                    f.write(f"'{key}':'{variables[key]}',\n")
+                f.write('}\n')
+                if type(files) != type(str()):
+                    with ZipFile(files) as zf:
+                        dirs = zf.namelist()
+                        extract_recursively('', dirs, zf, input_path)
+                    root_name = os.listdir(input_path)[0]
+                    root_path = os.path.join(input_path, root_name)
+                    f.write(f"__file_root='{root_path}'")
+            execute_path = os.path.join(app_path, 'app.pyz')
+            app_run = runpy.run_path(execute_path)
+            root_path = os.path.join(app_path, 'log')
+            result, log = app_run['execute'](root_path)
+            if not result:
+                result = 'No return value made'
+            shutil.rmtree(root_path)
+            # What you need to do:
+            # Mock static fileSystem
+            return Response(status=200, data={'result': result, 'log': log})
+        except Exception:
+            # Delete all files uploaded
+            print(Exception)
+            if root_path:
+                shutil.rmtree(root_path)
+            return Response(status=500, data='Internal server error')
 
 
 class UpdateAppView(UpdateAPIView):

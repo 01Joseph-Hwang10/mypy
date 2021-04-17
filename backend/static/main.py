@@ -14,13 +14,27 @@
 # ( e.g. var1 = input('Please give the input name var1: ') )
 # ( e.g. var2 = int(input('Please give the input name var2[Integer]: ')) )
 # ( e.g. var3 = float(input('Please give the input name var3[Float]: ')) )
-# 6. Types of following are available as input: str, int, float, complex, list, tuple, range, dict, set, frozenset, bool
-# bytes, bytearray, memoryview is not supported
+# 6. Types of following are available as input: str, int, float, complex, list, tuple, dict, set, frozenset, bool
+# range, bytes, bytearray, memoryview is currently not supported
 # Also, don't use input function repeatedly. For example,
 # while True:
 #   var=input('Give the input please: ')
 #   if some_condition:
 #       break
+# 7. If you want to make your program recieve a file as an input,
+# upload files you want to give to program in a packed zipfile.
+# To access the files, use '__file_root' variable
+# which will globally assigned on the runtime.
+# Example of the usage would be like below
+# Folder scheme of your zipped file
+# |- some_chart.csv
+# |- images/
+# |- -- picture1.png
+# |- -- picture2.png
+# Code example
+# import os
+# path_to_chart = os.path.join(__file_root, 'some_chart.csv')
+# path_to_picture1 = os.path.join(__file_root, 'images/picture1.png')
 
 import sys
 import os

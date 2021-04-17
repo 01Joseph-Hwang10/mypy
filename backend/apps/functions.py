@@ -40,7 +40,7 @@ FROZENSET = 'frozenset'
 BOOL = 'bool'
 
 
-def input_to_sys_args(codeline, id):
+def input_to_sys_args(codeline):
 
     new_codeline = codeline
     name = ""
@@ -127,7 +127,8 @@ def input_to_sys_args(codeline, id):
                         filtered_paren_close_index[position])
 
     if len(input_paren_open_index) != len(input_paren_close_index):
-        raise SyntaxError
+        raise SyntaxError(
+            "Your code is not properly written in perspective of syntax related with 'input' function")
 
     input_start_index = []
 
