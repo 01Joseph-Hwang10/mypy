@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { executeApp as axiosExecuteApp } from '@slices/execute-app';
 import { retrieveApp as axiosRetrieveApp } from '@slices/retrieve-app';
 import { deleteApp as axiosDeleteApp } from '@slices/delete-app';
+import executeAppDataForm from '@redux/form/executeAppDataForm';
 
 function AppDetail( {
 	executeLoading : ExecuteLoading,
@@ -15,7 +16,14 @@ function AppDetail( {
 	result : Result,
 	log : Log,
 	inputs : Inputs,
-	appSpec : AppSpec,
+	appSpec : { 
+		name, 
+		description,
+		exports,
+		created_by,
+		id,
+		app, 
+	},
 	retrieveLoading : RetrieveLoading,
 	loadAppError : LoadAppError,
 	loadAppSuccessful : LoadAppSuccessful,
@@ -44,16 +52,7 @@ function AppDetail( {
     
 	const executeApp = async () => {
 		ExecuteLoading();
-		const forms = document.querySelectorAll( '.formElement' );
-		let variables = {};
-		for ( let i = 0; i < forms.length; i++ ) {
-			const input = forms[ i ].querySelector( 'input' );
-			const key = input.name;
-			const value = input.value;
-			variables[ key ] = value;
-		}
-
-		const postData = { app : AppSpec.app, variables, id : AppSpec.id, };
+		const postData = executeAppDataForm( app, id );
 		const { ok, data, } = await axiosExecuteApp( postData );
 		if ( ok ) {
 			ExecuteAppSuccessful( data );
@@ -64,7 +63,7 @@ function AppDetail( {
 
 	const deleteApp = async () => {
 		DeleteLoading();
-		const { ok, data, } = await axiosDeleteApp( AppSpec.id );
+		const { ok, data, } = await axiosDeleteApp( id );
 		if ( ok ) {
 			DeleteAppSuccessful();
 			router.push( '/' );
@@ -81,12 +80,12 @@ function AppDetail( {
 					<div>Loading...</div>
 				) : (
 					<div>
-						<h2>{AppSpec.name}</h2>
-						<h3>{AppSpec.description}</h3>
-						<h3>Exports: {AppSpec.exports}</h3>
-						<h4>Created by: {AppSpec.created_by}</h4>
+						<h2>{name}</h2>
+						<h3>{description}</h3>
+						<h3>Exports: {exports}</h3>
+						<h4>Created by: {created_by}</h4>
 						<button onClick={deleteApp}>Delete</button>
-						<section>
+						<section className="inputContainer">
 							{
 								Inputs && Inputs.map( input => (
 									<div className="formElement" key={input.id}>
@@ -96,9 +95,13 @@ function AppDetail( {
 									</div>
 								) )
 							}
+							<div className="fileInput">
+								<div>Files</div>
+								<input name="files" type="file" accept=".zip"></input>
+							</div>
 						</section>
 						<button onClick={executeApp}>Run</button>
-						<section>
+						<section className="outputContainer">
 							<h2>Result</h2>
 							{Result}
 							<h2>Log</h2>
