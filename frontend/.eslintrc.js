@@ -38,5 +38,7 @@ module.exports = {
 		"space-infix-ops" : [ 'warn', ],
 		"space-unary-ops" : [ 'warn', ],
 		"react/prop-types" : 'off',
+		"no-unused-vars" : 'off',
+		// "max-len" : [ "warn", ],
 	},
 };

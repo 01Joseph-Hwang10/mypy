@@ -55,6 +55,7 @@ def input_to_sys_args(codeline):
     input_paren_close_index = []
     input_func_index = []
 
+    # Get interested character's indexes
     for i in range(len(codeline)):
         if codeline[i] == "'":
             single_quote_index.append(i)
@@ -69,15 +70,20 @@ def input_to_sys_args(codeline):
         if codeline[i] == ")":
             paren_close_index.append(i)
 
+    # Search for input with parenthesis opened
     for i in range(len(codeline) - 5):
+        # Search for keyword 'input'
         if codeline[i: i + 5] == "input":
+            # Walk to right to check whether there is parenthesis next to the keyword
             j = i + 4
             while j < len(codeline) - 5:
                 j += 1
-                if codeline[j] == "(":
-                    input_paren_open_index.append(j)
+                if codeline[j] != " ":
+                    if codeline[j] == "(":
+                        input_paren_open_index.append(j)
                     break
 
+    # Cut comment, considering quote
     for index in hash_index:
         new_single_quote_index = list(
             filter(lambda x: x < index, single_quote_index))
@@ -128,7 +134,8 @@ def input_to_sys_args(codeline):
 
     if len(input_paren_open_index) != len(input_paren_close_index):
         raise SyntaxError(
-            "Your code is not properly written in perspective of syntax related with 'input' function")
+            "Your code is not properly written in perspective of syntax related with 'input' function"
+        )
 
     input_start_index = []
 

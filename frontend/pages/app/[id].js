@@ -9,6 +9,7 @@ import { retrieveApp as axiosRetrieveApp } from '@slices/retrieve-app';
 import { deleteApp as axiosDeleteApp } from '@slices/delete-app';
 import executeAppDataForm from '@form/executeAppDataForm';
 import * as styles from '@styles/AppDetail.module.scss';
+import Input from '@components/inputs/Input';
 
 
 function AppDetail( {
@@ -91,9 +92,7 @@ function AppDetail( {
 							{
 								Inputs && Inputs.map( input => (
 									<div className="formElement" key={input.id}>
-										<div>{input.name}</div>
-										<div>{input.description}</div>
-										<input name={input.name} placeholder={input.description}></input>
+										<Input input={input} />
 									</div>
 								) )
 							}

@@ -18,6 +18,7 @@
           "@form/*":["redux/form/*"],
           "@src/*":["src/*"],
           "@hooks/*":["hooks/*"],
+          "@functions/*":["functions/*"],
       }
     }
   }
