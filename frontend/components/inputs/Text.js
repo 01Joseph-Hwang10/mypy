@@ -4,13 +4,14 @@ function Text( {
 	input : {
 		name,
 		description,
+		type,
 	},
 } ) {
 	return (
 		<div className="formElement__text">
-			<div>{name}</div>
+			<div>{`${name}(${type})`}</div>
 			<div>{description}</div>
-			<input name={name} placeholder={description}></input>
+			<input className="textInput" name={name} placeholder={description}></input>
 		</div>
 	);
 }

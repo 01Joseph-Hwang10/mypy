@@ -4,13 +4,14 @@ function Boolean( {
 	input : {
 		name,
 		description,
+		type,
 	},
 } ) {
 	return (
-		<div className="formElement__boolean">
-			<div>{name}</div>
+		<div className="formElement__bool">
+			<div>{`${name}(${type})`}</div>
 			<div>{description}</div>
-			<input type="checkbox"></input>
+			<input name={name} className="boolInput" type="checkbox"></input>
 		</div>
 	);
 }

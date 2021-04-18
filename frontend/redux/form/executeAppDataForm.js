@@ -1,20 +1,81 @@
 
 const executeAppDataForm = (  app, id  ) => {
 	const formData = new FormData();
-	const forms = document.querySelectorAll( '.formElement' );
+
+	// Variables section
 	let variables = {};
-	for ( let i = 0; i < forms.length; i++ ) {
-		const input = forms[ i ].querySelector( 'input' );
-		const key = input.name;
-		const value = input.value;
-		variables[ key ] = value;
+
+	const qAll = selector => {
+		if ( document.querySelectorAll( selector ) ) {
+			return document.querySelectorAll( selector );
+		}
+		return false;
+	};
+
+	const textInput = qAll( '.formElement__text' );
+	const listInput = qAll( '.formElement__list' );
+	const dictInput = qAll( '.formElement__dict' );
+	const boolInput = qAll( '.formElement__bool' );
+
+	if ( textInput ) {
+		textInput.forEach( element => {
+			const input = element.querySelector( 'input' );
+			const key = input.name;
+			const value = input.value;
+			variables[ key ] = value;
+		} );
 	}
+
+	if ( listInput ) {
+
+		listInput.forEach( element => {
+			let value = [];
+			const key = element.querySelector( '.name' ).innerText;
+			const inputs = element.querySelectorAll( 'input' );
+			inputs.forEach( input => {
+				const listItem = input.value;
+				if ( listItem ) {
+					value.push( listItem );
+				}
+			} );
+			variables[ key ] = value;
+		} );
+	}
+
+	if ( dictInput ) {
+		
+		dictInput.forEach( element => {
+			let value = {};
+			const key = element.querySelector( '.name' ).innerText;
+			const forms = element.querySelectorAll( '.dict__row' );
+			forms.forEach( form => {
+				const dictKey = form.querySelector( '.dict__key' ).value;
+				const dictValue = form.querySelector( '.dict__value' ).value;
+				if ( dictKey && dictValue ) {
+					value[ dictKey ] = dictValue;
+				}
+			} );
+			variables[ key ] = value;
+		} );
+	}
+
+	if ( boolInput ) {
+
+		boolInput.forEach( element => {
+			const input = element.querySelector( 'input' );
+			const key = input.name;
+			const value = ( input.checked ? true : false );
+			variables[ key ] = value;
+		} );
+	}
+
 	let files = false;
 	const fileInput = document.querySelector( '.fileInput' ).files;
 	if ( fileInput ) {
 		files = fileInput[ 0 ];
 	}
 
+	
 	formData.append( 'app', app );
 	formData.append( 'variables', JSON.stringify( variables ) );
 	formData.append( 'files', files );

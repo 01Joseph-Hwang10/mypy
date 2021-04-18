@@ -44,13 +44,17 @@ def execute(log_path):
 
     log_file_path = os.path.join(log_path, 'log.txt')
 
-    with open(log_file_path, 'w') as f:
-        sys.stdout = f
+    with open(log_file_path, 'w') as fw:
+        sys.stdout = fw
 
-        result = main()
-        sys.stdout = sys.__stdout__
-    with open(log_file_path, 'r') as f:
-        logs = f.readlines()
+        try:
+            result = main()
+            sys.stdout = sys.__stdout__
+        except Exception:
+            result = 'An Error occured'
+            sys.stdout = sys.__stdout__
+    with open(log_file_path, 'r') as fr:
+        logs = fr.readlines()
         log_array = []
         for i in range(len(logs)):
             log_array.append({'id': i+1, 'log': logs[i]})

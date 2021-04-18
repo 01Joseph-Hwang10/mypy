@@ -219,13 +219,34 @@ class ExecuteAppView(CreateAPIView):
             variables = json.loads(post_data['variables'])
             files = post_data['files']
 
+            # Make needed folders if not exist
+            log_dir = os.path.join(app_path, 'log')
+            input_dir = os.path.join(app_path, 'input')
+            output_dir = os.path.join(app_path, 'output')
+            data_dir = os.path.join(app_path, 'data')
+            static_dir = os.path.join(app_path, 'static')
+            if not os.path.exists(log_dir):
+                os.mkdir(log_dir)
+            if not os.path.exists(input_dir):
+                os.mkdir(input_dir)
+            if not os.path.exists(output_dir):
+                os.mkdir(output_dir)
+            if not os.path.exists(data_dir):
+                os.mkdir(data_dir)
+            if not os.path.exists(static_dir):
+                os.mkdir(static_dir)
+
             # Modify __args.py and write the input from client
             input_path = os.path.join(app_path, 'input')
             args_path = os.path.join(input_path, '__args.py')
             with open(args_path, 'w') as f:
                 f.write('__global_vars={\n')
                 for key in list(variables.keys()):
-                    f.write(f"'{key}':'{variables[key]}',\n")
+                    if type(variables[key]) in [
+                            type(str()), type(int()), type(float()), type(complex())]:
+                        f.write(f"'{key}':{str(variables[key])},\n")
+                    else:
+                        f.write(f"'{key}':{variables[key]},\n")
                 f.write('}\n')
                 if files != 'false':
                     with ZipFile(files) as zf:

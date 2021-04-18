@@ -1,32 +1,46 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Row from './dictionary/Row';
-import { AddRow } from '@functions/AddRow';
 
 function Dictionary( {
 	input : {
 		name,
 		description,
+		type,
 	},
 } ) {
 
-	const addDictionaryRow = ( e ) => {
-		const toAttach = e.target
-			.closest( '.formElement__dict' )
-			.querySelector( '.dict' );
-		const rowComponent = React.createElement( Row, {} );
-		AddRow( rowComponent, toAttach );
+	const [ row, setRow, ] = useState( [ <Row key={1} id={1} />, ] );
+
+	const deleteDictionaryRow = ( key ) => {
+		const newState = row.filter( 
+			oneRow => Number( oneRow.key ) !== Number( key ) );
+		setRow( newState );
+	};
+
+	const addDictionaryRow = () => {
+		const newKey = row.length + 1;
+		setRow(
+			[
+				...row, 
+				<Row 
+					key={newKey} 
+					id={newKey} 
+					addDictionaryRow={addDictionaryRow}
+					deleteDictionaryRow={deleteDictionaryRow} 
+				/>, 
+			]
+		);
 	};
 
 	return (
 		<div className="formElement__dict">
-			<div>{name}</div>
+			<div>
+				<span className="name">{name}</span>
+				<span>{`(${type})`}</span>
+			</div>
 			<div>{description}</div>
 			<div className="dict">
-				<div className="row">
-					<span>Key, value</span>
-					<input className="row__key" placeholder="key"></input>
-					<input className="row__value" placeholder="value"></input>
-				</div>
+				{row}
 			</div>
 			<div>
 				<span>Key, value</span>

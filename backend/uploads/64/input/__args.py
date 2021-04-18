@@ -1,2 +1,0 @@
-__global_vars={
-}

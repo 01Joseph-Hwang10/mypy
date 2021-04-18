@@ -1,31 +1,48 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Row from './list/Row';
-import { AddRow } from '@functions/AddRow';
 
 function List( {
 	input : {
 		name,
 		description,
+		type,
 	},
 } ) {
 
-	const addListRow = ( e ) => {
-		const toAttach = e.target
-			.closest( '.formElement__list' )
-			.querySelector( '.list' );
-		const rowComponent = () => React.createElement( Row, {} );
-		AddRow( rowComponent, toAttach );
+	const [ row, setRow, ] = useState( [ <Row key={1} id={1} setRow={setRow} />, ] );
+
+	const deleteListRow = ( key ) => {
+		const newState = row.filter( 
+			oneRow => Number( oneRow.key ) !== Number( key ) );
+		setRow( newState );
 	};
+
+	const addListRow = () => {
+		const newKey = row.length + 1;
+		setRow(
+			[ 
+				...row, 
+				<Row 
+					key={newKey} 
+					id={newKey} 
+					addListRow={addListRow}
+					deleteListRow={deleteListRow} 
+				/>, 
+			]
+		);
+	};
+
+
 
 	return (
 		<div className="formElement__list">
-			<div>{name}</div>
+			<div>
+				<span className='name'>{name}</span>
+				<span>{`(${type})`}</span>
+			</div>
 			<div>{description}</div>
 			<div className="list">
-				<div className="row">
-					<span>Input Item</span>
-					<input></input>
-				</div>
+				{row}
 			</div>
 			<div>
 				<span>Input Item</span>

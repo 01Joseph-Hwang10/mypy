@@ -106,7 +106,9 @@ def input_to_sys_args(codeline):
             input_func_index.append(index)
 
     if len(equal_operator_index) != 0:
-        name = codeline[: equal_operator_index[0]].replace(" ", "")
+        name = codeline[: equal_operator_index[0]]
+        name = name.replace(" ", "")
+        name = name.replace("\t", "")
 
     for index in input_func_index:
         filtered_paren_close_index = list(
