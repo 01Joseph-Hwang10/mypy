@@ -1,13 +1,15 @@
-import { loading as executeLoading, executeAppSuccessful, executeAppError } from '@redux/slices/execute-app';
-import { loading as retrieveLoading, loadAppSuccessful, loadAppError } from '@redux/slices/retrieve-app';
-import { loading as deleteLoading, deleteAppSuccessful, deleteAppError } from '@redux/slices/delete-app';
-import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
+import { useRouter } from 'next/router';
 import { connect } from 'react-redux';
+import { loading as executeLoading, executeAppSuccessful, executeAppError } from '@slices/execute-app';
+import { loading as retrieveLoading, loadAppSuccessful, loadAppError } from '@slices/retrieve-app';
+import { loading as deleteLoading, deleteAppSuccessful, deleteAppError } from '@slices/delete-app';
 import { executeApp as axiosExecuteApp } from '@slices/execute-app';
 import { retrieveApp as axiosRetrieveApp } from '@slices/retrieve-app';
 import { deleteApp as axiosDeleteApp } from '@slices/delete-app';
-import executeAppDataForm from '@redux/form/executeAppDataForm';
+import executeAppDataForm from '@form/executeAppDataForm';
+import * as styles from '@styles/AppDetail.module.scss';
+
 
 function AppDetail( {
 	executeLoading : ExecuteLoading,
@@ -107,7 +109,7 @@ function AppDetail( {
 							<h2>Log</h2>
 							{
 								Log && Log.map( log => (
-									<div key={log.id}>{log.log}</div>
+									<div className={styles.log} key={log.id}>{'>> '}{log.log}</div>
 								) )
 							}
 						</section>

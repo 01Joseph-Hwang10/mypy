@@ -93,6 +93,7 @@ class CreateAppView(CreateAPIView):
             input_dir = os.path.join(save_directory, 'input')
             output_dir = os.path.join(save_directory, 'output')
             data_dir = os.path.join(save_directory, 'data')
+            static_dir = os.path.join(save_directory, 'static')
             shutil.copy(main_script, script_directory)
             old_index_name = os.path.join(script_directory, 'index.py')
             new_index_name = os.path.join(
@@ -110,6 +111,7 @@ class CreateAppView(CreateAPIView):
             os.mkdir(input_dir)
             os.mkdir(output_dir)
             os.mkdir(data_dir)
+            os.mkdir(static_dir)
             shutil.copy(args_script, input_dir)
             instance = App.objects.get(id=new_id)
             instance.app = save_directory
