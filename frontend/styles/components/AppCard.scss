@@ -1,0 +1,48 @@
+@use '../borderRadius';
+@use '../base';
+
+
+.appList {
+    width: 100%;
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    grid-auto-rows: 180px;
+}
+
+.appCard {
+    @extend %full;
+    background-color: transparent;
+    border: 1px solid $line;
+    @extend %rounded-lg;
+    padding: 1rem;
+    display: grid;
+    gap: 1rem;
+    grid-template-rows: min-content auto min-content;
+}
+
+.appCard__name {
+    @extend %flex-box;
+    width: 100%;
+    justify-content: start;
+}
+
+.appCard__name span {
+    color: $black-edge;
+    font-weight: bold;
+    font-size: medium;
+}
+
+.appCard__description p {
+    text-align: left;
+}
+
+.appCard__extraInfo {
+    @extend %flex-box;
+    width: 100%;
+    justify-content: end;
+}
+
+.appCard__extraInfo span {
+    color: $intermediate;
+}

@@ -8,7 +8,6 @@ import { executeApp as axiosExecuteApp } from '@slices/execute-app';
 import { retrieveApp as axiosRetrieveApp } from '@slices/retrieve-app';
 import { deleteApp as axiosDeleteApp } from '@slices/delete-app';
 import executeAppDataForm from '@form/executeAppDataForm';
-import * as styles from '@styles/AppDetail.module.scss';
 import Input from '@components/inputs/Input';
 
 
@@ -108,7 +107,7 @@ function AppDetail( {
 							<h2>Log</h2>
 							{
 								Log && Log.map( log => (
-									<div className={styles.log} key={log.id}>{'>> '}{log.log}</div>
+									<div className='log' key={log.id}>{'>> '}{log.log}</div>
 								) )
 							}
 						</section>

@@ -1,0 +1,52 @@
+@use '../base';
+@use '../borderRadius';
+
+#contentRoot {
+    @extend %grid;
+    grid-template-areas: 
+        "content sidebar";
+    gap: 0 1rem;
+}
+
+@include small {
+    #contentRoot {
+        grid-template-columns: 2.5fr 1.5fr;
+    }
+}
+
+@include large {
+    #contentRoot {
+        grid-template-columns: 3.5fr 1.5fr;
+    }
+}
+
+.mainContent {
+    grid-area: content;
+    @extend %flex-box;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.sideBar {
+    grid-area: sidebar;
+}
+
+.createButton {
+    display: flex;
+    @extend %flex-box;
+    justify-content: center;
+    @extend %basic-button;
+    @extend %rounded-md;
+    margin-bottom: 1rem;
+}
+
+.createButton > div {
+    display: table;
+    margin-right: 0.5rem;
+}
+
+.createButton > div > a {
+    @extend %base-basic-button;
+    display: table-cell;
+    vertical-align: top;
+}

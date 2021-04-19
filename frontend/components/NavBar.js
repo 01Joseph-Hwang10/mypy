@@ -4,13 +4,15 @@ import Link from 'next/link';
 
 function NavBar() {
 	return (
-		<nav>
-			<Link href='/'>
-          MYPY
-			</Link>
+		<nav id='navigation'>
+			<div className="logoWrapper">
+				<Link href='/'>
+					MYPY
+				</Link>
+			</div>
 			<div>
-				<button>Login</button>
-				<button>Profile</button>
+				<button className='navButton'>Login</button>
+				<button className='navButton'>Mypy</button>
 			</div>
 		</nav>
 	);

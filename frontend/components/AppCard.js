@@ -2,13 +2,24 @@ import Link from 'next/link';
 import React from 'react';
 
 function AppCard( {
-	children,
 	id,
+	name,
+	description,
+	created_by : createdBy,
+	exports,
 } ) {
 	return (
 		<Link as={`/app/${id}`} href='/app/[id]' passHref>
-			<button>
-				<h2>{children}</h2>
+			<button className="appCard">
+				<div className="appCard__name">
+					<span>{name}</span>
+				</div>
+				<div className="appCard__description">
+					<p className="truncate-overflow">{description}</p>
+				</div>
+				<div className="appCard__extraInfo">
+					<span>{exports} Exports</span>
+				</div>
 			</button>
 		</Link>
 	);

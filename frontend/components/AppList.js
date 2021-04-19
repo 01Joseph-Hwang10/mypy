@@ -38,11 +38,13 @@ function AppList( {
 	if ( IsSuccessful && AppList.length === 0 ) return <div>No data found</div>;
 	if ( !IsSuccessful ) return <div>{ErrorMessage}</div>;
 	return (
-		AppList.map( app => (
-			<AppCard key={app.id} {...app}>
-				{app.name}
-			</AppCard>
-		) )
+		<div className="appList">
+			{
+				AppList.map( app => (
+					<AppCard key={app.id} {...app} />
+				) )
+			}
+		</div>
 	);
 }
 

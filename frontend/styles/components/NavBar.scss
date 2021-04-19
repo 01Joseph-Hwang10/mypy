@@ -1,0 +1,46 @@
+@use '../base';
+@use '../shadow';
+
+
+#navigation {
+    @extend %flex-box;
+    @extend %shadow-lg;
+    justify-content: space-between;
+    width: 100%;
+    background-color: $white-edge;
+    position: fixed;
+    padding: 0;
+    top: 0;
+    left: 0;
+}
+
+.logoWrapper {
+    padding: 0 1rem;
+}
+
+.logoWrapper:hover {
+    cursor: pointer;
+}
+
+.logoWrapper a {
+    font-weight: bold;
+    color: $black-edge;
+    font-size: x-large;
+    text-decoration: none;
+}
+
+.navButton {
+    color: $highlight;
+    height: 100%;
+    text-align: center;
+    padding: 1.5rem 2rem;
+    background-color: transparent;
+    border: none;
+    transition: background-color 0.2s ease;
+}
+
+.navButton:hover {
+    height: 100%;
+    cursor: pointer;
+    background-color: $line;
+}

@@ -1,6 +1,7 @@
 import React from 'react';
 import NavBar from '@components/NavBar';
 import Document, { Html, Head, Main, NextScript } from 'next/document';
+import Footer from '@components/Footer';
 
 class MyDocument extends Document {
 	static async getInitialProps( ctx ) {
@@ -14,7 +15,10 @@ class MyDocument extends Document {
 				<Head />
 				<body>
 					<NavBar />
-					<Main />
+					<div id='mainBody'>
+						<Main />
+					</div>
+					<Footer />
 					<NextScript />
 				</body>
 			</Html>

@@ -1,0 +1,44 @@
+$white-edge: #ffffff;
+$base: #f1f3f8;
+$line: #d6e0f0;
+$intermediate: #8d93ab;
+$highlight: #393b44;
+$black-edge: #000000;
+
+$python-blue: #3776ab;
+$python-yellow: #ffd343;
+
+%flex-box {
+    display: flex;
+    align-items: center;
+}
+
+%grid {
+    display: grid;
+}
+
+%base-basic-button {
+    text-decoration: none;
+    text-align: center;
+    color: $white-edge;
+}
+
+
+%basic-button {
+    @extend %base-basic-button;
+    width: 100%;
+    padding: 1rem 0rem;
+    background-color: $python-blue;
+    font-weight: 600;
+}
+
+%truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap; 
+}
+
+%full {
+    width: 100%;
+    height: 100%;
+}
