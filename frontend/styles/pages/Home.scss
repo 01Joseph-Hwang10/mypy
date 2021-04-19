@@ -25,6 +25,7 @@
     @extend %flex-box;
     flex-direction: column;
     justify-content: flex-start;
+    min-height: 100vh;
 }
 
 .sideBar {
@@ -50,3 +51,37 @@
     display: table-cell;
     vertical-align: top;
 }
+
+.sideBar {
+    @extend %flex-box;
+    flex-direction: column;
+    justify-content: start;
+    padding: 1rem;
+}
+
+.aboutApp h1, h3 {
+    text-align: center;
+}
+
+.aboutApp h1 {
+    font-weight: 600;
+    color: $black-edge;
+    margin-bottom: 0.5rem;
+}
+
+.aboutApp h3 {
+    line-height: 1.2rem;
+    color: $highlight;
+}
+
+// .aboutApp button {
+//     @extend %basic-button;
+//     padding: 0.25rem 0;
+//     margin-top: 0.25rem;
+//     margin-bottom: 0.25rem;
+//     @extend %rounded-lg;
+// }
+
+// .aboutApp button:hover {
+//     cursor: pointer;
+// }

@@ -11,6 +11,7 @@ function NavBar() {
 				</Link>
 			</div>
 			<div>
+				<button className='navButton'>Tutorial</button>
 				<button className='navButton'>Login</button>
 				<button className='navButton'>Mypy</button>
 			</div>

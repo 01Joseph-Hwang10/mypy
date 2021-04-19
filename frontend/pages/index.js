@@ -1,6 +1,7 @@
 import React from 'react';
 import AppList from '@components/AppList';
 import Link from 'next/link';
+import Search from '@components/Search';
 
 export default function Home() {
 	return (
@@ -15,8 +16,14 @@ export default function Home() {
 				<AppList />
 			</section>
 			<section className="sideBar">
-				<h1>MYPY: Python app everywhere!</h1>
-				<h3>MYPY supports python console to make your IPO executable!</h3>
+				<Search />
+				<div className="aboutApp">
+					<h1>MYPY: Python app everywhere!</h1>
+					<h3>MYPY supports python console to make your IPO executable!</h3>
+					{/* <button>Tutorial</button>
+					<button>About App</button>
+					<button>Contact/Proposal</button> */}
+				</div>
 			</section>
 		</div>
 	);

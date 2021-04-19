@@ -1,5 +1,6 @@
 @use '../base';
 @use '../shadow';
+@use '../transition';
 
 
 #navigation {
@@ -12,6 +13,7 @@
     padding: 0;
     top: 0;
     left: 0;
+    z-index: 50;
 }
 
 .logoWrapper {
@@ -36,7 +38,7 @@
     padding: 1.5rem 2rem;
     background-color: transparent;
     border: none;
-    transition: background-color 0.2s ease;
+    @extend %highlight-on-hover;
 }
 
 .navButton:hover {

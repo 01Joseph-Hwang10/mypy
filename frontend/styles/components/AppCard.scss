@@ -1,5 +1,6 @@
 @use '../borderRadius';
 @use '../base';
+@use '../transition';
 
 
 .appList {
@@ -19,6 +20,22 @@
     display: grid;
     gap: 1rem;
     grid-template-rows: min-content auto min-content;
+    transition: all 0.2s ease;
+}
+
+.appCard:hover {
+    background-color: $line;
+    @extend %shadow-md;
+    cursor: pointer;
+}
+
+.appCard__description p::after {
+    transition: all 0.2s ease;
+}
+
+.appCard:hover .appCard__description p::after {
+    background-color: $line;
+    cursor: pointer;
 }
 
 .appCard__name {

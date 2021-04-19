@@ -37,7 +37,8 @@ body {
 @import 'mixins/truncate';
 
 @import 'components/NavBar';
-@import 'pages/app/AppDetail';
 @import 'pages/Home';
+@import 'pages/app/AppDetail';
+@import 'components/Search';
 @import 'components/AppCard';
 @import 'components/Footer';

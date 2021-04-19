@@ -1,0 +1,40 @@
+@use '../base';
+
+
+.searchBar {
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.searchBar form {
+    width: 100%;
+    @extend %flex-box;
+    justify-content: center;
+}
+
+.searchBar input {
+    border: none;
+    outline: none;
+    color: $intermediate;
+    background-color: transparent;
+    border-bottom: 1px solid $line;
+    flex-grow: 1;
+    padding: 1rem 0;
+    transition: all 0.2s ease;
+}
+
+.searchBar input:focus {
+    color: $highlight;
+    border-bottom: 2px solid $highlight;
+}
+
+.searchBar button {
+    border: none;
+    background-color: transparent;
+    font-size: x-large;
+    font-weight: 600;
+}
+
+.searchBar button:hover {
+    cursor: pointer;
+}
