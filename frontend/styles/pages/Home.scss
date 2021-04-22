@@ -1,44 +1,52 @@
 @use '../base';
 @use '../borderRadius';
 
+$main-content-sm: 63%;
+$main-content-lg: 70%;
+
 #contentRoot {
-    @extend %grid;
-    grid-template-areas: 
-        "content sidebar";
-    gap: 0 1rem;
-}
-
-@include small {
-    #contentRoot {
-        grid-template-columns: 2.5fr 1.5fr;
-    }
-}
-
-@include large {
-    #contentRoot {
-        grid-template-columns: 3.5fr 1.5fr;
-    }
+    width: 100%;
+    padding-right: 1rem;
+    @extend %flex-box;
+    justify-content: start;
 }
 
 .mainContent {
-    grid-area: content;
     @extend %flex-box;
     flex-direction: column;
     justify-content: flex-start;
     min-height: 100vh;
 }
 
-.sideBar {
-    grid-area: sidebar;
+@include small {
+    .mainContent {
+        width: $main-content-sm;
+    }
+}
+
+@include large {
+    .mainContent {
+        width: $main-content-lg;
+    }
 }
 
 .createButton {
     display: flex;
     @extend %flex-box;
     justify-content: center;
-    @extend %basic-button;
+    @extend %base-basic-button;
     @extend %rounded-md;
+    width: 100%;
     margin-bottom: 1rem;
+    background-color: $teal;
+    padding: 1rem 0rem;
+    font-weight: 600;
+    transition: filter 0.2s ease;
+}
+
+.createButton:hover {
+    cursor: pointer;
+    filter: brightness(1.1);
 }
 
 .createButton > div {
@@ -56,32 +64,151 @@
     @extend %flex-box;
     flex-direction: column;
     justify-content: start;
-    padding: 1rem;
+    padding: 0 1rem;
+    margin-top: 6rem;
+    top: 0;
+    right: 0;
+    position: fixed;
 }
 
-.aboutApp h1, h3 {
+@include small {
+    .sideBar {
+        width: calc(100% - #{$main-content-sm});
+    }
+}
+
+@include large {
+    .sideBar {
+        width: calc(100% - #{$main-content-lg});
+    }
+}
+
+.sideBar__aboutApp {
+    margin-bottom: 1rem;
+    @extend %flex-box;
+    flex-direction: column;
+    justify-content: start;
+}
+
+.sideBar__aboutApp span {
     text-align: center;
 }
 
-.aboutApp h1 {
+.sideBar__aboutApp > span:first-child {
     font-weight: 600;
     color: $black-edge;
     margin-bottom: 0.5rem;
 }
 
-.aboutApp h3 {
+.sideBar__aboutApp > span:last-child {
     line-height: 1.2rem;
     color: $highlight;
 }
 
-// .aboutApp button {
-//     @extend %basic-button;
-//     padding: 0.25rem 0;
-//     margin-top: 0.25rem;
-//     margin-bottom: 0.25rem;
-//     @extend %rounded-lg;
+.sideBar__aboutApp > span:last-child a {
+    margin-left: 3px;
+}
+
+.sideBar__buttons {
+    width: 90%;
+    border-bottom: 1.5px solid $line;
+    padding-bottom: 1rem;
+}
+
+.sideBar__buttons button {
+    @extend %base-basic-button;
+    background-color: $intermediate;
+    width: 100%;
+    font-size: small;
+    padding: 0.5rem;
+    margin-top: 0.25rem;
+    @extend %rounded-lg;
+    font-weight: 600;
+    transition: filter 0.2s ease;
+}
+
+.sideBar__buttons button:hover {
+    cursor: pointer;
+    filter: brightness(1.1);
+}
+
+.sideBar__buttons button:first-child {
+    background-color: $python-blue;
+    color: $base;
+}
+
+.sideBar__buttons button:last-child {
+    background-color: $python-yellow;
+    color: $highlight;
+}
+
+// @keyframes ripple
+// {
+//     0%
+//     {
+//         width: 0px;
+//         height: 0px;
+//         opacity: 0.5;
+//     }
+//     100%
+//     {
+//         width: 500px;
+//         height: 500px;
+//         opacity: 0;
+//     }
 // }
 
-// .aboutApp button:hover {
-//     cursor: pointer;
+// .buttonRipple {
+//     overflow: hidden;
 // }
+
+// .buttonRipple span {
+//     position: absolute;
+//     background: #fff;
+//     transform: translate(-50%, -50%);
+//     pointer-events: none;
+//     border-radius: 50%;
+//     animation: ripple 1s linear infinite;
+// }
+
+
+.sideBar__survey {
+    padding: 1rem 0;
+    @extend %flex-box;
+    flex-direction: column;
+    justify-content: start;
+}
+
+.sideBar__survey span {
+    text-align: center;
+}
+
+.sideBar__survey > span:first-child {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.sideBar__survey > span:nth-child(2) {
+    color: $highlight;
+}
+
+.sideBar__survey > div {
+    width: 100%;
+    @extend %flex-box;
+    padding: 0.5rem 0;
+    justify-content: center;
+}
+
+.sideBar__survey > div > button {
+    font-size: x-large;
+    background-color: $line;
+    border-radius: 50%;
+    padding: 0.5rem;
+    margin: 0 0.5rem;
+    transition: filter 0.2s ease;
+}
+
+.sideBar__survey > div > button:hover {
+    cursor: pointer;
+    filter: brightness(1.1);
+}

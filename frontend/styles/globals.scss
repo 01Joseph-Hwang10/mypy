@@ -12,6 +12,10 @@ $black-edge: #000000;
 $python-blue: #3776ab;
 $python-yellow: #ffd343;
 
+$teal: #008080;
+
+
+
 html,
 body {
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
@@ -21,11 +25,24 @@ body {
 body {
   background-color: $base;
   min-width: 100%;
+  -ms-overflow-style: none;
+}
+
+:root {
+  scrollbar-width: none !important;
+}
+
+::-webkit-scrollbar {
+  display: none;
 }
 
 #mainBody {
   margin-top: 6rem;
   padding: 0 1rem;
+}
+
+button, a {
+  border: none;
 }
 
 * {

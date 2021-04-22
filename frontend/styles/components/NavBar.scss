@@ -8,6 +8,7 @@
     @extend %shadow-lg;
     justify-content: space-between;
     width: 100%;
+    height: 4rem;
     background-color: $white-edge;
     position: fixed;
     padding: 0;
@@ -31,18 +32,18 @@
     text-decoration: none;
 }
 
-.navButton {
+.navButtons a {
+    text-decoration: none;
     color: $highlight;
     height: 100%;
     text-align: center;
     padding: 1.5rem 2rem;
     background-color: transparent;
     border: none;
-    @extend %highlight-on-hover;
+    transition: background-color 0.2s ease;
 }
 
-.navButton:hover {
-    height: 100%;
+.navButtons a:hover {
     cursor: pointer;
     background-color: $line;
 }

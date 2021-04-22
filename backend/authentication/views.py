@@ -1,4 +1,6 @@
 from django.core.checks.messages import DEBUG
+from django.urls import reverse_lazy
+from django.views.generic import FormView, TemplateView
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import (
@@ -9,6 +11,7 @@ from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 from users.serializers import CustomUserSerializer
 from users.models import CustomUser
 from common.functions import get_cookie
+from authentication.forms import SignUpForm
 
 
 class CustomTokenObtainPairView(TokenObtainPairView):
@@ -88,31 +91,13 @@ class LogoutView(generics.RetrieveAPIView):
         return auth_response
 
 
-class SignupView(generics.CreateAPIView):
+class RedirectToLoginView(TemplateView):
 
-    queryset = CustomUser.objects.all()
-    serializer_class = CustomUserSerializer
+    template_name = 'auth/login.html'
 
-    def post(self, request):
-        try:
-            post_data = request.data
-            first_name = post_data['first_name']
-            email = post_data['email']
-            username = email
-            password = post_data['password']
-            password_confirm = post_data['passwordConfirm']
-            if(password != password_confirm):
-                return Response(status=400, data='password confirm not match')
-            if(CustomUser.objects.filter(email=email).exists()):
-                return Response(status=400, data='email already used')
-            new_object = CustomUser(
-                username=username,
-                first_name=first_name,
-                last_name="",
-                email=email,
-            )
-            new_object.set_password(password)
-            new_object.save()
-            return Response(status=201, data="Signed Up Successfully!")
-        except Exception:
-            return Response(status=500, data="Internal Server Error")
+
+class SignUpView(FormView):
+
+    template_name = 'auth/signup.html'
+    form_class = SignUpForm
+    success_url = reverse_lazy('auth:login')

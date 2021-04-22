@@ -7,22 +7,40 @@ export default function Home() {
 	return (
 		<div id="contentRoot">
 			<section className="mainContent">
-				<div className="createButton">
-					<div>
-						<Link href='/create'>Create new app</Link>
-					</div>
-					<i className="bi bi-plus-circle-fill"></i>
-				</div>
+				<Link href='/create'>
+					<button className="createButton buttonRipple">
+						<div>
+							Create new app
+						</div>
+						<i className="bi bi-plus-circle-fill"></i>
+					</button>
+				</Link>
 				<AppList />
 			</section>
 			<section className="sideBar">
 				<Search />
-				<div className="aboutApp">
-					<h1>MYPY: Python app everywhere!</h1>
-					<h3>MYPY supports python console to make your IPO executable!</h3>
-					{/* <button>Tutorial</button>
-					<button>About App</button>
-					<button>Contact/Proposal</button> */}
+				<div className="sideBar__aboutApp">
+					<span>MYPY: Python app everywhere!</span>
+					<span>
+						MYPY serves your python app online! 
+						<Link href='/about'>Learn more!</Link>
+					</span>
+				</div>
+				<div className="sideBar__buttons">
+					<Link href='/create'>
+						<button className="buttonRipple">Create new</button>
+					</Link>
+					<Link href='/tutorial'>
+						<button className="buttonRipple">Tutorial</button>
+					</Link>
+				</div>
+				<div className="sideBar__survey">
+					<span>Please tell us your app experience!</span>
+					<span>Was the app useful?</span>
+					<div>
+						<button className="bi bi-hand-thumbs-up"></button>
+						<button className="bi bi-hand-thumbs-down"></button>
+					</div>
 				</div>
 			</section>
 		</div>

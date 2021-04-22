@@ -1,4 +1,4 @@
-const BASE_URL = 'http://localhost:8000/api';
+const BASE_URL = 'http://localhost:8000/source/api';
 // Apps
 export const CREATE_APP = `${BASE_URL}/apps/create/`;
 export const LIST_APP = `${BASE_URL}/apps/list/`;

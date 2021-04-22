@@ -10,10 +10,16 @@ function NavBar() {
 					MYPY
 				</Link>
 			</div>
-			<div>
-				<button className='navButton'>Tutorial</button>
-				<button className='navButton'>Login</button>
-				<button className='navButton'>Mypy</button>
+			<div className="navButtons">
+				<Link href='/tutorial'>
+					Tutorial
+				</Link>
+				<Link href='/login'>
+					Login
+				</Link>
+				<Link href='/mypy'>
+					Mypy
+				</Link>
 			</div>
 		</nav>
 	);

@@ -6,7 +6,7 @@ from users.models import CustomUser
 class CustomUserSerializer(Serializer):
 
     my_apps = PrimaryKeyRelatedField(
-        many=True, read_only=True, queryset=CustomUser.objects.all(), required=False)
+        many=True, read_only=True, required=False)
 
     class Meta:
         model = CustomUser
