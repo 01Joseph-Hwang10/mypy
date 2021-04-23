@@ -1,4 +1,115 @@
 
+
 label {
     display: none;
 }
+
+#contentRoot {
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    margin-top: 5rem;
+    padding: 1rem;
+    width: 100vw;
+    height: 100vh;
+}
+
+#contentRoot > form {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    width: 100%;
+    background-color: var(--white-edge);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+@media screen and (min-width: 640px) {
+    #contentRoot > form {
+        width: 70%;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    #contentRoot > form {
+        width: 50%;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    #contentRoot > form {
+        width: 30%;
+    }
+}
+
+#contentRoot > form > .logo {
+    font-weight: bold;
+    font-size: x-large;
+    text-align: center;
+    margin-bottom: 0.75rem;
+}
+
+#contentRoot > form > .notice {
+    font-size: small;
+    text-align: left;
+    margin-bottom: 1rem;
+    color: tomato;
+}
+
+#contentRoot > form input {
+    background-color: transparent;
+    border: 2px solid var(--line);
+    border-radius: 1rem;
+    text-align: left;
+    margin-top: 0.25rem;
+    padding: 0.5rem;
+    width: 100%;
+    outline: none;
+}
+
+.hasError input {
+    border: 2px solid tomato !important;
+}
+
+.hasError {
+    border-radius: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+#contentRoot > form > .formInput {
+    width: 100%;
+}
+
+#contentRoot > form > button {
+    margin-top: 0.25rem;
+    background-color: var(--teal);
+    border-radius: 1rem;
+    border: none;
+    font-weight: 600;
+    text-align: center;
+    padding: 0.5rem;
+    width: 100%;
+    color: var(--white-edge);
+    transition: filter 0.2s ease;
+}
+
+#contentRoot > form > button:hover {
+    cursor: pointer;
+    filter: brightness(1.1);
+}
+
+
+.formInput__errorMessage {
+    margin: 0.25rem 0;
+    margin-bottom: 0.75rem;
+    color: tomato;
+}
+
+.formInput__helpMessage {
+    margin: 0.25rem 0;
+    margin-bottom: 0.75rem;
+    color: teal;
+}
+

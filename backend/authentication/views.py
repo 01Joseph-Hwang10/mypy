@@ -1,5 +1,6 @@
 from django.core.checks.messages import DEBUG
 from django.urls import reverse_lazy
+from django.contrib.auth import authenticate
 from django.views.generic import FormView, TemplateView
 from rest_framework import generics, status
 from rest_framework.response import Response
@@ -34,10 +35,11 @@ class CustomTokenObtainPairView(TokenObtainPairView):
 
         if DEBUG:
             auth_response.set_cookie(
-                "access_token", value=serializer.validated_data['access'])
+                "access_token", value=serializer.validated_data['access'], max_age=max_age_1day)
             auth_response.set_cookie(
-                "refresh_token", value=serializer.validated_data['refresh'])
-            auth_response.set_cookie("user_id", value=user_id)
+                "refresh_token", value=serializer.validated_data['refresh'], max_age=max_age_54weeks)
+            auth_response.set_cookie(
+                "user_id", value=user_id, max_age=max_age_54weeks)
         else:
             auth_response.set_cookie(
                 "access_token", value=serializer.validated_data['access'], max_age=max_age_1day, secure=True, httponly=True, samesite='Lax')
@@ -101,3 +103,7 @@ class SignUpView(FormView):
     template_name = 'auth/signup.html'
     form_class = SignUpForm
     success_url = reverse_lazy('auth:login')
+
+    def form_valid(self, form):
+        form.save()
+        return super().form_valid(form)

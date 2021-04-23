@@ -32,7 +32,7 @@
     text-decoration: none;
 }
 
-.navButtons a {
+.navButtons a, .navButtons button {
     text-decoration: none;
     color: $highlight;
     height: 100%;
@@ -43,7 +43,7 @@
     transition: background-color 0.2s ease;
 }
 
-.navButtons a:hover {
+.navButtons a:hover, .navButtons button:hover {
     cursor: pointer;
     background-color: $line;
 }

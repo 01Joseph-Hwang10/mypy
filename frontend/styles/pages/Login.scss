@@ -1,0 +1,147 @@
+@use '../base';
+@use '../borderRadius';
+@use '../shadow';
+
+
+#loginContentRoot {
+    width: 100%;
+    height: 70vh;
+    display: grid;
+    grid-template-areas: 
+    "content login"
+    ;
+
+    grid-template-columns: 2.5fr 1.5fr;
+}
+
+@include small {
+    #loginContentRoot {
+        grid-template-columns: 2.5fr 1.5fr;
+    }
+}
+
+@include large {
+    #loginContentRoot {
+        grid-template-columns: 3.5fr 1.5fr;
+    }
+}
+
+
+.loginForm {
+    grid-area: login;
+}
+
+.loginForm__main {
+    padding: 1rem;
+    background-color: $white-edge;
+    @extend %rounded-lg;
+    @extend %shadow-lg;
+}
+
+.loginContent {
+    grid-area: content;
+}
+
+.socialLogins {
+    @extend %flex-box;
+    flex-direction: column;
+    justify-content: start;
+}
+
+.socialLogins > span {
+    text-align: center;
+    font-weight: 600;
+    font-size: large;
+    color: $black-edge;
+}
+
+.socialLogins__buttons {
+    @extend %flex-box;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.socialLogins__buttons button {
+    border-radius: 50%;
+    padding: 0.75rem;
+    background-color: $line;
+    transition: filter 0.2s ease;
+}
+
+.socialLogins__buttons button:hover {
+    cursor: pointer;
+    filter: brightness(1.1);
+}
+
+.socialLogins__buttons button:first-child, .socialLogins__buttons button:last-child {
+    margin: 0 1rem;
+}
+
+
+.emailLogin {
+    @extend %flex-box;
+    flex-direction: column;
+    justify-content: start;
+}
+
+.emailLogin__subject {
+    margin-bottom: 0.25rem;
+}
+
+
+.emailLogin input {
+    background-color: transparent;
+    border: 2px solid $line;
+    border-radius: 1rem;
+    text-align: left;
+    margin-top: 0.25rem;
+    padding: 0.5rem;
+    width: 100%;
+    outline: none;
+    transition: border 0.2s ease;
+}
+
+.emailLogin input:focus {
+    border: 2px solid $intermediate;
+}
+
+.emailLogin button {
+    margin-top: 0.25rem;
+    background-color: $teal;
+    border-radius: 1rem;
+    border: none;
+    font-weight: 600;
+    text-align: center;
+    padding: 0.6rem;
+    width: 100%;
+    color: $white-edge;
+    transition: filter 0.2s ease;
+}
+
+.emailLogin button:hover {
+    cursor: pointer;
+    filter: brightness(1.1);
+}
+
+.signUp {
+    @extend %flex-box;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+.signUp span {
+    text-align: center;
+}
+
+.signUp span a {
+    text-decoration: none;
+    font-weight: bold;
+    color: $python-blue;
+}
+
+.loginContent__subject {
+    font-size: x-large;
+    font-weight: bold;
+    color: $black-edge;
+    text-align: left;
+}

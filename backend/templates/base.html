@@ -8,6 +8,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block page_title %} {% endblock page_title %} | MYPY</title>
+    <link rel="stylesheet" href="{% static 'styles/reset.css' %}">
+    <link rel="stylesheet" href="{% static 'styles/globals.css' %}">
+    <link rel="stylesheet" href="{% static 'styles/nav_bar.css' %}">
+    <link rel="stylesheet" href="{% static 'styles/footer.css' %}">
     
     {% block style %}
         
@@ -15,10 +19,22 @@
         
 </head>
 <body>
+
+    {% include 'nav_bar.html' %}
     
-    {% block content %}
+    <section id="contentRoot">
+        {% block content %}
         
-    {% endblock content %}
+        {% endblock content %}
+    </section>
+
+    {% include 'footer.html' %}
+
+    
+    {% block script %}
+        
+    {% endblock script %}
+        
         
 </body>
 </html>

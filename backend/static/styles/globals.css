@@ -1,0 +1,43 @@
+:root {
+    --white-edge: #ffffff;
+    --base: #f1f3f8;
+    --line: #d6e0f0;
+    --intermediate: #8d93ab;
+    --highlight: #393b44;
+    --black-edge: #000000;
+
+    --python-blue: #3776ab;
+    --python-yellow: #ffd343;
+
+    --teal: #008080;
+
+    --sm: 640px;
+    --md: 768px;
+    --lg: 1024px;
+    --xl: 1280px;
+    --xxl: 1536px;
+
+    scrollbar-width: none !important;
+}
+
+html,
+body {
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--base);
+    height: 100vh;
+    width: 100vw;
+    -ms-overflow-style: none;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+

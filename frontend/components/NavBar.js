@@ -2,7 +2,8 @@ import React from 'react';
 import Link from 'next/link';
 
 
-function NavBar() {
+const NavBar = () => {
+
 	return (
 		<nav id='navigation'>
 			<div className="logoWrapper">
@@ -14,8 +15,8 @@ function NavBar() {
 				<Link href='/tutorial'>
 					Tutorial
 				</Link>
-				<Link href='/login'>
-					Login
+				<Link href='/auth'>
+					Sign In/Out
 				</Link>
 				<Link href='/mypy'>
 					Mypy
@@ -23,7 +24,7 @@ function NavBar() {
 			</div>
 		</nav>
 	);
-}
+};
 
 
 export default NavBar;

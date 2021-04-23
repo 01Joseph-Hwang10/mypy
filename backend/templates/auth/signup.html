@@ -7,8 +7,6 @@
 {% block style %}
     <link rel="stylesheet" href="{% static 'styles/signup.css' %}">
 {% endblock style %}
-    
-
 
 {% block page_title %}
     Sign Up
@@ -16,9 +14,37 @@
     
 
 {% block content %}
-    <form>
-        {{ form }}
-        <button>Submit</button>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        
+        {% if form.non_field_errors %}
+            
+            
+            {% for error in form.non_field_errors %}
+                <span class="errorMessage">{{ error }}</span>
+            {% endfor %}
+                
+        {% endif %}
+            
+        <div class="logo">MYPY</div>
+
+        <div class="notice">
+            <span>
+                NOTE: Password lost and found is currently not supported 
+                since we don't have a domain for sending email. 
+                Sorry for the inconvenience
+            </span>
+        </div>
+        
+        {% for field in form %}
+            {% include 'mixins/form_input.html' with field=field %}
+        {% endfor %}
+            
+
+        <button>Sign Up</button>
+
     </form>
 {% endblock content %}
+    
     

@@ -1,4 +1,5 @@
 from django.forms import ModelForm, widgets
+from django.contrib.auth.password_validation import validate_password
 from django import forms
 from users.models import CustomUser
 
@@ -21,6 +22,24 @@ class SignUpForm(ModelForm):
     passwordConfirm = forms.CharField(
         widget=forms.PasswordInput(attrs={'placeholder': 'Confirm password'})
     )
+
+    def clean_email(self):
+
+        email = self.cleaned_data.get('email')
+        user = CustomUser.objects.filter(email=email)
+
+        if user:
+            raise forms.ValidationError('This email is already occupied')
+        else:
+            return email
+
+    def clean_password(self):
+
+        password = self.cleaned_data.get('password')
+
+        validate_password(password)
+
+        return password
 
     def clean_passwordConfirm(self):
 

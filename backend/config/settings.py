@@ -29,8 +29,6 @@ SECRET_KEY = '#08y$puf(yn%@a#-%!l0o2anef9rl(+n%_3a!$zp_zjfo+aeyh'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(os.environ.get('DEBUG') != 'False')
 
-ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -152,15 +150,15 @@ STATIC_URL = '/static/'
 
 MEDIA_URL = '/media/'
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+if DEBUG:
+    STATIC_ROOT = ''
+    STATICFILES_DIRS = (
+        os.path.join(BASE_DIR, 'static'),
+    )
+else:
+    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
-
-SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
-
-STATICFILES_DIRS = (
-    os.path.join(SITE_ROOT, 'static/'),
-)
 
 # Django Rest Framework
 
@@ -203,9 +201,27 @@ SIMPLE_JWT = {
 
 CORS_ALLOW_CREDENTIALS = True
 
+ALLOWED_HOSTS = (  # This is not the django cors headers property,
+    # It's django property
+    'localhost',
+    '127.0.0.1',
+)
+
 CORS_ORIGIN_WHITELIST = (
     'http://localhost:3000',
     'http://127.0.0.1:3000',
     'https://localhost:3000',
     'https://127.0.0.1:3000'
+)
+
+CORS_ALLOWED_ORIGINS = (
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+    'https://localhost:3000',
+    'https://127.0.0.1:3000'
+)
+
+CSRF_TRUSTED_ORIGINS = (
+    'localhost:3000',
+    '127.0.0.1:3000',
 )

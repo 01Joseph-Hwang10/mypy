@@ -1,0 +1,18 @@
+<div class=
+"{% if field.errors %}hasError{% endif %}
+formInput">
+  {{ field }} 
+
+  {% if field.help_text %}
+    <span class="formInput__helpMessage">{{ field.help_text }}</span>
+  {% endif %}
+
+  {% if field.errors %}
+    
+  {% for error in field.errors %}
+    <span class="formInput__errorMessage">{{ error }}</span>
+  {% endfor %}
+
+  {% endif %}
+
+</div>
