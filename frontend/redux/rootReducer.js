@@ -5,6 +5,7 @@ import { reducer as ExecuteAppReducer } from '@slices/execute-app';
 import { reducer as RetrieveAppReducer } from '@slices/retrieve-app';
 import { reducer as DeleteAppReducer } from '@slices/delete-app';
 import { reducer as AuthReducer } from '@slices/auth';
+import { reducer as MessageReducer } from '@slices/message';
 
 const rootReducer = combineReducers( {
 	createApp : createAppReducer,
@@ -13,6 +14,7 @@ const rootReducer = combineReducers( {
 	retrieveApp : RetrieveAppReducer,
 	deleteApp : DeleteAppReducer,
 	auth : AuthReducer,
+	message : MessageReducer,
 } );
 
 export default rootReducer;

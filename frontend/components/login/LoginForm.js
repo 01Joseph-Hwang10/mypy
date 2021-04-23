@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { loading, signInError, signInSuccessful, signIn } from '@redux/slices/auth';
 import SignInDataForm from '@redux/form/SignInDataForm';
 import { useRouter } from 'next/router';
+import { showMessage, playAnimation } from '@redux/slices/message';
 
 function LoginForm( {
 	isLoading : IsLoading,
@@ -13,6 +14,7 @@ function LoginForm( {
 	loading : Loading,
 	signInSuccessful : SignInSuccessful,
 	signInError : SignInError,
+	showMessage : ShowMessage,
 } ) {
 
 	const router = useRouter();
@@ -26,8 +28,10 @@ function LoginForm( {
 			const { user_id, } = data;
 			SignInSuccessful( user_id );
 			router.push( '/' );
+			ShowMessage( { message : "Hello :)", } );
+			playAnimation();
 		} else {
-			SignInError( 'Login Failed!' );
+			SignInError( "Sign In Failed! You may submitted wrong email or password" );
 		}
 	};
 
@@ -75,6 +79,7 @@ const mapDispatchToProps = dispatch => {
 		loading : () => dispatch( loading() ),
 		signInSuccessful : ( response ) => dispatch( signInSuccessful( response ) ),
 		signInError : ( response ) => dispatch( signInError( response ) ),
+		showMessage : ( data ) => dispatch( showMessage( data ) ),
 	};
 };
 

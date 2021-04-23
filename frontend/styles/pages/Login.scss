@@ -123,6 +123,12 @@
     filter: brightness(1.1);
 }
 
+.emailLogin__error {
+    text-align: center;
+    margin-top: 0.25rem;
+    color: tomato;
+}
+
 .signUp {
     @extend %flex-box;
     justify-content: center;

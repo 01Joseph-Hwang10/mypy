@@ -1,7 +1,5 @@
 import React from 'react';
-import NavBar from '@components/NavBar';
 import Document, { Html, Head, Main, NextScript } from 'next/document';
-import Footer from '@components/Footer';
 
 
 class MyDocument extends Document {
@@ -15,11 +13,7 @@ class MyDocument extends Document {
 			<Html>
 				<Head />
 				<body>
-					<NavBar />
-					<div id='mainBody'>
-						<Main />
-					</div>
-					<Footer />
+					<Main />
 					<NextScript />
 				</body>
 			</Html>

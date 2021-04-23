@@ -19,6 +19,7 @@
           "@src/*":["src/*"],
           "@hooks/*":["hooks/*"],
           "@functions/*":["functions/*"],
+          "@layout/*":["layout/*"],
       }
     }
   }

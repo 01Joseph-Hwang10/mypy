@@ -14,7 +14,7 @@ export const {
 } = createSlice( {
 	name : 'authSlice',
 	initialState : {
-		signedIn : true,
+		signedIn : false,
 		userId : null,
 		error : null,
 		loading : false,
@@ -24,6 +24,7 @@ export const {
 			state.loading = true;
 		},
 		signInSuccessful : ( state, { payload, } ) => {
+			window.localStorage.setItem( 'user_id', payload );
 			state.loading = false;
 			state.userId = payload;
 			state.signedIn = true;
@@ -45,42 +46,44 @@ export const {
 
 export const signIn = async postData => {
 
-	const { status, data, } = await axios
-		.post( TOKEN, postData, { 
-			headers : {
-				'Content-Type' : 'multipart/form-data',
-			},
-			withCredentials : true,
-		} );
+	try {
+		const { data, } = await axios
+			.post( TOKEN, postData, { 
+				headers : {
+					'Content-Type' : 'multipart/form-data',
+				},
+				withCredentials : true,
+			} );
 
-	if ( status === 200 ) {
 		return {
 			ok : true,
 			data,
 		};
+	} catch ( error ) {
+		return {
+			ok : false,
+			data : error.message,
+		};
 	}
-	return {
-		ok : false,
-		data,
-	};
 };
 
 
 export const refreshToken = async () => {
 
-	const { status, data, } = await axios
-		.post( REFRESH, {}, { withCredentials : true, } );
+	try {
+		const { data, } = await axios
+			.post( REFRESH, {}, { withCredentials : true, } );
 
-	if ( status === 200 ) {
 		return {
 			ok : true,
 			data,
 		};
+	} catch ( error ) {
+		return {
+			ok : false,
+			data : error.message,
+		};
 	}
-	return {
-		ok : false,
-		data,
-	};
 };
 
 

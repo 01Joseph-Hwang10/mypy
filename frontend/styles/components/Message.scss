@@ -1,0 +1,40 @@
+@use '../base';
+@use '../borderRadius';
+
+.messageWrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    @extend %flex-box;
+    justify-content: center;
+    z-index: 100;
+    pointer-events: none;
+}
+
+
+@keyframes showMessage {
+    0% {
+        transform: translateY(-2.5rem);
+    }
+    20% {
+        transform: translateY(2.5rem);
+    }
+    80% {
+        transform: translateY(2.5rem);
+    }
+    100% {
+        transform: translateY(-2.5rem);
+    }
+
+}
+
+.messageWrapper .message {
+    @extend %rounded-lg;
+    background-color: $python-blue;
+    font-weight: 600;
+    color: $white-edge;
+    padding: 1rem 2.5rem;
+    transition: transform 0.2s linear;
+}
+
