@@ -8,11 +8,11 @@ function Initialize( {
 } ) {
 
 	useEffect( async () => {
-		try {
-			await refreshToken();
+		const { ok, } = await refreshToken();
+		if ( ok ) {
 			const userId = window.localStorage.getItem( 'user_id' );
 			SignInSuccessful( userId );
-		} catch ( error ) {
+		} else {
 			Logout();
 		}
 	}, [] );

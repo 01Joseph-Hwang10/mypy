@@ -16,3 +16,11 @@ export const TEXT_COMPONENT = 'TextComponent';
 export const LIST_COMPONENT = 'ListComponent';
 export const DICTIONARY_COMPONENT = 'DictionaryComponent';
 export const BOOLEAN_COMPONENT = 'BooleanComponent';
+
+// Responsive Width
+
+export const SCREEN_SMALL = 640;
+export const SCREEN_MEDIUM = 768;
+export const SCREEN_LARGE = 1024;
+export const SCREEN_XLARGE = 1280;
+export const SCREEN_XXLARGE = 1536;

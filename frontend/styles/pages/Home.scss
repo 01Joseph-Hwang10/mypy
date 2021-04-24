@@ -1,35 +1,6 @@
 @use '../base';
 @use '../borderRadius';
 
-$main-content-sm: 63%;
-$main-content-lg: 70%;
-
-#contentRoot {
-    width: 100%;
-    padding-right: 1rem;
-    @extend %flex-box;
-    justify-content: start;
-}
-
-.mainContent {
-    @extend %flex-box;
-    flex-direction: column;
-    justify-content: flex-start;
-    min-height: 100vh;
-}
-
-@include small {
-    .mainContent {
-        width: $main-content-sm;
-    }
-}
-
-@include large {
-    .mainContent {
-        width: $main-content-lg;
-    }
-}
-
 .createButton {
     display: flex;
     @extend %flex-box;
@@ -61,26 +32,10 @@ $main-content-lg: 70%;
 }
 
 .sideBar {
+    width: 100%;
     @extend %flex-box;
     flex-direction: column;
     justify-content: start;
-    padding: 0 1rem;
-    margin-top: 6rem;
-    top: 0;
-    right: 0;
-    position: fixed;
-}
-
-@include small {
-    .sideBar {
-        width: calc(100% - #{$main-content-sm});
-    }
-}
-
-@include large {
-    .sideBar {
-        width: calc(100% - #{$main-content-lg});
-    }
 }
 
 .sideBar__aboutApp {

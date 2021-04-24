@@ -1,11 +1,11 @@
 import React from 'react';
 
-function signup() {
+function MypyPage() {
 	return (
 		<div>
-            signup
+            
 		</div>
 	);
 }
 
-export default signup;
+export default MypyPage;

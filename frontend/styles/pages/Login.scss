@@ -1,34 +1,33 @@
 @use '../base';
 @use '../borderRadius';
 @use '../shadow';
+@use '../margin';
 
 
-#loginContentRoot {
+#mobileLoginContentRoot, .sideBarWrapper .loginFormWrapper {
+    @extend %flex-box;
+    flex-direction: column;
+    justify-content: start;
+}
+
+#mobileLoginContentRoot {
+    height: 100vh;
+    @extend %mx-auto;
+    width: 91.67%;
+}
+
+#loginFormWrapper {
+    position: absolute;
+    top: 0;
+    right: 0;
     width: 100%;
-    height: 70vh;
-    display: grid;
-    grid-template-areas: 
-    "content login"
-    ;
-
-    grid-template-columns: 2.5fr 1.5fr;
-}
-
-@include small {
-    #loginContentRoot {
-        grid-template-columns: 2.5fr 1.5fr;
-    }
-}
-
-@include large {
-    #loginContentRoot {
-        grid-template-columns: 3.5fr 1.5fr;
-    }
+    padding: 0 1rem;
+    transition: transform 0.2s ease;
 }
 
 
 .loginForm {
-    grid-area: login;
+    width: 100%;
 }
 
 .loginForm__main {
@@ -36,10 +35,6 @@
     background-color: $white-edge;
     @extend %rounded-lg;
     @extend %shadow-lg;
-}
-
-.loginContent {
-    grid-area: content;
 }
 
 .socialLogins {
@@ -105,7 +100,7 @@
     border: 2px solid $intermediate;
 }
 
-.emailLogin button {
+.emailLogin .submitButton, .emailLogin .loadingButton {
     margin-top: 0.25rem;
     background-color: $teal;
     border-radius: 1rem;
@@ -118,9 +113,13 @@
     transition: filter 0.2s ease;
 }
 
-.emailLogin button:hover {
+.emailLogin .submitButton:hover {
     cursor: pointer;
     filter: brightness(1.1);
+}
+
+.emailLogin .loadingButton {
+    filter: saturate(50%);
 }
 
 .emailLogin__error {

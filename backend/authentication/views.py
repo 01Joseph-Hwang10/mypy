@@ -35,11 +35,11 @@ class CustomTokenObtainPairView(TokenObtainPairView):
 
         if DEBUG:
             auth_response.set_cookie(
-                "access_token", value=serializer.validated_data['access'], max_age=max_age_1day)
+                "access_token", value=serializer.validated_data['access'], max_age=max_age_1day, samesite='Lax')
             auth_response.set_cookie(
-                "refresh_token", value=serializer.validated_data['refresh'], max_age=max_age_54weeks)
+                "refresh_token", value=serializer.validated_data['refresh'], max_age=max_age_54weeks, samesite='Lax')
             auth_response.set_cookie(
-                "user_id", value=user_id, max_age=max_age_54weeks)
+                "user_id", value=user_id, max_age=max_age_54weeks, samesite='Lax')
         else:
             auth_response.set_cookie(
                 "access_token", value=serializer.validated_data['access'], max_age=max_age_1day, secure=True, httponly=True, samesite='Lax')
@@ -55,29 +55,29 @@ class CustomTokenRefreshView(TokenRefreshView):
 
     def post(self, request, *args, **kwargs):
 
-        cookie = get_cookie(request)
-        post_data = {"refresh": str(cookie['refresh_token'])}
-
-        serializer = self.get_serializer(data=post_data)
         try:
+            cookie = get_cookie(request)
+            post_data = {"refresh": str(cookie['refresh_token'])}
+
+            serializer = self.get_serializer(data=post_data)
             serializer.is_valid(raise_exception=True)
-        except TokenError as e:
-            raise InvalidToken(e.args[0])
 
-        auth_response = Response(
-            serializer.validated_data, status=status.HTTP_200_OK)
+            auth_response = Response(
+                serializer.validated_data, status=status.HTTP_200_OK)
 
-        # max_age = 365 * 24 * 60 * 60
-        max_age_1day = 24*60*60
+            # max_age = 365 * 24 * 60 * 60
+            max_age_1day = 24*60*60
 
-        if DEBUG:
-            auth_response.set_cookie(
-                "access_token", value=serializer.validated_data['access'])
-        else:
-            auth_response.set_cookie(
-                "access_token", value=serializer.validated_data['access'], max_age=max_age_1day, secure=True, httponly=True, samesite='Lax')
+            if DEBUG:
+                auth_response.set_cookie(
+                    "access_token", value=serializer.validated_data['access'])
+            else:
+                auth_response.set_cookie(
+                    "access_token", value=serializer.validated_data['access'], max_age=max_age_1day, secure=True, httponly=True, samesite='Lax')
 
-        return auth_response
+            return auth_response
+        except Exception:
+            return Response(status=401, data='Authorization Error')
 
 
 class LogoutView(generics.RetrieveAPIView):

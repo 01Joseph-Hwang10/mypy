@@ -6,6 +6,7 @@ import { loading, signInError, signInSuccessful, signIn } from '@redux/slices/au
 import SignInDataForm from '@redux/form/SignInDataForm';
 import { useRouter } from 'next/router';
 import { showMessage, playAnimation } from '@redux/slices/message';
+import { cleanUp } from '@functions/SignIn';
 
 function LoginForm( {
 	isLoading : IsLoading,
@@ -27,7 +28,11 @@ function LoginForm( {
 		if ( ok ) {
 			const { user_id, } = data;
 			SignInSuccessful( user_id );
-			router.push( '/' );
+			if ( window.matchMedia( '(min-width: 640px)' ).matches ) {
+				cleanUp();
+			} else {
+				router.push( '/' );
+			}
 			ShowMessage( { message : "Hello :)", } );
 			playAnimation();
 		} else {
@@ -53,7 +58,13 @@ function LoginForm( {
 					<span className="emailLogin__subject">...or with Email</span>
 					<input required className="emailLogin__email" type='email' placeholder='email'></input>
 					<input required className="emailLogin__password" type='password' placeholder="password"></input>
-					<button>Sign In</button>
+					{
+						IsLoading ? (
+							<button disabled className="loadingButton">Loading...</button>
+						) : (
+							<button className="submitButton">Sign In</button>
+						)
+					}
 					{
 						ErrorMessage !== null && <span className="emailLogin__error">{ErrorMessage}</span>
 					}

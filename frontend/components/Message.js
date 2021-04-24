@@ -4,11 +4,14 @@ import { connect } from 'react-redux';
 function Message( {
 	message : Message,
 } ) {
+
+	const animationStyle = {
+		transform : 'translateY(-3rem)',
+	};
+
 	return (
 		<div className="messageWrapper">
-			<div className="message" style={{
-				transform : 'translateY(-3rem)',
-			}}>{Message}</div>
+			<div className="message" style={animationStyle}>{Message}</div>
 		</div>
 	);
 }

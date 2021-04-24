@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Link from 'next/link';
 import { connect } from 'react-redux';
 import { logout, signOut } from '@redux/slices/auth';
 import { useRouter } from 'next/router';
 import { showMessage, playAnimation } from '@redux/slices/message';
+import { signInToggle } from '@functions/SignIn';
+import { returnLoginElements } from '@functions/SignIn';
 
 
 const NavBar = ( {
@@ -13,6 +15,14 @@ const NavBar = ( {
 } ) => {
 
 	const router = useRouter();
+
+	const { signInButton, } = returnLoginElements();
+
+	useEffect( ()=> {
+		if ( signInButton ) {
+			signInButton.removeAttribute( 'style' );
+		}
+	}, [ SignedIn, ] );
 
 	const signOutClick = async () => {
 		await signOut();
@@ -37,9 +47,7 @@ const NavBar = ( {
 					SignedIn ? (
 						<button onClick={signOutClick}>Sign Out</button>
 					) : (
-						<Link href='/login'>
-						Sign In
-						</Link>
+						<button onClick={signInToggle} className="signInButton">Sign In</button>
 					)
 				}
 				<Link href='/mypy'>

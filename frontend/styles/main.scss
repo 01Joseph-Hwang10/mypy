@@ -1,0 +1,50 @@
+@use 'base';
+
+$main-content-sm: 63%;
+$main-content-lg: 70%;
+
+#contentRoot {
+    width: 100%;
+    padding-right: 1rem;
+    @extend %flex-box;
+    justify-content: start;
+}
+
+.mainContent {
+    @extend %flex-box;
+    flex-direction: column;
+    justify-content: flex-start;
+    min-height: 100vh;
+}
+
+@include small {
+    .mainContent {
+        width: $main-content-sm;
+    }
+}
+
+@include large {
+    .mainContent {
+        width: $main-content-lg;
+    }
+}
+
+.sideBarWrapper {
+    top: 0;
+    right: 0;
+    position: fixed;
+    margin-top: 6rem;
+    padding: 0 1rem;
+}
+
+@include small {
+    .sideBarWrapper {
+        width: calc(100% - #{$main-content-sm});
+    }
+}
+
+@include large {
+    .sideBarWrapper {
+        width: calc(100% - #{$main-content-lg});
+    }
+}

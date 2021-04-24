@@ -43,6 +43,10 @@
     transition: background-color 0.2s ease;
 }
 
+.navButtons button {
+    font-size: 0.925rem;
+}
+
 .navButtons a:hover, .navButtons button:hover {
     cursor: pointer;
     background-color: $line;
