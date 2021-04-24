@@ -17,6 +17,8 @@ export const {
 		isSuccessful : false,
 		me : null,
 		error : null,
+		myApps : [],
+		imported : [],
 	},
 	reducers : {
 		loading : ( state ) => {
@@ -39,19 +41,21 @@ export const {
 
 export const retrieveUser = async ( userId ) => {
 
-	const getUrl = `${RETRIEVE_USER}${userId}/`;
+	try {
+		const getUrl = `${RETRIEVE_USER}${userId}/`;
 
-	const { status, data, } = await axios
-		.get( getUrl, { withCredentials : true, } );
+		const { data, } = await axios
+			.get( getUrl, { withCredentials : true, } );
 
-	if ( status === 200 ) {
 		return {
 			ok : true,
 			data,
 		};
+	} catch ( error ) {
+		return {
+			ok : false,
+			data : error.message,
+		};
 	}
-	return {
-		ok : false,
-		data,
-	};
+
 };

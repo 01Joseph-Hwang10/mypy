@@ -37,16 +37,17 @@ export const {
 
 export const deleteApp = async id => {
 
-	const { status, data, } = await axios.delete( `${DELETE_APP}?id=${id}` );
+	try {
+		const {  data, } = await axios.delete( `${DELETE_APP}?id=${id}` );
 
-	if ( status === 200 ) {
 		return {
 			ok : true,
 			data,
 		};
+	} catch ( error ) {
+		return {
+			ok : false,
+			data : error.message,
+		};
 	}
-	return {
-		ok : false,
-		data,
-	};
 };

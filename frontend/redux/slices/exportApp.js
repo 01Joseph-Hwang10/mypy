@@ -68,15 +68,17 @@ export const {
 
 
 export const axiosExportApp = async ( postData ) => {
-	const { status, } = await axios
-		.patch( UPDATE_IMPORTS, postData, { withCredentials : true, } );
 
-	if ( status === 200 ) {
+	try {
+		await axios
+			.patch( UPDATE_IMPORTS, postData, { withCredentials : true, } );
+
 		return {
 			ok : true,
 		};
+	} catch ( error ) {
+		return {
+			ok : false,
+		};
 	}
-	return {
-		ok : false,
-	};
 };

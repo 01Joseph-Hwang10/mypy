@@ -39,20 +39,21 @@ export const {
 
 export const executeApp = async ( postData ) => {
     
-	const { status, data, } = await axios.post( EXECUTE_APP, postData, {
-		headers : {
-			'Content-Type' : 'multipart/form-data',
-		},
-	} );
-
-	if ( status === 200 ) {
+	try {
+		const {  data, } = await axios.post( EXECUTE_APP, postData, {
+			headers : {
+				'Content-Type' : 'multipart/form-data',
+			},
+		} );
+	
 		return {
 			ok : true,
 			data,
 		};
+	} catch ( error ) {
+		return {
+			ok : false,
+			data : error.message,
+		};
 	}
-	return {
-		ok : false,
-		data,
-	};
 };

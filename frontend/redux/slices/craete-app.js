@@ -38,21 +38,22 @@ export const {
 
 export const createApp = async ( postData ) => {
 
-	const { status, data, } = await axios
-		.post( CREATE_APP, postData, {
-			headers : { 
-				'Content-Type' : 'multipart/form-data',
-			},
-		} );
+	try {
+		const {  data, } = await axios
+			.post( CREATE_APP, postData, {
+				headers : { 
+					'Content-Type' : 'multipart/form-data',
+				},
+			} );
     
-	if ( status === 201 ) {
 		return {
 			ok : true,
 			data,
 		};
+	} catch ( error ) {
+		return {
+			ok : false,
+			data : error.message,
+		};
 	}
-	return {
-		ok : false,
-		data,
-	};
 };
