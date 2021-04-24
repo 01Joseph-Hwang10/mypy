@@ -12,7 +12,9 @@
     gap: 1rem;
     grid-template-rows: min-content auto min-content;
     transition: all 0.2s ease;
+    font-family: Arial, Helvetica, sans-serif;
 }
+
 
 .appCard:hover {
     background-color: $line;
@@ -20,11 +22,11 @@
     cursor: pointer;
 }
 
-.appCard__description p::after {
+.appCard__description p::after, .appCard__name span::after {
     transition: all 0.2s ease;
 }
 
-.appCard:hover .appCard__description p::after {
+.appCard:hover .appCard__description p::after, .appCard:hover .appCard__name span::after {
     background-color: $line;
     cursor: pointer;
 }
@@ -47,10 +49,39 @@
 
 .appCard__extraInfo {
     @extend %flex-box;
-    width: 100%;
     justify-content: end;
 }
 
-.appCard__extraInfo span {
-    color: $intermediate;
+.appCard__extraInfo .itemWrapper {
+    z-index: 5;
+    @extend %flex-box;
+    @extend %rounded-lg;
+    padding: 0 0.5rem;
+    justify-content: end;
+    transition: background-color 0.2s ease;
 }
+
+.appCard__extraInfo .exportCount, .appCard__extraInfo .exportButton {
+    color: $intermediate;
+    transition: color 0.2s ease;
+}
+
+.appCard__extraInfo .exportButton {
+    font-size: medium;
+    margin-left: 0.5rem;
+    transition: all 0.5s ease-in-out;
+}
+
+.appCard__extraInfo .itemWrapper:hover .exportCount, .appCard__extraInfo .itemWrapper:hover .exportButton {
+    color: $white-edge;
+}
+
+.appCard__extraInfo .itemWrapper:hover .exportButton {
+    transform: rotateZ(180deg);
+    font-size: large;
+}
+
+.appCard__extraInfo .itemWrapper:hover {
+    background-color: $intermediate;
+}
+

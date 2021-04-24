@@ -18,9 +18,13 @@ export const DICTIONARY_COMPONENT = 'DictionaryComponent';
 export const BOOLEAN_COMPONENT = 'BooleanComponent';
 
 // Responsive Width
-
 export const SCREEN_SMALL = 640;
 export const SCREEN_MEDIUM = 768;
 export const SCREEN_LARGE = 1024;
 export const SCREEN_XLARGE = 1280;
 export const SCREEN_XXLARGE = 1536;
+
+// Colors
+export const TEAL = '#008080';
+export const PYTHON_BLUE = '#3776ab';
+export const PYTHON_YELLOW = '#ffd343';

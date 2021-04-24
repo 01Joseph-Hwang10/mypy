@@ -12,6 +12,7 @@ function create( {
 	isLoading : IsLoading,
 	isSuccessful : IsSuccessful,
 	isFirstTime : IsFirstTime,
+	userId : UserId,
 } ) {
 
 	const router = useRouter();
@@ -19,8 +20,9 @@ function create( {
 	const createAppSubmit = async ( e ) => {
 		e.preventDefault();
 		Loading();
-		const postData = createAppDataForm( e );
-		const { ok, data, } = await createApp( postData );
+		let formData = createAppDataForm( e );
+		formData.append( 'user_id', Number( UserId ) );
+		const { ok, data, } = await createApp( formData );
 		if ( ok ) {
 			const { id, } = data;
 			CreateAppSuccessful();
@@ -67,6 +69,7 @@ const mapStateToProps = ( state ) => {
 		isLoading : state.createApp.loading,
 		isSuccessful : state.createApp.isSuccessful,
 		isFirstTime : state.createApp.isFirstTime,
+		userId : state.auth.userId,
 	};
 };
 

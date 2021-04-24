@@ -34,7 +34,6 @@ function LoginForm( {
 				router.push( '/' );
 			}
 			ShowMessage( { message : "Hello :)", } );
-			playAnimation();
 		} else {
 			SignInError( "Sign In Failed! You may submitted wrong email or password" );
 		}

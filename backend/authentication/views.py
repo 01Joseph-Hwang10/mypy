@@ -70,7 +70,7 @@ class CustomTokenRefreshView(TokenRefreshView):
 
             if DEBUG:
                 auth_response.set_cookie(
-                    "access_token", value=serializer.validated_data['access'])
+                    "access_token", value=serializer.validated_data['access'], samesite='Lax')
             else:
                 auth_response.set_cookie(
                     "access_token", value=serializer.validated_data['access'], max_age=max_age_1day, secure=True, httponly=True, samesite='Lax')

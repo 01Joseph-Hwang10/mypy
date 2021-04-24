@@ -6,6 +6,8 @@ import { reducer as RetrieveAppReducer } from '@slices/retrieve-app';
 import { reducer as DeleteAppReducer } from '@slices/delete-app';
 import { reducer as AuthReducer } from '@slices/auth';
 import { reducer as MessageReducer } from '@slices/message';
+import { reducer as exportAppReducer } from '@slices/exportApp';
+import { reducer as retrieveUserReducer } from '@slices/retrieve-user';
 
 const rootReducer = combineReducers( {
 	createApp : createAppReducer,
@@ -15,6 +17,8 @@ const rootReducer = combineReducers( {
 	deleteApp : DeleteAppReducer,
 	auth : AuthReducer,
 	message : MessageReducer,
+	exportApp : exportAppReducer,
+	retrieveUser : retrieveUserReducer,
 } );
 
 export default rootReducer;

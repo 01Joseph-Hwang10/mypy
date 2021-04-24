@@ -3,10 +3,12 @@ import { connect } from 'react-redux';
 
 function Message( {
 	message : Message,
+	color : Color,
 } ) {
 
 	const animationStyle = {
 		transform : 'translateY(-3rem)',
+		backgroundColor : `${Color}`,
 	};
 
 	return (
@@ -19,6 +21,7 @@ function Message( {
 const mapStateToProps = state => {
 	return {
 		message : state.message.message,
+		color : state.message.color,
 	};
 };
 

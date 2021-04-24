@@ -21,15 +21,17 @@ if ( typeof window === 'object' ) {
 }
 
 export const returnLoginElements = () => {
-	const nav = document.querySelector( '#navigation' );
-	const signInButton = nav.querySelector( '.signInButton' );
-	const loginFormWrapper = document.querySelector( '#loginFormWrapper' );
-
-	return {
-		nav,
-		signInButton,
-		loginFormWrapper,
-	};
+	if ( typeof document === 'object' ) {
+		const nav = document.querySelector( '#navigation' );
+		const signInButton = nav.querySelector( '.signInButton' );
+		const loginFormWrapper = document.querySelector( '#loginFormWrapper' );
+	
+		return {
+			nav,
+			signInButton,
+			loginFormWrapper,
+		};
+	}
 };
 
 export const maintainWhenFocusWithin = ( e ) => {

@@ -16,12 +16,14 @@ const NavBar = ( {
 
 	const router = useRouter();
 
-	const { signInButton, } = returnLoginElements();
-
+	
 	useEffect( ()=> {
-		if ( signInButton ) {
-			signInButton.removeAttribute( 'style' );
-		}
+		const { signInButton, } = returnLoginElements();
+		if ( signInButton ) signInButton.removeAttribute( 'style' );
+		const signOutButton = document
+			.querySelector( '#navigation' )
+			.querySelector( '.signOutButton' );
+		if ( signOutButton ) signOutButton.removeAttribute( 'style' );
 	}, [ SignedIn, ] );
 
 	const signOutClick = async () => {
@@ -29,7 +31,6 @@ const NavBar = ( {
 		Logout();
 		router.push( '/' );
 		ShowMessage( { message : "Goodbye :)", } );
-		playAnimation();
 	};
 
 	return (
@@ -45,7 +46,7 @@ const NavBar = ( {
 				</Link>
 				{
 					SignedIn ? (
-						<button onClick={signOutClick}>Sign Out</button>
+						<button onClick={signOutClick} className="signOutButton">Sign Out</button>
 					) : (
 						<button onClick={signInToggle} className="signInButton">Sign In</button>
 					)

@@ -15,6 +15,7 @@ from apps.models import App, InputSpec
 from apps.serializers import AppSerializer, InputSpecSerializer
 from users.models import CustomUser
 from apps.models import App
+from common.permissions import AllowedToCreateApp
 
 
 class CreateAppView(CreateAPIView):
@@ -22,6 +23,7 @@ class CreateAppView(CreateAPIView):
     queryset = App.objects.all()
     serializer_class = AppSerializer
     parser_classes = (MultiPartParser,)
+    permission_classes = (AllowedToCreateApp,)
 
     def post(self, request, *args, **kwargs):
         try:

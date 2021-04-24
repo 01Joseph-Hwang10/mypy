@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.contrib.admin import StackedInline
 from django.contrib.auth.admin import UserAdmin
 from users.models import CustomUser
 from apps.admin import AppInline
@@ -8,3 +9,15 @@ from apps.admin import AppInline
 class CustomUserAdmin(UserAdmin):
 
     inlines = (AppInline,)
+
+    list_filter = UserAdmin.list_filter
+
+    fieldsets = UserAdmin.fieldsets + (
+        (
+            'Mypy', {
+                'fields': (
+                    'imported',
+                )
+            }
+        ),
+    )

@@ -23,7 +23,8 @@ from config.settings import DEBUG, MEDIA_ROOT, MEDIA_URL, STATIC_ROOT, STATIC_UR
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('source/api/apps/', include('apps.urls', namespace='apps')),
-    path('source/auth/', include('authentication.urls', namespace='auth'))
+    path('source/auth/', include('authentication.urls', namespace='auth')),
+    path('source/api/users/', include('users.urls', namespace='users'))
 ]
 
 if DEBUG:
