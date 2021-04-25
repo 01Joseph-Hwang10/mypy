@@ -18,7 +18,7 @@ function PublicMypyAppList( {
 				<AppListSection 
 					{...importedAppListProps}
 					header={
-						<AppListHeader name={importedAppListProps.sectionName} />
+						<AppListHeader name={'Imported Apps'} />
 					}
 				/>
 			</div>

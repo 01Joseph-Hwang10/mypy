@@ -38,7 +38,7 @@ function PrivateMypyAppList( {
 					{...myAppListProps} 
 					header={
 						<>
-							<AppListHeader name={myAppListProps.sectionName} />
+							<AppListHeader name={'My Apps'} />
 							<Link href='/create'>
 								<button className="createButton buttonRipple">
 									<div>
@@ -55,7 +55,7 @@ function PrivateMypyAppList( {
 				<AppListSection 
 					{...importedAppListProps}
 					header={
-						<AppListHeader name={importedAppListProps.sectionName} />
+						<AppListHeader name={'Imported Apps'} />
 					}
 				/>
 			</div>
