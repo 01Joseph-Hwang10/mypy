@@ -32,6 +32,12 @@ class UpdateImportsView(UpdateAPIView):
             return Response(status=400, data='Update failed')
 
 
+class UpdateProfileView(UpdateAPIView):
+
+    queryset = CustomUser.objects.all()
+    serializer_class = CustomUserSerializer
+
+
 class RetrieveUserView(RetrieveAPIView):
 
     queryset = CustomUser.objects.all()

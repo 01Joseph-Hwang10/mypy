@@ -8,22 +8,16 @@ function MypySideBar( {
 
 	const [ isEditing, setIsEditing, ] = useState( false );
 
-	const {
-		first_name : name,
-		email,
-		bio,
-	} = Me;
-
 	return (
 		<div className="mypySideBar">
 			<form className="mypySideBar__info">
 				<span className="mypySideBar__name">
-					{SignedIn ? name : 'Guest'}
+					{SignedIn && Me ? Me.first_name : 'Guest'}
 				</span>
-				<span className="mypySideBar__email">{SignedIn && email}</span>
-				<p className="mypySideBar__bio">{SignedIn && bio && bio}</p>
+				<span className="mypySideBar__email">{SignedIn && Me && Me.email}</span>
+				<p className="mypySideBar__bio">{SignedIn && Me && Me.bio && Me.bio}</p>
 				{
-					SignedIn && <button>Update</button>
+					SignedIn && Me && <button>Update</button>
 				}
 			</form>
 			<div className="mypySideBar__buttons"></div>

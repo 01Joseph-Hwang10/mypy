@@ -18,4 +18,5 @@ export const LOGOUT = `${AUTH_URL}/logout/`;
 
 // Users
 export const UPDATE_IMPORTS = `${API_URL}/users/update/imports/`;
+export const UPDATE_GENERAL = `${API_URL}/users/update/`;
 export const RETRIEVE_USER = `${API_URL}/users/retrieve/user/`;
