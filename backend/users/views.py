@@ -17,10 +17,16 @@ class UpdateImportsView(UpdateAPIView):
             is_adding = post_data['isAdding']
             app_id = post_data['id']
             user = CustomUser.objects.get(id=user_id)
+            app = App.objects.filter(id=app_id)[0]
             if is_adding == 'true':
                 user.imported.add(app_id)
+                app.exports = app.exports + 1
             else:
                 user.imported.remove(app_id)
+                if app.exports > 0:
+                    app.exports = app.exports - 1
+            user.save()
+            app.save()
             return Response(status=200, data='Update was successful')
         except Exception:
             return Response(status=400, data='Update failed')

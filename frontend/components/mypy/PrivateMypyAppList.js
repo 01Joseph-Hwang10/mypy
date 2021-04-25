@@ -1,6 +1,6 @@
 import AppListHeader from '@components/AppListHeader';
 import AppListSection from '@components/mixins/AppListSection';
-import React, { createElement } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import Link from 'next/link';
 
@@ -52,7 +52,12 @@ function PrivateMypyAppList( {
 				/>
 			</div>
 			<div className="appListWrapper importedAppListWrapper">
-				<AppListSection {...importedAppListProps} />
+				<AppListSection 
+					{...importedAppListProps}
+					header={
+						<AppListHeader name={importedAppListProps.sectionName} />
+					}
+				/>
 			</div>
 		</div>
 	);

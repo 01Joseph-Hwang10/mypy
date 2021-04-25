@@ -1,3 +1,4 @@
+import AppListHeader from '@components/AppListHeader';
 import AppListSection from '@components/mixins/AppListSection';
 import React from 'react';
 import { connect } from 'react-redux';
@@ -14,7 +15,12 @@ function PublicMypyAppList( {
 	return (
 		<div className="mypyAppListWrapper">
 			<div className="importedAppListWrapper">
-				<AppListSection {...importedAppListProps} />
+				<AppListSection 
+					{...importedAppListProps}
+					header={
+						<AppListHeader name={importedAppListProps.sectionName} />
+					}
+				/>
 			</div>
 		</div>
 	);

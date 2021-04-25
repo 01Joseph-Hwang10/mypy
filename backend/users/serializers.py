@@ -19,6 +19,7 @@ class CustomUserSerializer(Serializer):
     imported = PrimaryKeyRelatedField(
         many=True, read_only=True, required=False
     )
+    bio = CharField(required=False)
 
     class Meta:
         model = CustomUser

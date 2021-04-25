@@ -2,7 +2,7 @@ import LoginForm from '@components/login/LoginForm';
 import { translateDistance } from '@functions/SignIn';
 import React from 'react';
 import PrivateMypyAppList from './PrivateMypyAppList';
-import MySideBar from './MySideBar';
+import MypySideBar from './MypySideBar';
 import { connect } from 'react-redux';
 import PublicMypyAppList from './PublicMypyAppList';
 
@@ -26,7 +26,7 @@ function MypyPage( {
 				}
 			</section>
 			<section className="sideBarWrapper">
-				<MySideBar />
+				<MypySideBar />
 				<div id="loginFormWrapper" style={animationStyle}>
 					<LoginForm />
 				</div>

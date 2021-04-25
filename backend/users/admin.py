@@ -20,4 +20,11 @@ class CustomUserAdmin(UserAdmin):
                 )
             }
         ),
+        (
+            'Additional Info', {
+                'fields': (
+                    'bio',
+                )
+            }
+        ),
     )

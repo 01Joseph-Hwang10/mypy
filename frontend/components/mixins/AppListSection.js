@@ -46,8 +46,6 @@ function AppListSection( {
 		setLoading( false );
 	}, [] );
 
-	console.log( header );
-
 	const appListProps = {
 		IsLoading : loading,
 		AppList : appList,

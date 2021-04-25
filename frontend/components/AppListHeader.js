@@ -9,7 +9,7 @@ function AppListHeader( {
 				<span>{name}</span>
 			</div>
 			<div className='buttonsWrapper'>
-				<button className="bi bi-chevron-down"></button>
+				{/* <button className="bi bi-chevron-down"></button> */}
 			</div>
 		</div>
 	);

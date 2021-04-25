@@ -12,9 +12,9 @@ function MypyPublic( {
 
 	useEffect( ()=> {
 		if ( SignedIn ) {
-			router.push( `mypy/${UserId}` );
+			router.push( `/mypy/${UserId}` );
 		}
-	}, [] );
+	}, [ SignedIn, ] );
 
 	if ( SignedIn ) return <></>;
 	return (

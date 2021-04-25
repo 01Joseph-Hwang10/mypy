@@ -55,14 +55,16 @@ export const signInToggle = () => {
 		loginFormWrapper,
 	} = returnLoginElements();
 
-	if ( signInButton.style.backgroundColor ) {
-		signInButton.removeAttribute( 'style' );
-		loginFormWrapper.style.transform = `translateX(${translateDistance}rem)`;
-		document.removeEventListener( 'click', maintainWhenFocusWithin );
-	} else {
-		signInButton.style.backgroundColor = '#d6e0f0';
-		loginFormWrapper.style.transform = 'translateX(0)';
-		document.addEventListener( 'click', maintainWhenFocusWithin );
+	if ( signInButton ) {
+		if ( signInButton.style.backgroundColor ) {
+			signInButton.removeAttribute( 'style' );
+			loginFormWrapper.style.transform = `translateX(${translateDistance}rem)`;
+			document.removeEventListener( 'click', maintainWhenFocusWithin );
+		} else {
+			signInButton.style.backgroundColor = '#d6e0f0';
+			loginFormWrapper.style.transform = 'translateX(0)';
+			document.addEventListener( 'click', maintainWhenFocusWithin );
+		}
 	}
 };
 
@@ -72,6 +74,8 @@ export const cleanUp = () => {
 		loginFormWrapper,
 	} = returnLoginElements();
 
-	loginFormWrapper.style.transform = `translateX(${translateDistance}rem)`;
+	if ( loginFormWrapper ) {
+		loginFormWrapper.style.transform = `translateX(${translateDistance}rem)`;
+	}
 	document.removeEventListener( 'click', maintainWhenFocusWithin );
 };

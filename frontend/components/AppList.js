@@ -9,9 +9,9 @@ function AppList( {
 	keyPrefix,
 } ) {
 
-	if ( IsLoading || !AppList ) return <div>Loading...</div>;
-	if ( IsSuccessful && AppList.length === 0 ) return <div>No data found</div>;
-	if ( !IsSuccessful ) return <div>{ErrorMessage}</div>;
+	if ( IsLoading || !AppList ) return <div className="appList__message">Loading...</div>;
+	if ( IsSuccessful && AppList.length === 0 ) return <div className="appList__message">No data found</div>;
+	if ( !IsSuccessful ) return <div className="appList__message">{ErrorMessage}</div>;
 	return (
 		<div className="appList">
 			{

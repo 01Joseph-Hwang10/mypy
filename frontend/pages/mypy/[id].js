@@ -1,6 +1,4 @@
 import MypyPage from '@components/mypy/MypyPage';
-import listSelectedAppDataForm from '@redux/form/listSelectedAppDataForm';
-import { listSelectedApp } from '@redux/slices/list-app';
 import { showMessage } from '@redux/slices/message';
 import { retrieveUser, retrieveMeSuccessful, retrieveMeError } from '@redux/slices/retrieve-user';
 import React, { useEffect } from 'react';

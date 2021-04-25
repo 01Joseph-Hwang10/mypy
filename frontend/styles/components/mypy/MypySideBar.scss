@@ -1,0 +1,39 @@
+@use '../../base';
+@use '../../borderRadius';
+@use '../../shadow';
+
+.mypySideBar {
+    @extend %flex-box;
+    flex-direction: column;
+    justify-content: start;
+    background-color: $white-edge;
+    @extend %shadow-lg;
+    @extend %rounded-lg;
+    padding: 1.2rem;
+}
+
+.mypySideBar__info {
+    @extend %flex-box;
+    flex-direction: column;
+    justify-content: start;
+}
+
+.mypySideBar__info span {
+    text-align: center;
+    margin-bottom: 0.5rem;
+}
+
+.mypySideBar__name {
+    font-size: x-large;
+    font-weight: bold;
+}
+
+.mypySideBar__email {
+    font-size: medium;
+    font-weight: 400;
+}
+
+.mypySideBar__bio {
+    font-size: small;
+    text-align: left;
+}
