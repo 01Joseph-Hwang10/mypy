@@ -5,7 +5,7 @@ import Search from './Search';
 function SideBar() {
 	return (
 		<div className="sideBar">
-			<Search />
+			<Search placeholder="Search for python IPO apps!" />
 			<div className="sideBar__aboutApp">
 				<span>MYPY: Python app everywhere!</span>
 				<span>

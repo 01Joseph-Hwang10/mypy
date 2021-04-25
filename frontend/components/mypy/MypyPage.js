@@ -1,10 +1,14 @@
 import LoginForm from '@components/login/LoginForm';
 import { translateDistance } from '@functions/SignIn';
 import React from 'react';
-import MyAppList from './MyAppList';
+import PrivateMypyAppList from './PrivateMypyAppList';
 import MySideBar from './MySideBar';
+import { connect } from 'react-redux';
+import PublicMypyAppList from './PublicMypyAppList';
 
-function MypyPage() {
+function MypyPage( {
+	signedIn : SignedIn,
+} ) {
 
 	const animationStyle = {
 		transform : `translateX(${translateDistance}rem)`,
@@ -12,10 +16,16 @@ function MypyPage() {
 
 	return (
 		<div id="contentRoot">
-			<section className='.mainContent'>
-				<MyAppList />
+			<section className='mainContent'>
+				{
+					SignedIn ? (
+						<PrivateMypyAppList />
+					) : (
+						<PublicMypyAppList />
+					)
+				}
 			</section>
-			<section className=".sideBarWrapper">
+			<section className="sideBarWrapper">
 				<MySideBar />
 				<div id="loginFormWrapper" style={animationStyle}>
 					<LoginForm />
@@ -25,4 +35,12 @@ function MypyPage() {
 	);
 }
 
-export default MypyPage;
+
+const mapStateToProps = state => {
+	return {
+		signedIn : state.auth.signedIn,
+	};
+};
+
+
+export default connect( mapStateToProps, null )( MypyPage );

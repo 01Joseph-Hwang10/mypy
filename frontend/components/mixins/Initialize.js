@@ -3,6 +3,7 @@ import { retrieveMeError, retrieveMeSuccessful, retrieveUser } from '@redux/slic
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { propagateNewItems, mapStorageItemsToProps } from '@slices/exportApp';
+import { showMessage } from '@redux/slices/message';
 
 function Initialize( {
 	logout : Logout,
@@ -11,6 +12,7 @@ function Initialize( {
 	retrieveMeError : RetrieveMeError,
 	propagateNewItems : PropagateNewItems,
 	mapStorageItemsToProps : MapStorageItemsToProps,
+	showMessage : ShowMessage,
 } ) {
 
 	useEffect( async () => {
@@ -26,6 +28,7 @@ function Initialize( {
 			} else {
 				RetrieveMeError( 'Something went wrong :/' );
 				MapStorageItemsToProps();
+				ShowMessage( 'Something went wrong :/', 'error' );
 			}
 		} else {
 			Logout();
@@ -47,6 +50,7 @@ const mapDispatchToProps = dispatch => {
 		retrieveMeError : response => dispatch( retrieveMeError( response ) ),
 		propagateNewItems : data => dispatch( propagateNewItems( data ) ),
 		mapStorageItemsToProps : () => dispatch( mapStorageItemsToProps() ),
+		showMessage : ( data ) => dispatch( showMessage( data ) ),
 	};
 };
 

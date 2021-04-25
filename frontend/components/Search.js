@@ -1,10 +1,12 @@
 import React from 'react';
 
-function Search() {
+function Search( {
+	placeholder,
+} ) {
 	return (
 		<div className='searchBar'>
 			<form>
-				<input placeholder="Search for python IPO apps!"></input>
+				<input placeholder={placeholder}></input>
 				<button className="bi bi-search"></button>
 			</form>
 		</div>

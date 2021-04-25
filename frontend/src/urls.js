@@ -4,6 +4,7 @@ const AUTH_URL = `${BASE_URL}/auth`;
 // Apps
 export const CREATE_APP = `${API_URL}/apps/create/`;
 export const LIST_APP = `${API_URL}/apps/list/`;
+export const LIST_SELECTED_APP = `${API_URL}/apps/list/selected/`;
 export const RETRIEVE_APP = `${API_URL}/apps/retrieve/`;
 export const EXECUTE_APP = `${API_URL}/apps/execute/`;
 export const UPDATE_APP = `${API_URL}/apps/update/`;

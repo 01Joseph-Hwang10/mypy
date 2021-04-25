@@ -1,0 +1,16 @@
+@use '../../base';
+
+
+.mypyAppListWrapper {
+    @extend %flex-box;
+    flex-direction: column;
+    justify-content: start;
+}
+
+.appListWrapper {
+    width: 100%;
+}
+
+.appListSection, .appListHeaderWrapper, .appListFooterWrapper {
+    width: 100%;
+}

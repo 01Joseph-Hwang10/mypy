@@ -179,6 +179,21 @@ class ListAppView(ListAPIView):
     pagination_class = ThreeFigurePagination
 
 
+class SelectedListAppView(CreateAPIView):
+
+    serializer_class = AppSerializer
+
+    def post(self, request, *args, **kwargs):
+        try:
+            post_data = request.data
+            app_ids = json.loads(post_data['app_ids'])
+            apps = App.objects.filter(id__in=app_ids)
+            serialized = AppSerializer(apps, many=True)
+            return Response(status=200, data=serialized.data)
+        except Exception:
+            return Response(status=500, data="Internal Server Error")
+
+
 class RetrieveAppView(RetrieveAPIView):
 
     queryset = App.objects.all()

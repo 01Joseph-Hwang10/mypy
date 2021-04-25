@@ -1,3 +1,4 @@
+import MypyPage from '@components/mypy/MypyPage';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
@@ -17,9 +18,9 @@ function MypyPublic( {
 
 	if ( SignedIn ) return <></>;
 	return (
-		<div>
-            mypy for unauthenticated
-		</div>
+		<>
+			<MypyPage />
+		</>
 	);
 }
 

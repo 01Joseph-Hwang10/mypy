@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { LIST_APP } from '@src/urls';
+import { LIST_APP, LIST_SELECTED_APP } from '@src/urls';
 
 
 export const {
@@ -49,6 +49,25 @@ export const listApp = async () => {
 		};
 	} catch ( error ) {
 		console.error( error );
+		return {
+			ok : false,
+			data : error.message,
+		};
+	}
+};
+
+
+export const listSelectedApp = async ( postData ) => {
+
+	try {
+		const { data, } = await axios
+			.post( LIST_SELECTED_APP, postData, { withCredentials : true, } ); 
+
+		return {
+			ok : true,
+			data,
+		};
+	} catch ( error ) {
 		return {
 			ok : false,
 			data : error.message,

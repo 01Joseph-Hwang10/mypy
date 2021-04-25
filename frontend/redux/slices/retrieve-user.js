@@ -9,6 +9,8 @@ export const {
 		loading,
 		retrieveMeError,
 		retrieveMeSuccessful,
+		setImportedApps,
+		setMyApps,
 	},
 } = createSlice( {
 	name : 'retrieveUserSlice',
@@ -17,8 +19,6 @@ export const {
 		isSuccessful : false,
 		me : null,
 		error : null,
-		myApps : [],
-		imported : [],
 	},
 	reducers : {
 		loading : ( state ) => {
