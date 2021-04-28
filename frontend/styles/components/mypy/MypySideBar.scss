@@ -37,3 +37,57 @@
     font-size: small;
     text-align: left;
 }
+
+.mypySideBar__info button {
+    padding: 0.5rem 2.5rem;
+    margin-top: 0.5rem;
+    @extend %rounded-md;
+    text-align: center;
+    color: $white-edge;
+    font-weight: 600;
+    transition: filter 0.2s ease;
+}
+
+.mypySideBar__info button:hover {
+    cursor: pointer;
+    filter: brightness(1.1);
+}
+
+.mypySideBar__info {
+    input, textarea {
+        width: 100%;
+        padding: 0.5rem 1rem;
+        background-color: transparent;
+        text-align: left;
+        margin: 0.25rem auto;
+        border: 1px solid $intermediate;
+        @extend %rounded-md;
+        transition: border 0.2s ease;
+    }
+
+    textarea {
+        padding: 2.5rem 1rem;
+    }
+
+    input:focus, textarea:focus {
+        border: 1px solid $highlight;
+    }
+
+    .mypySideBar__errorMessage {
+        color: tomato;
+    }
+}
+
+.mypySideBar__extraContent {
+    @extend %flex-box;
+    justify-content: start;
+    align-items: center;
+    flex-direction: column;
+    padding-top: 1rem;
+    border-top: 1px solid $line;
+    margin-top: 1rem;
+
+    .sideBar__buttons {
+        border-bottom: none;
+    }
+}

@@ -37,6 +37,30 @@ class UpdateProfileView(UpdateAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
 
+    def partial_update(self, request, *args, **kwargs):
+        try:
+            post_data = request.data
+            user_id = int(post_data['id'])
+            first_name = post_data['first_name']
+            email = post_data['email']
+            bio = post_data['bio']
+            user = CustomUser.objects.get(id=user_id)
+            isChanged = False
+            if user.first_name != first_name:
+                user.first_name = first_name
+                isChanged = True
+            if user.email != email:
+                user.email = email
+                isChanged = True
+            if user.bio != bio:
+                user.bio = bio
+                isChanged = True
+            if isChanged:
+                user.save()
+            return Response(status=200, data="Successfully Updated!")
+        except Exception:
+            return Response(status=400, data="Update Failed!")
+
 
 class RetrieveUserView(RetrieveAPIView):
 

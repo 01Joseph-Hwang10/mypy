@@ -1,22 +1,22 @@
 import { SCREEN_LARGE, SCREEN_MEDIUM, SCREEN_SMALL, SCREEN_XLARGE, SCREEN_XXLARGE } from "@src/constants";
 
-export let translateDistance = 20 * 2;
+export let translateDistance = 25 * 2;
 
 if ( typeof window === 'object' ) {
 	if ( window.matchMedia( `(min-width: ${SCREEN_SMALL}px)` ).matches ) {
-		translateDistance = 20 * 1;
+		translateDistance = 25 * 1;
 	}
 	if ( window.matchMedia( `(min-width: ${SCREEN_MEDIUM}px)` ).matches ) {
-		translateDistance = 20 * 2;
+		translateDistance = 25 * 2;
 	}
 	if ( window.matchMedia( `(min-width: ${SCREEN_LARGE}px)` ).matches ) {
-		translateDistance = 20 * 3;
+		translateDistance = 25 * 3;
 	}
 	if ( window.matchMedia( `(min-width: ${SCREEN_XLARGE}px)` ).matches ) {
-		translateDistance = 20 * 4;
+		translateDistance = 25 * 4;
 	}
 	if ( window.matchMedia( `(min-width: ${SCREEN_XXLARGE}px)` ).matches ) {
-		translateDistance = 20 * 5;
+		translateDistance = 25 * 5;
 	}
 }
 
@@ -55,7 +55,7 @@ export const signInToggle = () => {
 		loginFormWrapper,
 	} = returnLoginElements();
 
-	if ( signInButton ) {
+	if ( signInButton && loginFormWrapper ) {
 		if ( signInButton.style.backgroundColor ) {
 			signInButton.removeAttribute( 'style' );
 			loginFormWrapper.style.transform = `translateX(${translateDistance}rem)`;

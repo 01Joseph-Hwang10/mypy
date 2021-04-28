@@ -5,6 +5,11 @@ import axios from "axios";
 
 export const {
 	reducer,
+	actions : {
+		loading,
+		updateUserError,
+		updateUserSuccessful,
+	},
 } = createSlice( {
 	name : 'updateUserSlice',
 	initialState : {
@@ -29,9 +34,11 @@ export const {
 
 export const updateUser = async ( id, postData ) => {
 
+	postData.append( 'id', id );
+
 	try {
 		await axios
-			.patch( `${UPDATE_GENERAL}${id}`, postData, { withCredentials : true, } );
+			.patch( `${UPDATE_GENERAL}`, postData, { withCredentials : true, } );
 
 		return {
 			ok : true,

@@ -2,18 +2,43 @@
 @use '../borderRadius';
 @use '../shadow';
 @use '../margin';
+@use '../media';
 
 
-#mobileLoginContentRoot, .sideBarWrapper .loginFormWrapper {
+#loginContentRoot, .sideBarWrapper .loginFormWrapper {
     @extend %flex-box;
     flex-direction: column;
     justify-content: start;
 }
 
-#mobileLoginContentRoot {
+#loginContentRoot {
     height: 100vh;
     @extend %mx-auto;
     width: 91.67%;
+}
+
+@include small {
+    #loginContentRoot {
+        width: 70%;
+    }
+}
+
+@include medium {
+    #loginContentRoot {
+        width: 60%;
+    }
+}
+
+@include large {
+    #loginContentRoot {
+        width: 50%;
+    }
+}
+
+@include x-large {
+    #loginContentRoot {
+        width: 40%
+    }
 }
 
 #loginFormWrapper {

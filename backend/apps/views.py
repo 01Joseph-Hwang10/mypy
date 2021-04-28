@@ -186,6 +186,7 @@ class SelectedListAppView(CreateAPIView):
     def post(self, request, *args, **kwargs):
         try:
             post_data = request.data
+            print(post_data)
             app_ids = json.loads(post_data['app_ids'])
             apps = App.objects.filter(id__in=app_ids)
             serialized = AppSerializer(apps, many=True)

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { createApp } from '@slices/craete-app';
 import createAppDataForm from '@form/createAppDataForm';
 import { connect } from 'react-redux';
@@ -13,9 +13,16 @@ function create( {
 	isSuccessful : IsSuccessful,
 	isFirstTime : IsFirstTime,
 	userId : UserId,
+	signedIn : SignedIn,
 } ) {
 
 	const router = useRouter();
+
+	useEffect( () => {
+		if ( !SignedIn ) {
+			router.push( '/login' );
+		}
+	}, [] );
 
 	const createAppSubmit = async ( e ) => {
 		e.preventDefault();
@@ -32,6 +39,7 @@ function create( {
 		}
 	};
 
+	if ( !SignedIn ) return <></>;
 	return (
 		<div>
 			<form onSubmit={createAppSubmit}>
@@ -70,6 +78,7 @@ const mapStateToProps = ( state ) => {
 		isSuccessful : state.createApp.isSuccessful,
 		isFirstTime : state.createApp.isFirstTime,
 		userId : state.auth.userId,
+		signedIn : state.auth.signedIn,
 	};
 };
 

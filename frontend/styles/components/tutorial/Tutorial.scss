@@ -1,0 +1,52 @@
+@use '../../base';
+@use '../../media';
+@use '../../borderRadius';
+
+$tutorial-content-sm: 63%;
+$tutorial-content-lg: 70%;
+
+
+@include small {
+    .tutorialContentRoot {
+        width: $tutorial-content-sm;
+
+        .tutorialSideBarWrapper {
+            width: calc(100% - #{$tutorial-content-sm});
+        }
+    }
+}
+
+@include large {
+    .tutorialContentRoot {
+        width: $tutorial-content-lg;
+
+        .tutorialSideBarWrapper {
+            width: calc(100% - #{$tutorial-content-lg});
+        }
+    }
+}
+
+.tutorialContentRoot {
+    @extend %flex-box;
+    justify-content: end;
+    position: relative;
+    padding: 2rem;
+
+    .tutorialSideBarWrapper {
+        @extend %flex-box;
+        position: fixed;
+        justify-content: center;
+        top: 8rem;
+        left: 0;
+        background-color: $white-edge;
+        @extend %rounded-lg;
+        padding: 1rem;
+    }
+
+    .tutorialContent {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+    }
+}

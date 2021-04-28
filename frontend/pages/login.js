@@ -3,7 +3,7 @@ import React from 'react';
 
 function login() {
 	return (
-		<div id="mobileLoginContentRoot">
+		<div id="loginContentRoot">
 			<LoginForm />
 		</div>
 	);

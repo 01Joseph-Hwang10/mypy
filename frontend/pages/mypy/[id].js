@@ -1,24 +1,8 @@
 import MypyPage from '@components/mypy/MypyPage';
-import { showMessage } from '@redux/slices/message';
-import { retrieveUser, retrieveMeSuccessful, retrieveMeError } from '@redux/slices/retrieve-user';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 
-function MypyPrivate( {
-	retrieveMeSuccessful : RetrieveMeSuccessful,
-	retrieveMeError : RetrieveMeError,
-	showMessage : ShowMessage,
-} ) {
-
-	useEffect( async () => {
-		const { ok, data, } = await retrieveUser( window.localStorage.getItem( 'user_id' ) );
-		if ( ok ) {
-			RetrieveMeSuccessful( data );
-		} else {
-			RetrieveMeError( data );
-			ShowMessage( { message : data, level : 'error', } );
-		}
-	}, [] );
+function MypyPrivate() {
 
 	return (
 		<>
@@ -30,13 +14,7 @@ function MypyPrivate( {
 
 const mapStateToProps = null;
 
-const mapDispatchToProps = dispatch => {
-	return {
-		retrieveMeSuccessful : response => dispatch( retrieveMeSuccessful( response ) ),
-		retrieveMeError : response => dispatch( retrieveMeError( response ) ),
-		showMessage : data => dispatch( showMessage( data ) ),
-	};
-};
+const mapDispatchToProps = null;
 
 
 export default connect( mapStateToProps, mapDispatchToProps )( MypyPrivate );

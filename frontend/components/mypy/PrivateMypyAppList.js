@@ -1,12 +1,27 @@
 import AppListHeader from '@components/AppListHeader';
 import AppListSection from '@components/mixins/AppListSection';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import Link from 'next/link';
+import { retrieveMeError, retrieveMeSuccessful, retrieveUser } from '@redux/slices/retrieve-user';
+import { showMessage } from '@redux/slices/message';
 
 function PrivateMypyAppList( {
 	me : Me,
+	retrieveMeSuccessful : RetrieveMeSuccessful,
+	retrieveMeError : RetrieveMeError,
+	showMessage : ShowMessage,
 } ) {
+
+	useEffect( async () => {
+		const { ok, data, } = await retrieveUser( window.localStorage.getItem( 'user_id' ) );
+		if ( ok ) {
+			RetrieveMeSuccessful( data );
+		} else {
+			RetrieveMeError( data );
+			ShowMessage( { message : data, level : 'error', } );
+		}
+	}, [] );
 
 	let myAppListProps, 
 		importedAppListProps;
@@ -70,7 +85,14 @@ const mapStateToProps = state => {
 	};
 };
 
-const mapDispatchToProps = null;
+const mapDispatchToProps = dispatch => {
+	return {
+		retrieveMeSuccessful : response => dispatch( retrieveMeSuccessful( response ) ),
+		retrieveMeError : response => dispatch( retrieveMeError( response ) ),
+		showMessage : data => dispatch( showMessage( data ) ),
+	};
+};
+
 
 
 export default connect( mapStateToProps, mapDispatchToProps )( PrivateMypyAppList );
