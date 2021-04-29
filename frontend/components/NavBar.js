@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { logout, signOut } from '@redux/slices/auth';
 import { useRouter } from 'next/router';
 import { showMessage, playAnimation } from '@redux/slices/message';
-import { signInToggle } from '@functions/SignIn';
+import { checkLoginExists, signInToggle } from '@functions/SignIn';
 import { returnLoginElements } from '@functions/SignIn';
 
 
@@ -33,6 +33,15 @@ const NavBar = ( {
 		ShowMessage( { message : "Goodbye :)", } );
 	};
 
+	const signInClick = () => {
+		const loginIsExists = checkLoginExists();
+		if ( loginIsExists ) {
+			signInToggle();
+		} else {
+			router.push( '/login' );
+		}
+	};
+
 	return (
 		<nav id='navigation'>
 			<div className="logoWrapper">
@@ -48,7 +57,7 @@ const NavBar = ( {
 					SignedIn ? (
 						<button onClick={signOutClick} className="signOutButton">Sign Out</button>
 					) : (
-						<button onClick={signInToggle} className="signInButton">Sign In</button>
+						<button onClick={signInClick} className="signInButton">Sign In</button>
 					)
 				}
 				<Link href='/mypy'>

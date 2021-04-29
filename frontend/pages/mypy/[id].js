@@ -5,9 +5,7 @@ import { connect } from 'react-redux';
 function MypyPrivate() {
 
 	return (
-		<>
-			<MypyPage />
-		</>
+		<MypyPage />
 	);
 }
 

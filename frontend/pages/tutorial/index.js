@@ -1,24 +1,27 @@
-import LoginForm from '@components/login/LoginForm';
-import SideNav from '@components/tutorial/SideNav';
-import { translateDistance } from '@functions/SignIn';
+import TutorialLayout from '@components/tutorial/TutorialLayout';
+import Link from 'next/link';
 import React from 'react';
 
 function Tutorial() {
 
-	const animationStyle = {
-		transform : `translateX(${translateDistance}rem)`,
-	};
-
 	return (
-		<div className='tutorialContentRoot'>
-			<section className='tutorialSideBarWrapper'>
-				<SideNav />
-			</section>
-			<section className="tutorialContent"></section>
-			<div id="loginFormWrapper" style={animationStyle}>
-				<LoginForm />
+		<TutorialLayout>
+			<div className="tutorialContent__root tutorial__welcome">
+				<h1>Welcome to the tutorial of making MYPY App!!!</h1>
+				<p>
+				In this tutorial, 
+				you&apos;ll learn everything you need to know about
+				making your own MYPY app!!
+				</p>
+				<div className="tutorial_onContentNavigation">
+					<Link href='/tutorial/ch0'>
+						<span>
+							Quick Start <i className="bi bi-arrow-right-circle"></i>
+						</span>
+					</Link>
+				</div>
 			</div>
-		</div>
+		</TutorialLayout>
 	);
 }
 

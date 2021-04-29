@@ -18,9 +18,7 @@ function MypyPublic( {
 
 	if ( SignedIn ) return <></>;
 	return (
-		<>
-			<MypyPage />
-		</>
+		<MypyPage />
 	);
 }
 

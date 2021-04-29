@@ -1,13 +1,14 @@
 @use '../../base';
 @use '../../media';
 @use '../../borderRadius';
+@use '../../shadow';
 
-$tutorial-content-sm: 63%;
-$tutorial-content-lg: 70%;
+$tutorial-content-sm: 75%;
+$tutorial-content-lg: 80%;
 
 
 @include small {
-    .tutorialContentRoot {
+    .tutorialContent {
         width: $tutorial-content-sm;
 
         .tutorialSideBarWrapper {
@@ -17,7 +18,7 @@ $tutorial-content-lg: 70%;
 }
 
 @include large {
-    .tutorialContentRoot {
+    .tutorialContent {
         width: $tutorial-content-lg;
 
         .tutorialSideBarWrapper {
@@ -38,9 +39,23 @@ $tutorial-content-lg: 70%;
         justify-content: center;
         top: 8rem;
         left: 0;
-        background-color: $white-edge;
-        @extend %rounded-lg;
         padding: 1rem;
+        margin: 0 0.5rem;
+        .tutorial__sideNav {
+            background-color: $white-edge;
+            @extend %flex-box;
+            justify-content: center;
+            @extend %rounded-lg;
+            @extend %shadow-lg;
+
+            a {
+                transition: all 0.2s ease;
+            }
+
+            a:hover {
+                background-color: $line;
+            }
+        }
     }
 
     .tutorialContent {
@@ -48,5 +63,15 @@ $tutorial-content-lg: 70%;
         flex-direction: column;
         justify-content: flex-start;
         align-items: flex-start;
+        .tutorialContent__root {
+            min-height: 70vh;
+            background-color: $white-edge;
+            padding: 1rem;
+            @extend %rounded-lg;
+            width: 100%;
+            @extend %flex-box;
+            flex-direction: column;
+            justify-content: start;
+        }
     }
 }
