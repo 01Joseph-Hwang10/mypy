@@ -7,17 +7,24 @@
     justify-content: start;
     align-items: center;
 
-    a {
+    button {
         padding: 1.25rem;
         text-align: center;
         color: $highlight;
+        background-color: transparent;
         font-weight: 600;
         border-bottom: 2px solid $line;
         width: 100%;
         text-decoration: none;
+        transition: background-color 0.2s ease;
     }
 
-    a:last-child {
+    button:last-child {
         border-bottom: none;
+    }
+
+    button:hover {
+        cursor: pointer;
+        background-color: $line;
     }
 }

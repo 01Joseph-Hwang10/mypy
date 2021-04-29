@@ -25,6 +25,10 @@ export const SCREEN_XLARGE = 1280;
 export const SCREEN_XXLARGE = 1536;
 
 // Colors
+export const BASE = '#f1f3f8';
+export const LINE = '#d6e0f0';
+export const INTERMEDIATE = '#8d93ab';
+export const HIGHLIGHT = '#393b44';
 export const TEAL = '#008080';
 export const PYTHON_BLUE = '#3776ab';
 export const PYTHON_YELLOW = '#ffd343';

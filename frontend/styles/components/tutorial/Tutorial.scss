@@ -3,9 +3,18 @@
 @use '../../borderRadius';
 @use '../../shadow';
 
-$tutorial-content-sm: 75%;
+$tutorial-content-xs: 60%;
+$tutorial-content-sm: 65%;
+$tutorial-content-md: 70%;
 $tutorial-content-lg: 80%;
 
+.tutorialContent {
+    width: $tutorial-content-xs;
+
+    .tutorialSideBarWrapper {
+        width: calc(100% - #{$tutorial-content-xs});
+    }
+}
 
 @include small {
     .tutorialContent {
@@ -13,6 +22,16 @@ $tutorial-content-lg: 80%;
 
         .tutorialSideBarWrapper {
             width: calc(100% - #{$tutorial-content-sm});
+        }
+    }
+}
+
+@include medium {
+    .tutorialContent {
+        width: $tutorial-content-md;
+
+        .tutorialSideBarWrapper {
+            width: calc(100% - #{$tutorial-content-md});
         }
     }
 }
@@ -69,9 +88,56 @@ $tutorial-content-lg: 80%;
             padding: 1rem;
             @extend %rounded-lg;
             width: 100%;
-            @extend %flex-box;
+            display: flex;
             flex-direction: column;
-            justify-content: start;
+            justify-content: flex-start;
+            align-items: flex-start;
+
+            h1 {
+                font-weight: bold;
+                font-size: x-large;
+                margin: 1.5rem 0;
+            }
+
+            h2 {
+                font-weight: 600;
+                font-size: large;
+                margin: 1rem 0;
+                color: $teal;
+            }
+
+            h4 {
+                font-weight: 600;
+                font-size: large;
+                margin: 0.5rem 0;
+                line-height: 1.5rem;
+            }
+
+            p {
+                line-height: 1.1rem;
+                margin: 2rem 0;
+                font-size: medium;
+                strong {
+                    font-weight: bold;
+                    margin-right: 0.5rem;
+                }
+            }
+
+            .tutorial_onContentNavigation {
+                span {
+                    color: $python-blue;
+                    font-weight: 600;
+                    font-size: large;
+                    i {
+                        margin-left: 0.25rem;
+                        font-size: large;
+                    }
+                }
+
+                span:hover {
+                    cursor: pointer;
+                }
+            }
         }
     }
 }

@@ -50,8 +50,9 @@ def execute(log_path):
         try:
             result = main()
             sys.stdout = sys.__stdout__
-        except Exception:
-            result = 'An Error occured'
+        except Exception as e:
+            print(e)
+            result = 'An Error occured. Please reference the log'
             sys.stdout = sys.__stdout__
     with open(log_file_path, 'r') as fr:
         logs = fr.readlines()

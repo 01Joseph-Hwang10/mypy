@@ -1,6 +1,6 @@
 import React from 'react';
 
-function setEntryPoint() {
+function deployingOnMypy() {
 	return (
 		<div>
             
@@ -8,4 +8,4 @@ function setEntryPoint() {
 	);
 }
 
-export default setEntryPoint;
+export default deployingOnMypy;

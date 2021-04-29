@@ -1,0 +1,49 @@
+@use '../base';
+@use '../borderRadius';
+@use '../shadow';
+
+
+.codeBoxWrapper {
+    padding: 0.5rem;
+    width: 100%;
+}
+
+.codeBox {
+    @extend %shadow-inner;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    @extend %rounded-lg;
+    padding: 0.5rem;
+    background-color: $highlight;
+    width: 100%;
+    span {
+        margin: 0.25rem 0;
+        text-align: left;
+        color: $base;
+        font-weight: 600;
+    }
+
+    .breakLine {
+        display: block;
+        height: 1rem;
+        width: 1px;
+    }
+
+    .comment {
+        color: gray;
+    }
+
+    .tabbed {
+        margin-left: 2rem;
+    }
+
+    .doubleTabbed {
+        margin-left: 4rem;
+    }
+
+    .tripleTabbed {
+        margin-left: 6rem;
+    }
+}
