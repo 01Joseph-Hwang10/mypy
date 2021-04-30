@@ -106,6 +106,13 @@ $tutorial-content-lg: 80%;
                 color: $teal;
             }
 
+            h3 {
+                font-weight: bold;
+                font-size: large;
+                margin: 1rem 0;
+                color: $black-edge;
+            }
+
             h4 {
                 font-weight: 600;
                 font-size: large;
@@ -124,10 +131,16 @@ $tutorial-content-lg: 80%;
             }
 
             .tutorial_onContentNavigation {
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start;
+                align-items: flex-start;
+
                 span {
                     color: $python-blue;
                     font-weight: 600;
                     font-size: large;
+                    margin-bottom: 0.5rem;
                     i {
                         margin-left: 0.25rem;
                         font-size: large;

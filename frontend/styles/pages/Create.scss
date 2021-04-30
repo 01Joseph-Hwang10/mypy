@@ -1,0 +1,80 @@
+@use '../base';
+@use '../media';
+@use '../borderRadius';
+
+.createFormWrapper {
+    width: 100%;
+    @extend %flex-col;
+
+    form {
+        width: 91.67%;
+        padding: 1rem;
+        background-color: $white-edge;
+        @extend %rounded-lg;
+
+        .formSubject {
+            font-weight: 600;
+            display: block;
+            width: 100%;
+            font-size: x-large;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.5rem;
+            text-align: left;
+            margin: 0.25rem 0;
+            background-color: transparent;
+            border: 2px solid $intermediate;
+            transition: all 0.2s ease;
+            @extend %rounded-lg;
+        }
+
+        // why it's three, not two
+        input:nth-child(3) {
+            padding: 1.5rem 0.5rem;
+        }
+
+        input:focus {
+            border: 2px solid $highlight;
+        }
+
+        button {
+            @extend %basic-button;
+            @extend %rounded-lg;
+            transition: all 0.2s ease;
+            font-size: large;
+        }
+
+        button:hover {
+            cursor: pointer;
+            filter: brightness(1.1)
+        }
+    }
+    
+    @include small {
+        form {
+            width: 70%;
+        }
+    }
+    
+    @include medium {
+        form {
+            width: 60%;
+        }
+    }
+    
+    @include large {
+        form {
+            width: 50%;
+        }
+    }
+    
+    @include x-large {
+        form {
+            width: 40%
+        }
+    }
+}

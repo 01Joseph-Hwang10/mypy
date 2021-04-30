@@ -13,7 +13,7 @@ function quickStart() {
 				by making simple calculator in this tutorial
 				</h2>
 				<p>
-					The calculator we&apos;ll build recieves only 2 numbers,
+					The calculator we&apos;ll build recieves 2 numbers,
 					and do one of basic calculations with them:
 					addition, subtraction, multiplication, and division.
 					<br /> <br />

@@ -13,6 +13,12 @@ $python-yellow: #ffd343;
     align-items: center;
 }
 
+%flex-col {
+    @extend %flex-box;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
 %grid {
     display: grid;
 }

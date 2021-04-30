@@ -41,8 +41,9 @@ function create( {
 
 	if ( !SignedIn ) return <></>;
 	return (
-		<div>
+		<div className="createFormWrapper">
 			<form onSubmit={createAppSubmit}>
+				<span className="formSubject">Create New App</span>
 				<input id='name' placeholder='name' type='text' required />
 				<input id='description' placeholder='description' type='textarea' />
 				<input id='app' type='file' accept='.zip' required />

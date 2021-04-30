@@ -19,6 +19,7 @@ function LoginForm( {
 } ) {
 
 	const router = useRouter();
+	const { route, } = router;
 
 	const signInSubmit = async ( e ) => {
 		e.preventDefault();
@@ -28,7 +29,11 @@ function LoginForm( {
 		if ( ok ) {
 			const { user_id, } = data;
 			SignInSuccessful( user_id );
-			if ( window.matchMedia( '(min-width: 640px)' ).matches ) {
+			const dividedRoute = route.split( '/' );
+			if (
+				window.matchMedia( '(min-width: 640px)' ).matches &&
+				dividedRoute[ dividedRoute.length - 1 ] !== 'login'
+			) {
 				cleanUp();
 			} else {
 				router.push( '/' );
