@@ -4,6 +4,7 @@ import createAppDataForm from '@form/createAppDataForm';
 import { connect } from 'react-redux';
 import { loading, createAppSuccessful, createAppError } from '@slices/craete-app';
 import { useRouter } from 'next/router';
+import TextAreaAutosize from 'react-textarea-autosize';
 
 function create( { 
 	loading : Loading,
@@ -44,9 +45,9 @@ function create( {
 		<div className="createFormWrapper">
 			<form onSubmit={createAppSubmit}>
 				<span className="formSubject">Create New App</span>
-				<input id='name' placeholder='name' type='text' required />
-				<input id='description' placeholder='description' type='textarea' />
-				<input id='app' type='file' accept='.zip' required />
+				<input className='name' placeholder='name' type='text' required />
+				<TextAreaAutosize className='description' placeholder='description' />
+				<input className='app' type='file' accept='.zip' required />
 				<button>Create</button>
 			</form>
 			{ IsFirstTime ? ( <></> ) : (

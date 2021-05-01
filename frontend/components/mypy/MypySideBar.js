@@ -5,6 +5,8 @@ import { PYTHON_BLUE, PYTHON_YELLOW } from '@src/constants';
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import Link from 'next/link';
+import TextAreaAutosize from 'react-textarea-autosize';
+import { SIGN_UP } from '@src/urls';
 
 function MypySideBar( {
 	signedIn : SignedIn,
@@ -54,11 +56,22 @@ function MypySideBar( {
 				<span style={styleSpanElement} className="mypySideBar__span mypySideBar__name">
 					{SignedIn ? Me?.first_name : 'Guest'}
 				</span>
-				<input className="mypySideBar__input mypySideBar__name__input" name="first_name" placeholder='Name' defaultValue={Me?.first_name} style={styleFormElement}></input>
+				{
+					!SignedIn && 
+					<div className="mypySideBar__guestLogin">
+						<span>Sign up and access to your imported app list at any device!</span>
+						<div className="sideBar__buttons">
+							<Link href={SIGN_UP}>
+								<button className="buttonRipple">Sign Up</button>
+							</Link>
+						</div>
+					</div>
+				}
+				{ SignedIn && <input className="mypySideBar__input mypySideBar__name__input" name="first_name" placeholder='Name' defaultValue={Me?.first_name} style={styleFormElement}></input> }
 				<span style={styleSpanElement} className="mypySideBar__span mypySideBar__email">{SignedIn && Me?.email}</span>
-				<input className="mypySideBar__input mypySideBar__email__input" name="email" placeholder='Email' defaultValue={Me?.email} style={styleFormElement}></input>
+				{ SignedIn && <input className="mypySideBar__input mypySideBar__email__input" name="email" placeholder='Email' defaultValue={Me?.email} style={styleFormElement}></input> }
 				<p style={styleSpanElement} className="mypySideBar__span mypySideBar__bio">{SignedIn && Me?.bio}</p>
-				<textarea className="mypySideBar__input mypySideBar__bio__input" name="bio" placeholder='Bio' defaultValue={Me?.bio} style={styleFormElement}></textarea>
+				{ SignedIn && <TextAreaAutosize className="mypySideBar__input mypySideBar__bio__input" name="bio" placeholder='Bio' defaultValue={Me?.bio} style={styleFormElement} /> }
 				{
 					SignedIn && Me && <button onClick={toggleButton} style={styleButton}>{isSubmitting ? 'Loading...' : 'Update'}</button>
 				}

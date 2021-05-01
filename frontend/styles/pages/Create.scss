@@ -20,8 +20,8 @@
             text-align: center;
             margin-bottom: 1rem;
         }
-
-        input {
+        
+        input, textarea {
             width: 100%;
             padding: 0.5rem;
             text-align: left;
@@ -32,12 +32,11 @@
             @extend %rounded-lg;
         }
 
-        // why it's three, not two
-        input:nth-child(3) {
-            padding: 1.5rem 0.5rem;
+        textarea {
+            min-height: 7rem;
         }
 
-        input:focus {
+        input:focus, textarea:focus {
             border: 2px solid $highlight;
         }
 

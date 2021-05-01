@@ -76,6 +76,22 @@
     .mypySideBar__errorMessage {
         color: tomato;
     }
+
+    .mypySideBar__guestLogin {
+        border-bottom: none;
+        @extend %flex-col;
+        margin-top: 1rem;
+
+        .sideBar__buttons {
+            margin-top: 0.5rem;
+            border-bottom: none;
+
+            button {
+                background-color: $teal;
+                color: $white-edge;
+            }
+        }
+    }
 }
 
 .mypySideBar__extraContent {

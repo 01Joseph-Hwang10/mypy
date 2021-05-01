@@ -42,9 +42,18 @@ body {
   min-height: 100vh;
 }
 
-button, a {
+button, a, input, textarea {
   border: none;
+  outline: none;
+  background: transparent;
 }
+
+textarea {
+  resize: none;
+  overflow: hidden;
+}
+
+
 
 * {
   box-sizing: border-box;
