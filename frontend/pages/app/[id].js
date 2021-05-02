@@ -18,18 +18,26 @@ function AppDetail( {
 	result : Result,
 	log : Log,
 	inputs : Inputs,
+	userId : UserId,
+	createdBy : {
+		id : CreatedUserId,
+		first_name : CreatedUserName,
+	},
 	appSpec : { 
 		name, 
 		description,
 		exports,
 		created_by,
 		id,
-		app, 
+		app,
+		has_file_input,
+		cover_img,
 	},
 	retrieveLoading : RetrieveLoading,
 	loadAppError : LoadAppError,
 	loadAppSuccessful : LoadAppSuccessful,
 	retrieveIsLoading : RetrieveIsLoading,
+	executeIsLoading : ExecuteIsLoading,
 	// deleteIsLoading : DeleteIsLoading,
 	deleteLoading : DeleteLoading,
 	deleteAppSuccessful : DeleteAppSuccessful,
@@ -75,46 +83,69 @@ function AppDetail( {
 	};
 
 
+	if ( RetrieveIsLoading ) return <div className="appLoading">Loading...</div>;
 	return (
-		<>
+		<div id="appRoot">
 			{
-				RetrieveIsLoading ? (
-					<div>Loading...</div>
+				cover_img ? (
+					<div 
+						className='backgroundImg'
+						style={{ backgroundImage : cover_img, }}
+					>{name}</div>
 				) : (
-					<div>
-						<h2>{name}</h2>
-						<h3>{description}</h3>
-						<h3>Exports: {exports}</h3>
-						<h4>Created by: {created_by}</h4>
-						<button onClick={deleteApp}>Delete</button>
-						<section className="inputContainer">
-							{
-								Inputs && Inputs.map( input => (
-									<div className="formElement" key={input.id}>
-										<Input input={input} />
-									</div>
-								) )
-							}
-							<div className="fileInput">
-								<div>Files</div>
-								<input name="files" type="file" accept=".zip"></input>
-							</div>
-						</section>
-						<button onClick={executeApp}>Run</button>
-						<section className="outputContainer">
-							<h2>Result</h2>
-							{Result}
-							<h2>Log</h2>
-							{
-								Log && Log.map( log => (
-									<div className='log' key={log.id}>{'>> '}{log.log}</div>
-								) )
-							}
-						</section>
-					</div>
+					<div className='pseudoBackgroundImg'>{name}</div>
 				)
 			}
-		</>
+			<section className="appHeader">
+				<h2>{name}</h2>
+				<h3>{description}</h3>
+				<h3>Exports: {exports}</h3>
+				<h4>Created by: {CreatedUserName}</h4>
+				{
+					UserId == CreatedUserId && <button onClick={deleteApp}>Delete</button>
+				}
+			</section>
+			<section className="inputContainer">
+				{
+					Inputs && Inputs.map( input => (
+						<div className="formElement" key={input.id}>
+							<Input input={input} />
+						</div>
+					) )
+				}
+				{
+					has_file_input && (
+						<div className="fileInput">
+							<div>Files</div>
+							<input name="files" type="file"></input>
+						</div>
+					)
+				}
+			</section>
+			<button onClick={executeApp}>Run</button>
+			<section className="outputContainer">
+				{
+					( ExecuteIsLoading && Result !== null ) ? (
+						<div className="outputContainer__loading">Loading...</div>
+					) : (
+						<>
+							<div className="outputContainer__result">
+								<h2>Result</h2>
+								{Result}
+							</div>
+							<div className="outputContainer__log">
+								<h2>Log</h2>
+								{
+									Log && Log.map( log => (
+										<div className='log' key={log.id}>{'>> '}{log.log}</div>
+									) )
+								}
+							</div>
+						</>
+					)
+				}
+			</section>
+		</div>
 	);
 }
 
@@ -125,7 +156,10 @@ const mapStateToProps = state => {
 		log : state.executeApp.log,
 		inputs : state.retrieveApp.inputs,
 		appSpec : state.retrieveApp.appSpec,
+		createdBy : state.retrieveApp.createdBy,
 		retrieveIsLoading : state.retrieveApp.loading,
+		executeIsLoading : state.executeApp.loading,
+		userId : state.auth.userId,
 		// deleteIsLoading : state.deleteApp.loading,
 	};
 };

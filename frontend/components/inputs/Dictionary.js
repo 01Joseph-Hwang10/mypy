@@ -34,7 +34,7 @@ function Dictionary( {
 
 	return (
 		<div className="formElement__dict">
-			<div>
+			<div className="subject">
 				<span className="name">{name}</span>
 				<span>{`(${type})`}</span>
 			</div>

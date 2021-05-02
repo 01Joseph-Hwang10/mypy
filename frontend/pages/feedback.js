@@ -32,9 +32,9 @@ function feedback( {
 	};
 
 	return (
-		<div className="feedBackContentWrapper">
-			<span>Sending Feedback</span>
+		<div className="feedbackContentWrapper">
 			<form onSubmit={submitFeedback}>
+				<span>Sending Feedback</span>
 				<TextareaAutosize name='content' required placeholder='Thank you so much for your feedback!!' />
 				<button>{loading ? 'Loading...' : 'Send'}</button>
 			</form>

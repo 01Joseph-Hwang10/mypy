@@ -34,7 +34,9 @@ function SideBar() {
 					This app is currently on testing, thus not stable. 
 					It would be very thankful to report a bug or improvement.
 				</span>
-				<button>Send Proposal</button>
+				<Link href='/feedback'>
+					<button>Send Proposal</button>
+				</Link>
 			</div>
 		</div>
 	);

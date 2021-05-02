@@ -23,6 +23,15 @@ class SignUpForm(ModelForm):
         widget=forms.PasswordInput(attrs={'placeholder': 'Confirm password'})
     )
 
+    def clean_first_name(self):
+
+        first_name = self.cleaned_data.get('first_name')
+
+        if first_name == 'Guest':
+            raise forms.ValidationError("Name 'Guest' is not allowed")
+        else:
+            return first_name
+
     def clean_email(self):
 
         email = self.cleaned_data.get('email')

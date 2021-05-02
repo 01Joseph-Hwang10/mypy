@@ -18,13 +18,15 @@ export const {
 		loading : true,
 		errorMessage : null,
 		inputs : [],
+		createdBy : {},
 	},
 	reducers : {
-		loadAppSuccessful : ( state, { payload : { app, inputs, }, } ) => {
+		loadAppSuccessful : ( state, { payload : { app, inputs, createdBy, }, } ) => {
 			state.isSuccessful = true;
 			state.loading = false;
 			state.inputs = inputs;
 			state.appSpec = app;
+			state.createdBy = createdBy;
 		},
 		loadAppError : ( state, { payload, } ) => {
 			state.isSuccessful = false;

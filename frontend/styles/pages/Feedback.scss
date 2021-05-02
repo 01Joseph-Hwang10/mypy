@@ -1,0 +1,67 @@
+@use '../base';
+@use '../shadow';
+@use '../borderRadius';
+
+.feedbackContentWrapper {
+    @extend %flex-col;
+    width: 100%;
+
+    form {
+        background-color: $white-edge;
+        @extend %flex-col;
+        width: 90%;
+        padding: 1.5rem;
+        @extend %rounded-lg;
+
+        span {
+            text-align: center;
+            color: $black-edge;
+            font-weight: bold;
+            font-size: xx-large;
+        }
+
+        textarea {
+            border: 2px solid $line;
+            text-align: left;
+            padding: 0.5rem;
+            min-height: 5rem;
+            transition: all 0.2s ease;
+            @extend %rounded-lg;
+            margin-top: 1.5rem;
+            width: 100%;
+        }
+
+        textarea:focus {
+            border: 2px solid $highlight;
+        }
+        
+        button {
+            @extend %rounded-lg;
+            margin-top: 1rem;
+            @extend %base-basic-button;
+            background-color: $teal;
+            padding: 1rem 0;
+            width: 100%;
+            transition: filter 0.2s ease;
+        }
+
+        button:hover {
+            cursor: pointer;
+            filter: brightness(1.1);
+        }
+    }
+
+    @include small {
+        form {
+            width: 70%;
+        }
+    }
+
+    @include large {
+        form {
+            width: 50%;
+        }
+    }
+
+}
+

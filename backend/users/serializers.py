@@ -24,3 +24,13 @@ class CustomUserSerializer(Serializer):
     class Meta:
         model = CustomUser
         fields = '__all__'
+
+
+class LightWeightUserSerializer(Serializer):
+
+    id = IntegerField()
+    first_name = CharField()
+
+    class Meta:
+        model = CustomUser
+        fields = '__all__'

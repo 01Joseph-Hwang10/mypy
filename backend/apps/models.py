@@ -11,6 +11,8 @@ class App(TimeStampedModel):
     created_by = models.ForeignKey(
         CustomUser, related_name='myapp', on_delete=models.CASCADE)
     exports = models.IntegerField(default=0)
+    has_file_input = models.BooleanField(default=False)
+    cover_img = models.TextField(null=True, default=True)
 
 
 class InputSpec(TimeStampedModel):

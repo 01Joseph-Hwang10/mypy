@@ -36,7 +36,7 @@ function List( {
 
 	return (
 		<div className="formElement__list">
-			<div>
+			<div className="subject">
 				<span className='name'>{name}</span>
 				<span>{`(${type})`}</span>
 			</div>

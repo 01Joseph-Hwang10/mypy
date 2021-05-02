@@ -1,14 +1,16 @@
 import zipapp
+import jwt
 import json
 import os
 import shutil
 import runpy
 from zipfile import ZipFile
+from PIL import Image
 from apps.functions import extract_recursively, replace_with_appropriates
 from common.pagination import ThreeFigurePagination
 from rest_framework.parsers import MultiPartParser
 # from common.functions import get_cookie
-from config.settings import MEDIA_ROOT, STATIC_ROOT
+from config.settings import ALGORITHM, MEDIA_ROOT, SECRET_KEY, STATIC_ROOT
 from rest_framework.generics import CreateAPIView, ListAPIView, DestroyAPIView, UpdateAPIView, RetrieveAPIView
 from rest_framework.response import Response
 from apps.models import App, InputSpec
@@ -16,6 +18,8 @@ from apps.serializers import AppSerializer, InputSpecSerializer
 from users.models import CustomUser
 from apps.models import App
 from apps.permissions import AllowedToCreateApp, AllowedToModifyApp
+from common.functions import get_cookie
+from users.serializers import LightWeightUserSerializer
 
 
 class CreateAppView(CreateAPIView):
@@ -27,13 +31,21 @@ class CreateAppView(CreateAPIView):
 
     def post(self, request, *args, **kwargs):
         try:
+            # Gets cookie
+            cookie = get_cookie(request)
+            access_token = cookie['access_token']
+            decoded_token = jwt.decode(
+                jwt=access_token, key=SECRET_KEY, algorithms=ALGORITHM)
+            user_id = decoded_token['user_id']
+
             # Recieves input
-            post_data = request.data
-            user_id = int(post_data['user_id'])
+            post_data = json.loads(request.data)
             name = post_data['name']
             description = post_data['description']
             created_by = CustomUser.objects.get(id=user_id)
             app_source = post_data['app']
+            has_file_input = post_data['has_file_input']
+            cover_img_source = post_data['cover_img']
 
             # Initially create Instance
             new = App.objects.create(
@@ -41,7 +53,8 @@ class CreateAppView(CreateAPIView):
                 description=description,
                 created_by=created_by,
                 app='',
-                static='',
+                cover_img=None,
+                has_file_input=has_file_input,
             )
 
             # Get Id out of it
@@ -147,13 +160,23 @@ class CreateAppView(CreateAPIView):
             os.mkdir(data_dir)
             os.mkdir(static_dir)
 
+            # Save cover image if there is cover image
+            if cover_img_source:
+                cover_img = Image.open(cover_img_source)
+                cover_img_directory = os.path.join(static_dir, 'cover_img')
+                cover_img.save(cover_img_directory)
+            else:
+                cover_img_directory = False
+
             # Make __args.py which will be base of inputs
             args_script = os.path.join(STATIC_ROOT, '__args.py')
             shutil.copy(args_script, input_dir)
 
-            # Update initially created instance's app path
+            # Update initially created instance's app path and cover image path
             instance = App.objects.get(id=new_id)
             instance.app = save_directory
+            if cover_img_directory:
+                instance.cover_img = cover_img_directory
             instance.save()
 
             # Return id which will be used at retrieve on frontend
@@ -209,11 +232,14 @@ class RetrieveAppView(RetrieveAPIView):
             app = AppSerializer(app_source).data
             inputs = InputSpecSerializer(
                 app_source.input_spec.all(), many=True).data
+            created_by = LightWeightUserSerializer(
+                app_source.created_by).data
 
             # Return app path and inputs
             data = {
                 'app': app,
-                'inputs': inputs
+                'inputs': inputs,
+                'createdBy': created_by
             }
             return Response(status=200, data=data)
         except Exception as e:

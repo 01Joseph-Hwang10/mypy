@@ -9,9 +9,10 @@ class AllowedToModifyUser(IsAuthenticated):
     def has_object_permission(self, request, view, obj):
         cookie = get_cookie(request)
         post_data = request.data
-        user_id = post_data['user_id']
-        token_user_id = jwt.decode(
+        user_id = int(post_data['user_id'])
+        decoded_token = jwt.decode(
             jwt=cookie['access_token'], key=SECRET_KEY, algorithms=ALGORITHM)
+        token_user_id = int(decoded_token['user_id'])
 
         cookie_user_id = int(post_data['user_id'])
         if token_user_id == cookie_user_id and token_user_id == user_id:

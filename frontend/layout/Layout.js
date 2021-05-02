@@ -6,6 +6,7 @@ import BaseLayout from './BaseLayout';
 function Layout( {
 	children,
 } ) {
+
 	return (
 		<BaseLayout>
 			<NavBar />

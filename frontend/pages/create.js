@@ -54,9 +54,16 @@ function create( {
 			<div className="createFormWrapper">
 				<form onSubmit={createAppSubmit}>
 					<span className="formSubject">Create New App</span>
-					<input className='name' placeholder='name' type='text' required />
-					<TextAreaAutosize className='description' placeholder='description' />
-					<input className='app' type='file' accept='.zip' required />
+					<input className='name' name='name' placeholder='name' type='text' required />
+					<TextAreaAutosize className='description' name='description' placeholder='description' />
+					<label htmlFor='app'>Zipped Python App</label>
+					<input className='app' name='app' type='file' accept='.zip' required />
+					<label htmlFor='image'>App Cover Image</label>
+					<input className='coverImg' name='cover_img' type='file' accept='image/*' />
+					<div className="hasFileInputWrapper">
+						<label htmlFor='hasFileInput'>Do App Has File Input?</label>
+						<input className='hasFileInput' name='has_file_input' type='checkbox' />
+					</div>
 					<button>Create</button>
 				</form>
 				{ IsFirstTime ? ( <></> ) : (

@@ -1,7 +1,35 @@
+@use '../../base';
+@use '../../borderRadius';
+@use '../../shadow';
 
+#appRoot {
+    @extend %flex-col;
+    width: 100%;
 
-.log {
-    background-color: darkblue;
-    color: whitesmoke;
-    font-weight: 600;
+    .pseudoBackgroundImg, .backgroundImg {
+        @extend %shadow-inner;
+        width: 100%;
+        @extend %flex-box;
+        justify-content: center;
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: $white-edge;
+    }
+
+    .pseudoBackgroundImg {
+        background-color: $python-blue;
+        padding: 6rem 0;
+    }
+
+    .backgroundImg {
+        height: 10rem;
+        background-position: center;
+        background-size: cover;
+        backdrop-filter: blur(5px);
+    }
+
+    
 }
+
+
+@import '../../components/input/Input';
