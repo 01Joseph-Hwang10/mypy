@@ -26,6 +26,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '#08y$puf(yn%@a#-%!l0o2anef9rl(+n%_3a!$zp_zjfo+aeyh'
 
+ALGORITHM = 'HS256'
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(os.environ.get('DEBUG') != 'False')
 
@@ -47,6 +49,7 @@ PROJECT_APPS = [
     'authentication.apps.AuthenticationConfig',
     'mail.apps.MailConfig',
     'users.apps.UsersConfig',
+    'feedbacks.apps.FeedbacksConfig',
 ]
 
 THIRD_PARTY_APPS = [

@@ -1,6 +1,5 @@
 from django.core.checks.messages import DEBUG
 from django.urls import reverse_lazy
-from django.contrib.auth import authenticate
 from django.views.generic import FormView, TemplateView
 from rest_framework import generics, status
 from rest_framework.response import Response
@@ -76,7 +75,8 @@ class CustomTokenRefreshView(TokenRefreshView):
                     "access_token", value=serializer.validated_data['access'], max_age=max_age_1day, secure=True, httponly=True, samesite='Lax')
 
             return auth_response
-        except Exception:
+        except Exception as e:
+            print(e)
             return Response(status=401, data='Authorization Error')
 
 

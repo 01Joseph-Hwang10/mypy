@@ -7,11 +7,17 @@ function AppList( {
 	ErrorMessage,
 	IsSuccessful,
 	keyPrefix,
+	reloadAppList,
 } ) {
 
 	if ( IsLoading || !AppList ) return <div className="appList__message">Loading...</div>;
 	if ( IsSuccessful && AppList.length === 0 ) return <div className="appList__message">No data found</div>;
-	if ( !IsSuccessful ) return <div className="appList__message">{ErrorMessage}</div>;
+	if ( !IsSuccessful ) return (
+		<div className="appList__error">
+			<span className="appList__errorMessage">{ErrorMessage || 'Data was not successfully retrieved'}</span>
+			<button onClick={reloadAppList} className='appList__loadAgain'>Load Again</button>
+		</div>
+	);
 	return (
 		<div className="appList">
 			{

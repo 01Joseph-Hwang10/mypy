@@ -24,7 +24,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('source/api/apps/', include('apps.urls', namespace='apps')),
     path('source/auth/', include('authentication.urls', namespace='auth')),
-    path('source/api/users/', include('users.urls', namespace='users'))
+    path('source/api/users/', include('users.urls', namespace='users')),
+    path('source/api/feedbacks/', include('feedbacks.urls', namespace='feedbacks'))
 ]
 
 if DEBUG:

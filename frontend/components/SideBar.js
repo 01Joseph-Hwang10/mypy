@@ -29,6 +29,13 @@ function SideBar() {
 					<button className="bi bi-hand-thumbs-down"></button>
 				</div>
 			</div> */}
+			<div className="sideBar__extraContent">
+				<span>
+					This app is currently on testing, thus not stable. 
+					It would be very thankful to report a bug or improvement.
+				</span>
+				<button>Send Proposal</button>
+			</div>
 		</div>
 	);
 }

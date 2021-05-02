@@ -8,5 +8,5 @@ class CustomHeaderMiddleware(MiddlewareMixin):
             cookie = get_cookie(request)
             access_token = cookie['access_token']
             request.META['HTTP_AUTHORIZATION'] = f'Bearer {access_token}'
-        except:
-            pass
+        except Exception as e:
+            print(e)

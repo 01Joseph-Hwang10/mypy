@@ -1,6 +1,7 @@
 from rest_framework.generics import UpdateAPIView, RetrieveAPIView
 from rest_framework.response import Response
 from users.models import CustomUser
+from users.permissions import AllowedToModifyUser
 from users.serializers import CustomUserSerializer
 from apps.models import App
 
@@ -9,6 +10,7 @@ class UpdateImportsView(UpdateAPIView):
 
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
+    permission_classes = (AllowedToModifyUser,)
 
     def partial_update(self, request, *args, **kwargs):
         try:
@@ -28,7 +30,8 @@ class UpdateImportsView(UpdateAPIView):
             user.save()
             app.save()
             return Response(status=200, data='Update was successful')
-        except Exception:
+        except Exception as e:
+            print(e)
             return Response(status=400, data='Update failed')
 
 
@@ -36,6 +39,7 @@ class UpdateProfileView(UpdateAPIView):
 
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
+    permission_classes = (AllowedToModifyUser,)
 
     def partial_update(self, request, *args, **kwargs):
         try:
@@ -58,7 +62,8 @@ class UpdateProfileView(UpdateAPIView):
             if isChanged:
                 user.save()
             return Response(status=200, data="Successfully Updated!")
-        except Exception:
+        except Exception as e:
+            print(e)
             return Response(status=400, data="Update Failed!")
 
 

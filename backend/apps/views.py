@@ -15,7 +15,7 @@ from apps.models import App, InputSpec
 from apps.serializers import AppSerializer, InputSpecSerializer
 from users.models import CustomUser
 from apps.models import App
-from common.permissions import AllowedToCreateApp
+from apps.permissions import AllowedToCreateApp, AllowedToModifyApp
 
 
 class CreateAppView(CreateAPIView):
@@ -162,8 +162,8 @@ class CreateAppView(CreateAPIView):
                 'id': new_id
             }
             return Response(status=201, data=data)
-        except Exception:
-            print(Exception)
+        except Exception as e:
+            print(e)
 
             # Delete all files uploaded and instance if creation failed
             shutil.rmtree(save_directory)
@@ -186,12 +186,12 @@ class SelectedListAppView(CreateAPIView):
     def post(self, request, *args, **kwargs):
         try:
             post_data = request.data
-            print(post_data)
             app_ids = json.loads(post_data['app_ids'])
             apps = App.objects.filter(id__in=app_ids)
             serialized = AppSerializer(apps, many=True)
             return Response(status=200, data=serialized.data)
-        except Exception:
+        except Exception as e:
+            print(e)
             return Response(status=500, data="Internal Server Error")
 
 
@@ -216,7 +216,8 @@ class RetrieveAppView(RetrieveAPIView):
                 'inputs': inputs
             }
             return Response(status=200, data=data)
-        except Exception:
+        except Exception as e:
+            print(e)
             return Response(status=500, data='Internal Server Error')
 
 
@@ -289,9 +290,9 @@ class ExecuteAppView(CreateAPIView):
             # What you need to do:
             # Mock static fileSystem
             return Response(status=200, data={'result': result, 'log': log})
-        except Exception:
+        except Exception as e:
             # Delete all files uploaded
-            print(Exception)
+            print(e)
             if root_path:
                 shutil.rmtree(root_path)
             return Response(status=500, data='Internal server error')
@@ -301,6 +302,7 @@ class UpdateAppView(UpdateAPIView):
 
     queryset = App.objects.all()
     serializer_class = AppSerializer
+    permission_classes = (AllowedToModifyApp,)
 
     def patch(self, request, *args, **kwargs):
 
@@ -312,6 +314,7 @@ class DeleteAppView(DestroyAPIView):
 
     queryset = App.objects.all()
     serializer_class = AppSerializer
+    permission_classes = (AllowedToModifyApp,)
 
     def delete(self, request, *args, **kwargs):
 
@@ -319,7 +322,8 @@ class DeleteAppView(DestroyAPIView):
             # Delete every source of app
             id = int(self.request.query_params.get('id'))
             shutil.rmtree(os.path.join(MEDIA_ROOT, f'{id}/'))
-            App.objects.filter(id=id).delete()
+            App.objects.filter(id=id)[0].delete()
             return Response(status=200, data='app successfully deleted')
-        except Exception:
+        except Exception as e:
+            print(e)
             return Response(status=500, data='app deletation failed')
