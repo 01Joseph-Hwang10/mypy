@@ -23,27 +23,29 @@ function AppListSection( {
 	const keyPrefix = ( sectionName ? sectionName.replace( ' ', '_' ) : null );
 
 	useEffect( async ()=>{
-		setLoading( true );
-		const postData = listSelectedAppDataForm( id, appIdList );
-		let ok, data;
-		if ( filter ) {
-			const { ok : resultOk, data : resultData, } = await listSelectedApp( postData );
-			ok = resultOk;
-			data = resultData;
-		} else {
-			const { ok : resultOk, data : resultData, } = await listApp();
-			ok = resultOk;
-			data = resultData;
+		if ( appIdList ) {
+			setLoading( true );
+			const postData = listSelectedAppDataForm( id, appIdList );
+			let ok, data;
+			if ( filter ) {
+				const { ok : resultOk, data : resultData, } = await listSelectedApp( postData );
+				ok = resultOk;
+				data = resultData;
+			} else {
+				const { ok : resultOk, data : resultData, } = await listApp();
+				ok = resultOk;
+				data = resultData;
+			}
+			if ( ok ) {
+				setIsSuccessful( true );
+				setAppList( data );
+			} else {
+				setIsSuccessful( false );
+				setError( data );
+				ShowMessage( { message : data, level : 'error', } );
+			}
+			setLoading( false );
 		}
-		if ( ok ) {
-			setIsSuccessful( true );
-			setAppList( data );
-		} else {
-			setIsSuccessful( false );
-			setError( data );
-			ShowMessage( { message : data, level : 'error', } );
-		}
-		setLoading( false );
 	}, [] );
 
 	const appListProps = {

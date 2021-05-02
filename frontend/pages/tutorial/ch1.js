@@ -48,13 +48,15 @@ function deployingOnMypy() {
 				<p>
 					If you&apos;ve done building app, zip the root folder of your app recursively
 					so that you can upload the zipped file to mypy. For example, if the file scheme looks like below,
-					<h4>
-						my_app/ <br />
-						|- index.py <br />
-						|- module1.py <br />
-						|- module2.py <br />
-						|- ... <br />
-					</h4>
+				</p>
+				<h4>
+					my_app/ <br />
+					|- index.py <br />
+					|- module1.py <br />
+					|- module2.py <br />
+					|- ... <br />
+				</h4>
+				<p>
 					you need to zip &quot;my_app&quot; folder to upload on mypy.
 				</p>
 				<h3>#3. Upload The Zipfile To Mypy</h3>

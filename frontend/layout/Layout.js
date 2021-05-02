@@ -1,22 +1,19 @@
 import Footer from '@components/Footer';
-import Message from '@components/Message';
-import Initialize from '@components/mixins/Initialize';
 import NavBar from '@components/NavBar';
 import React from 'react';
+import BaseLayout from './BaseLayout';
 
 function Layout( {
 	children,
 } ) {
 	return (
-		<>
-			<Initialize />
-			<Message />
+		<BaseLayout>
 			<NavBar />
 			<div id="mainBody">
 				{children}
 			</div>
 			<Footer />
-		</>
+		</BaseLayout>
 	);
 }
 

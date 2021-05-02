@@ -1,5 +1,5 @@
-import { logout, refreshToken, signInSuccessful } from '@redux/slices/auth';
-import { retrieveMeError, retrieveMeSuccessful, retrieveUser } from '@redux/slices/retrieve-user';
+import { loading as authLoading, logout, refreshToken, signInSuccessful } from '@redux/slices/auth';
+import { retrieveMeError, retrieveMeSuccessful, retrieveUser, loading as retrieveUserLoading } from '@redux/slices/retrieve-user';
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { propagateNewItems, mapStorageItemsToProps } from '@slices/exportApp';
@@ -13,9 +13,13 @@ function Initialize( {
 	propagateNewItems : PropagateNewItems,
 	mapStorageItemsToProps : MapStorageItemsToProps,
 	showMessage : ShowMessage,
+	authLoading : AuthLoading,
+	retrieveUserLoading : RetrieveUserLoading,
 } ) {
 
 	useEffect( async () => {
+		AuthLoading();
+		RetrieveUserLoading();
 		const { ok : tokenOk, } = await refreshToken();
 		if ( tokenOk ) {
 			const userId = window.localStorage.getItem( 'user_id' );
@@ -36,9 +40,7 @@ function Initialize( {
 		}
 	}, [] );
 
-	return (
-		<></>
-	);
+	return <></>;
 }
 
 
@@ -51,6 +53,8 @@ const mapDispatchToProps = dispatch => {
 		propagateNewItems : data => dispatch( propagateNewItems( data ) ),
 		mapStorageItemsToProps : () => dispatch( mapStorageItemsToProps() ),
 		showMessage : ( data ) => dispatch( showMessage( data ) ),
+		authLoading : () => dispatch( authLoading() ),
+		retrieveUserLoading : () => dispatch( retrieveUserLoading() ),
 	};
 };
 

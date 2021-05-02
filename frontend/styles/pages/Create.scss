@@ -2,78 +2,123 @@
 @use '../media';
 @use '../borderRadius';
 
-.createFormWrapper {
-    width: 100%;
-    @extend %flex-col;
+$quick-start-content-xs: 50%;
+$quick-start-content-sm: 55%;
+$quick-start-content-md: 60%;
+$quick-start-content-lg: 70%;
 
-    form {
-        width: 91.67%;
-        padding: 1rem;
-        background-color: $white-edge;
-        @extend %rounded-lg;
+.createContentRoot {
+    .tutorialContentRoot {
+        .tutorialContent {
+            width: $quick-start-content-xs;
+        }
+    }
 
-        .formSubject {
-            font-weight: 600;
-            display: block;
+    .createFormWrapper {
+        width: calc(100% - #{$quick-start-content-xs});
+        padding: 0 1rem;
+    }
+}
+
+@include small {
+    .createContentRoot {
+        .tutorialContentRoot {
+            .tutorialContent {
+                width: $quick-start-content-sm;
+            }
+        }
+    
+        .createFormWrapper {
+            width: calc(100% - #{$quick-start-content-sm});
+        }
+    }
+}
+
+@include medium {
+    .createContentRoot {
+        .tutorialContentRoot {
+            .tutorialContent {
+                width: $quick-start-content-md;
+            }
+        }
+    
+        .createFormWrapper {
+            width: calc(100% - #{$quick-start-content-md});
+        }
+    }
+}
+
+@include large {
+    .createContentRoot {
+        .tutorialContentRoot {
+            .tutorialContent {
+                width: $quick-start-content-lg;
+            }
+        }
+    
+        .createFormWrapper {
+            width: calc(100% - #{$quick-start-content-lg});
+        }
+    }
+}
+
+.createContentRoot {
+    position: relative;
+    .tutorialContentRoot {
+        justify-content: start;
+    }
+    
+    .createFormWrapper {
+        @extend %flex-col;
+        position: fixed;
+        top: 8rem;
+        right: 0;
+    
+        form {
             width: 100%;
-            font-size: x-large;
-            text-align: center;
-            margin-bottom: 1rem;
-        }
-        
-        input, textarea {
-            width: 100%;
-            padding: 0.5rem;
-            text-align: left;
-            margin: 0.25rem 0;
-            background-color: transparent;
-            border: 2px solid $intermediate;
-            transition: all 0.2s ease;
+            padding: 1rem;
+            background-color: $white-edge;
             @extend %rounded-lg;
-        }
-
-        textarea {
-            min-height: 7rem;
-        }
-
-        input:focus, textarea:focus {
-            border: 2px solid $highlight;
-        }
-
-        button {
-            @extend %basic-button;
-            @extend %rounded-lg;
-            transition: all 0.2s ease;
-            font-size: large;
-        }
-
-        button:hover {
-            cursor: pointer;
-            filter: brightness(1.1)
-        }
-    }
     
-    @include small {
-        form {
-            width: 70%;
-        }
-    }
+            .formSubject {
+                font-weight: 600;
+                display: block;
+                width: 100%;
+                font-size: x-large;
+                text-align: center;
+                margin-bottom: 1rem;
+            }
+            
+            input, textarea {
+                width: 100%;
+                padding: 0.5rem;
+                text-align: left;
+                margin: 0.25rem 0;
+                background-color: transparent;
+                border: 2px solid $intermediate;
+                transition: all 0.2s ease;
+                @extend %rounded-lg;
+            }
     
-    @include medium {
-        form {
-            width: 60%;
-        }
-    }
+            textarea {
+                min-height: 7rem;
+            }
     
-    @include large {
-        form {
-            width: 50%;
-        }
-    }
+            input:focus, textarea:focus {
+                border: 2px solid $highlight;
+            }
     
-    @include x-large {
-        form {
-            width: 40%
+            button {
+                @extend %basic-button;
+                @extend %rounded-lg;
+                transition: all 0.2s ease;
+                font-size: large;
+            }
+    
+            button:hover {
+                cursor: pointer;
+                filter: brightness(1.1)
+            }
         }
     }
 }

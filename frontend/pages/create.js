@@ -5,12 +5,15 @@ import { connect } from 'react-redux';
 import { loading, createAppSuccessful, createAppError } from '@slices/craete-app';
 import { useRouter } from 'next/router';
 import TextAreaAutosize from 'react-textarea-autosize';
+import QuickStartContent from '@components/tutorial/QuickStartContent';
 
 function create( { 
 	loading : Loading,
 	createAppSuccessful : CreateAppSuccessful,
 	createAppError : CreateAppError,
 	isLoading : IsLoading,
+	authLoading : AuthLoading,
+	retrieveUserLoading : RetrieveUserLoading,
 	isSuccessful : IsSuccessful,
 	isFirstTime : IsFirstTime,
 	userId : UserId,
@@ -20,7 +23,7 @@ function create( {
 	const router = useRouter();
 
 	useEffect( () => {
-		if ( !SignedIn ) {
+		if ( !AuthLoading && !RetrieveUserLoading && !SignedIn ) {
 			router.push( '/login' );
 		}
 	}, [] );
@@ -42,33 +45,40 @@ function create( {
 
 	if ( !SignedIn ) return <></>;
 	return (
-		<div className="createFormWrapper">
-			<form onSubmit={createAppSubmit}>
-				<span className="formSubject">Create New App</span>
-				<input className='name' placeholder='name' type='text' required />
-				<TextAreaAutosize className='description' placeholder='description' />
-				<input className='app' type='file' accept='.zip' required />
-				<button>Create</button>
-			</form>
-			{ IsFirstTime ? ( <></> ) : (
-				<>
-					{
-						IsLoading ? (
-							<div>Creating the app...</div>
-						) : (
-							<>
-								{
-									IsSuccessful ? (
-										<div>App successfully created</div>
-									) : (
-										<div>App creation failed</div>
-									)
-								}
-							</>
-						)
-					}
-				</>
-			) }
+		<div className="createContentRoot">
+			<div className="tutorialContentRoot">
+				<div className="quickStartWrapper tutorialContent">
+					<QuickStartContent />
+				</div>
+			</div>
+			<div className="createFormWrapper">
+				<form onSubmit={createAppSubmit}>
+					<span className="formSubject">Create New App</span>
+					<input className='name' placeholder='name' type='text' required />
+					<TextAreaAutosize className='description' placeholder='description' />
+					<input className='app' type='file' accept='.zip' required />
+					<button>Create</button>
+				</form>
+				{ IsFirstTime ? ( <></> ) : (
+					<>
+						{
+							IsLoading ? (
+								<div>Creating the app...</div>
+							) : (
+								<>
+									{
+										IsSuccessful ? (
+											<div>App successfully created</div>
+										) : (
+											<div>App creation failed</div>
+										)
+									}
+								</>
+							)
+						}
+					</>
+				) }
+			</div>
 		</div>
 	);
 }
@@ -77,6 +87,8 @@ function create( {
 const mapStateToProps = ( state ) => {
 	return {
 		isLoading : state.createApp.loading,
+		authLoading : state.auth.loading,
+		retrieveUserLoading : state.retrieveUser.loading,
 		isSuccessful : state.createApp.isSuccessful,
 		isFirstTime : state.createApp.isFirstTime,
 		userId : state.auth.userId,

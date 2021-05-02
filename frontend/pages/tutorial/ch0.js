@@ -1,7 +1,7 @@
-import CodeBox from '@components/mixins/CodeBox';
 import TutorialLayout from '@components/tutorial/TutorialLayout';
 import React from 'react';
 import Link from 'next/link';
+import CodeBox from '@components/mixins/CodeBox';
 
 function quickStart() {
 	return (
@@ -13,7 +13,7 @@ function quickStart() {
 				by making simple calculator in this tutorial
 				</h2>
 				<p>
-					The calculator we&apos;ll build recieves 2 numbers,
+					The calculator we&apos;ll build recieves 1 numbers,
 					and do one of basic calculations with them:
 					addition, subtraction, multiplication, and division.
 					<br /> <br />
@@ -45,10 +45,10 @@ function quickStart() {
 					<span>def index():</span>
 					<span className="breakLine"></span>
 					<span className="tabbed">
-						num1 = float(input(&quot;First number to calculate&quot;))
+						num0 = float(input(&quot;First number to calculate&quot;))
 					</span>
 					<span className='tabbed'>
-						num2 = float(input(&quot;Second number to calculate&quot;))
+						num1 = float(input(&quot;Second number to calculate&quot;))
 					</span>
 					<span className="tabbed">
 						operation = input(&quot;Calculation to operate&quot;)
@@ -60,7 +60,7 @@ function quickStart() {
 					and renders input UI to your app page 
 					as it is like the actual app. 
 					<br /> <br/>
-					For the case of the example above, mypy will convert &quot;num1&quot;
+					For the case of the example above, mypy will convert &quot;num0&quot;
 					and will render it as the float input UI supported by us.
 					<br /> <br/>
 					Note that if there is no type coversion at input function,
@@ -103,16 +103,16 @@ function quickStart() {
 					<span>def index():</span>
 					<span className="breakLine"></span>
 					<span className="tabbed">
-						num1 = float(input(&quot;First number to calculate&quot;))
+						num0 = float(input(&quot;First number to calculate&quot;))
 					</span>
 					<span className='tabbed'>
-						num2 = float(input(&quot;Second number to calculate&quot;))
+						num1 = float(input(&quot;Second number to calculate&quot;))
 					</span>
 					<span className="tabbed">
 						operation = input(&quot;Calculation to operate&quot;)
 					</span>
 					<span className="breakLine"></span>
-					<span className="tabbed">result = calculate(num1, num2, operation)</span>
+					<span className="tabbed">result = calculate(num0, num2, operation)</span>
 					<span className="breakLine"></span>
 					<span className="tabbed">return result</span>
 					<span className="breakLine"></span>
@@ -123,16 +123,16 @@ function quickStart() {
 					<br /> <br />
 				In the case of this example, if we say the name of the root folder to be &quot;calculator&quot;,
 				the folder scheme would be seem like below.
-					<br /> <br />
-					<h4>
-						calculator <br />
-						|- index.py <br />
-						|- calculator.py <br />
-					</h4>
-					<br /> <br />
+				</p>
+				<h3>
+				calculator <br />
+				|- index.py <br />
+				|- calculator.py <br />
+				</h3>
+				<p>
 				So what we need to do is just to <strong>zip the &quot;calculator&quot; and upload it to mypy.</strong>
 				Then mypy will automatically make the app for you with your code!
-				So the app creation is successfully done!
+                Click &quot;Create New&quot; button at home page or mypy page to create your own new app!
 					{/* Insert the result preview */}
 				</p>
 				<div className="tutorial_onContentNavigation">

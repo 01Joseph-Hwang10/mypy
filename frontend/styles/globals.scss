@@ -69,7 +69,6 @@ textarea {
 @import 'components/NavBar';
 @import 'pages/Home';
 @import 'pages/Login';
-@import 'pages/Create';
 @import 'pages/app/AppDetail';
 @import 'components/Search';
 @import 'components/AppList';
@@ -79,4 +78,5 @@ textarea {
 @import 'components/mypy/MypyAppList';
 @import 'components/mypy/MypySideBar';
 @import 'components/tutorial/Tutorial';
+@import 'pages/Create'; // This is intended with reason related with 'justify content'
 @import 'components/tutorial/sideNav';

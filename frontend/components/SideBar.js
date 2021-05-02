@@ -5,7 +5,7 @@ import Search from './Search';
 function SideBar() {
 	return (
 		<div className="sideBar">
-			<Search placeholder="Search for python IPO apps!" />
+			{/* <Search placeholder="Search for python IPO apps!" /> */}
 			<div className="sideBar__aboutApp">
 				<span>MYPY: Python app everywhere!</span>
 				<span>
@@ -21,14 +21,14 @@ function SideBar() {
 					<button className="buttonRipple">Tutorial</button>
 				</Link>
 			</div>
-			<div className="sideBar__survey">
+			{/* <div className="sideBar__survey">
 				<span>Please tell us your app experience!</span>
 				<span>Was the app useful?</span>
 				<div>
 					<button className="bi bi-hand-thumbs-up"></button>
 					<button className="bi bi-hand-thumbs-down"></button>
 				</div>
-			</div>
+			</div> */}
 		</div>
 	);
 }

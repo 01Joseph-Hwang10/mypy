@@ -1,22 +1,19 @@
 import Footer from '@components/Footer';
-import Message from '@components/Message';
-import Initialize from '@components/mixins/Initialize';
 import MobileNavBar from '@components/mobile/MobileNavBar';
 import React from 'react';
+import BaseLayout from './BaseLayout';
 
 function MobileLayout( {
 	children,
 } ) {
 	return (
-		<>
-			<Initialize />
-			<Message />
+		<BaseLayout>
 			<MobileNavBar />
 			<div id="mainBody">
 				{children}
 			</div>
 			<Footer />
-		</>
+		</BaseLayout>
 	);
 }
 
