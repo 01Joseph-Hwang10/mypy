@@ -16,6 +16,7 @@
     @extend %flex-box;
     flex-direction: column;
     justify-content: start;
+    width: 100%;
 }
 
 .mypySideBar__info span {
@@ -36,11 +37,13 @@
 .mypySideBar__bio {
     font-size: small;
     text-align: left;
+    margin-bottom: 1rem;
 }
 
 .mypySideBar__info button {
+    width: 90%;
     padding: 0.5rem 2.5rem;
-    margin-top: 0.5rem;
+    margin-bottom: 0.25rem;
     @extend %rounded-md;
     text-align: center;
     color: $white-edge;
@@ -81,6 +84,7 @@
         border-bottom: none;
         @extend %flex-col;
         margin-top: 1rem;
+        margin-bottom: -1.5rem;
 
         .sideBar__buttons {
             margin-top: 0.5rem;
@@ -89,6 +93,7 @@
             button {
                 background-color: $teal;
                 color: $white-edge;
+                width: 100%;
             }
         }
     }

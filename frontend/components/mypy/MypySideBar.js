@@ -1,7 +1,7 @@
 import updateUserDataForm from '@redux/form/updateUserDataForm';
 import { retrieveMeSuccessful } from '@redux/slices/retrieve-user';
 import { updateUser, updateUserSuccessful, updateUserError } from '@redux/slices/update-user';
-import { PYTHON_BLUE, PYTHON_YELLOW } from '@src/constants';
+import { TEAL, PYTHON_YELLOW } from '@src/constants';
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import Link from 'next/link';
@@ -23,7 +23,8 @@ function MypySideBar( {
 
 	const styleFormElement = { display : isEditing ? 'block' : 'none', };
 	const styleSpanElement = { display : isEditing ? 'none' : 'block', };
-	const styleButton = { backgroundColor : isEditing ? PYTHON_YELLOW : PYTHON_BLUE, };
+	const styleButton = { backgroundColor : isEditing ? PYTHON_YELLOW : TEAL, };
+	const styleCancelButton = { backgroundColor : 'gray', };
 
 	const toggleButton = async ( e ) => {
 		if ( isEditing ) {
@@ -47,6 +48,10 @@ function MypySideBar( {
 		} else {
 			setIsEditing( true );
 		}
+	};
+
+	const cancelUpdate = () => {
+		setIsEditing( false );
 	};
 
 
@@ -74,6 +79,9 @@ function MypySideBar( {
 				{ SignedIn && <TextAreaAutosize className="mypySideBar__input mypySideBar__bio__input" name="bio" placeholder='Bio' defaultValue={Me?.bio} style={styleFormElement} /> }
 				{
 					SignedIn && Me && <button onClick={toggleButton} style={styleButton}>{isSubmitting ? 'Loading...' : 'Update'}</button>
+				}
+				{
+					SignedIn && isEditing && <button onClick={cancelUpdate} style={styleCancelButton}>{isSubmitting ? 'Loading...' : 'Cancel'}</button>
 				}
 				{
 					!UpdateIsSuccessful && <span className="mypySideBar__errorMessage">{UpdateError}</span>

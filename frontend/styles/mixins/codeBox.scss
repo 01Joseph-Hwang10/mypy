@@ -18,32 +18,40 @@
     padding: 0.5rem;
     background-color: $highlight;
     width: 100%;
-    span {
-        margin: 0.25rem 0;
-        text-align: left;
-        color: $base;
-        font-weight: 600;
-    }
-
+    
     .breakLine {
         display: block;
         height: 1rem;
         width: 1px;
     }
-
+    
     .comment {
         color: gray;
     }
-
+    
     .tabbed {
         margin-left: 2rem;
     }
-
+    
     .doubleTabbed {
         margin-left: 4rem;
     }
-
+    
     .tripleTabbed {
         margin-left: 6rem;
+    }
+
+    span {
+        margin: 0.25rem 0;
+        text-align: left;
+        color: $base;
+        font-weight: 600;
+
+        strong {
+            margin: 0.25rem;
+            text-align: left;
+            color: $python-yellow;
+            font-weight: bold;
+        }
     }
 }

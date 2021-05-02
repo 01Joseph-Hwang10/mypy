@@ -60,7 +60,7 @@ function deployingOnMypy() {
 				<h3>#3. Upload The Zipfile To Mypy</h3>
 				<p>
 					If the zipfile is generated, then you&apos;re all done! 
-					Just click &quot;Create New&quot; button and upload that zipfile
+					In mypy, just click &quot;Create New&quot; button at home or your app page and upload that zipfile
 					to make your own mypy app!
 				</p>
 				<div className="tutorial_onContentNavigation">

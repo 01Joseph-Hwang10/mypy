@@ -17,6 +17,11 @@ $main-content-lg: 70%;
     min-height: 100vh;
 }
 
+// Temporary, change when building mobile UI
+.mainContent {
+    width: $main-content-sm;
+}
+
 @include small {
     .mainContent {
         width: $main-content-sm;
@@ -35,6 +40,11 @@ $main-content-lg: 70%;
     position: fixed;
     margin-top: 6rem;
     padding: 0 1rem;
+}
+
+// Temporary, change when building mobile UI
+.sideBarWrapper {
+    width: calc(100% - #{$main-content-sm});
 }
 
 @include small {

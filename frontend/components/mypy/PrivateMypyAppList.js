@@ -14,12 +14,14 @@ function PrivateMypyAppList( {
 } ) {
 
 	useEffect( async () => {
-		const { ok, data, } = await retrieveUser( window.localStorage.getItem( 'user_id' ) );
-		if ( ok ) {
-			RetrieveMeSuccessful( data );
-		} else {
-			RetrieveMeError( data );
-			ShowMessage( { message : data, level : 'error', } );
+		if ( !Me ) {
+			const { ok, data, } = await retrieveUser( window.localStorage.getItem( 'user_id' ) );
+			if ( ok ) {
+				RetrieveMeSuccessful( data );
+			} else {
+				RetrieveMeError( data );
+				ShowMessage( { message : data, level : 'error', } );
+			}
 		}
 	}, [] );
 

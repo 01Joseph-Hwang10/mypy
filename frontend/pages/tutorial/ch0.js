@@ -22,9 +22,15 @@ function quickStart() {
 					that our server can read the entry point of your app
 				</p>
 				<CodeBox>
-					<span className="comment"># index.py</span>
+					<span className="comment">
+						# index.py 
+						<strong> &lt;= This name is mandatory!</strong>
+					</span>
 					<span className='breakLine'></span>
-					<span>def index():</span>
+					<span>
+						def index():
+						<strong> &lt;= This name is mandatory too!</strong>
+					</span>
 					<span className="comment tabbed"># we&apos;ll execute our codes here</span>
 					<span className="breakLine"></span>
 				</CodeBox>
