@@ -28,8 +28,160 @@
         backdrop-filter: blur(5px);
     }
 
-    
+    .appHeader {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, 1fr);
+        gap: 1rem;
+
+        .appHeader__generalInfo, .appHeader__description {
+            padding: 1.5rem;
+            @extend %rounded-lg;
+            border: 2px solid $line;
+        }
+
+        .appHeader__generalInfo {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-start;
+
+            h2 {
+                font-size: xx-large;
+                font-weight: bold;
+                color: $black-edge;
+                margin-bottom: 1rem;
+            }
+
+            h3 {
+                font-size: large;
+                font-weight: 600;
+                color: $black-edge;
+                margin-bottom: 1rem;
+            }
+
+            h4 {
+                font-size: x-large;
+                font-weight: bold;
+                color: $black-edge;
+            }
+
+            button {
+                background-color: tomato;
+                @extend %rounded-lg;
+                margin-top: 0.5rem;
+                padding: 0.5rem 0;
+                width: 100%;
+                color: $white-edge;
+                font-weight: 600;
+                font-size: large;
+                @extend %filter-on-change;
+            }
+
+            button:hover {
+                cursor: pointer;
+                filter: brightness(1.1);
+            }
+        }
+
+        .appHeader__description {
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-start;
+
+            p {
+                text-align: left;
+                line-height: 1.2rem;
+                font-size: large;
+            }
+        }
+    }
+
+    .outputContainer {
+        @extend %flex-col;
+        .outputContainer__result {
+            @extend %flex-col;
+            margin-bottom: 3rem;
+            width: 100%;
+            .subject {
+                text-align: center;
+                color: $highlight;
+                font-size: xx-large;
+                font-weight: bold;
+                margin-bottom: 2rem;
+            }
+            .resultWrapper {
+                display: flex;
+                width: 100%;
+                flex-direction: column;
+                justify-content: flex-start;
+                align-items: flex-start;
+                padding: 1rem;
+                @extend %rounded-lg;
+                border: 2px solid $line;
+            }
+        }
+        .outputContainer__log {
+            @extend %flex-col;
+            margin-bottom: 1.5rem;
+            width: 100%;
+            .subject {
+                text-align: center;
+                color: $highlight;
+                font-size: xx-large;
+                font-weight: bold;
+                margin-bottom: 2rem;
+            }
+            .logWrapper {
+                display: flex;
+                width: 100%;
+                flex-direction: column;
+                justify-content: flex-start;
+                align-items: flex-start;
+                padding: 1rem;
+                @extend %rounded-lg;
+                border: 2px solid $line;
+                background-color: $highlight;
+                .log {
+                    font-size: large;
+                    font-weight: 600;
+                    color: $white-edge;
+                    @extend %flex-box;
+                    justify-content: flex-start;
+                }
+            }
+        }
+    }
 }
+
+section {
+    width: 100%;
+    padding: 1.5rem;
+}
+
+@include small {
+    section {
+        width: $p11-12;
+    }
+
+    #appRoot {
+        .appHeader {
+            grid-template-columns: 0.9fr 1.1fr;
+        }
+    }
+}
+
+@include large {
+    section {
+        width: $p9-12;
+    }
+}
+
+@include xx-large {
+    section {
+        width: $p7-12;
+    }
+}
+
 
 
 @import '../../components/input/Input';

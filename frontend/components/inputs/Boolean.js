@@ -1,4 +1,5 @@
-import React from 'react';
+import { TEAL } from '@src/constants';
+import React, { useState } from 'react';
 
 function Boolean( {
 	input : {
@@ -7,11 +8,42 @@ function Boolean( {
 		type,
 	},
 } ) {
+
+	const [ isChecked, setIsChecked, ] = useState( false );
+
+	const styleChecked = {
+		backgroundColor : `${TEAL}`,
+	};
+	const styleNotChecked = {
+		backgroundColor : 'tomato',
+	};
+
+	const toggleIsChecked = ( ) => {
+
+		if ( isChecked ) {
+			setIsChecked( false );
+		} else {
+			setIsChecked( true );
+		}
+	};
+
+
 	return (
 		<div className="formElement__bool">
-			<div>{`${name}(${type})`}</div>
-			<div>{description}</div>
-			<input name={name} className="boolInput" type="checkbox"></input>
+			<div className="boolInputName">{`${name}(${type})`}</div>
+			<div className="boolInputDescription">
+				<p>{description}</p>
+			</div>
+			<div className="boolInputWrapper">
+				{
+					isChecked ? (
+						<input name={name} className="boolInput" type="checkbox" checked></input>
+					) : (
+						<input name={name} className="boolInput" type="checkbox"></input>
+					)
+				}
+				<button onClick={toggleIsChecked} style={isChecked ? styleChecked : styleNotChecked}>{isChecked ? 'True' : 'False'}</button>
+			</div>
 		</div>
 	);
 }

@@ -70,9 +70,9 @@ const executeAppDataForm = (  app, id  ) => {
 	}
 
 	let files = false;
-	const fileInput = document.querySelector( '.fileInput' ).files;
+	const fileInput = document.querySelector( '.fileInput' );
 	if ( fileInput ) {
-		files = fileInput[ 0 ];
+		files = fileInput.files[ 0 ];
 	}
 
 	

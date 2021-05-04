@@ -44,6 +44,7 @@ export const createApp = async ( postData ) => {
 				headers : { 
 					'Content-Type' : 'multipart/form-data',
 				},
+				withCredentials : true,
 			} );
     
 		return {

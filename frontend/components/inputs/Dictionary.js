@@ -38,14 +38,16 @@ function Dictionary( {
 				<span className="name">{name}</span>
 				<span>{`(${type})`}</span>
 			</div>
-			<div>{description}</div>
-			<div className="dict">
-				{row}
+			<div className='description'>
+				<p>{description}</p>
 			</div>
-			<div>
-				<span>Key, value</span>
-				<button onClick={addDictionaryRow}></button>
-				<button onClick={addDictionaryRow}></button>
+			<div className="inputWrapper">
+				<div className="dict">
+					{row}
+					<div className="dict__add">
+						<button className="bi bi-plus-circle" onClick={addDictionaryRow}></button>
+					</div>
+				</div>
 			</div>
 		</div>
 	);

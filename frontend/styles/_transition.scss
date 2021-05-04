@@ -1,5 +1,17 @@
 
 
-%highlight-on-hover {
+%bgcolor-on-change {
     transition: background-color 0.2s ease;
+}
+
+%filter-on-change {
+    transition: filter 0.2s ease;
+}
+
+%border-on-change {
+    transition: border 0.2s ease;
+}
+
+%all-on-change {
+    transition: all 0.2s ease;
 }

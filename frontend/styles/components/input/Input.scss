@@ -2,3 +2,38 @@
 @import 'Dictionary';
 @import 'Text';
 @import 'List';
+
+#appRoot {
+    .inputContainer {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        .formElementWrapper {
+            flex-grow: 1;
+            padding: 0.5rem;
+            .formElement {
+                width: 100%;
+            }
+        }
+        .runButtonWrapper {
+            width: 100%;
+            padding: 0 0.5rem;
+            margin-top: 1rem;
+            .runButton {
+                width: 100%;
+                padding: 1rem;
+                font-size: x-large;
+                background-color: $python-blue;
+                color: $white-edge;
+                font-weight: bold;
+                @extend %rounded-lg;
+                @extend %filter-on-change;
+            }
+            .runButton:hover {
+                cursor: pointer;
+                filter: brightness(1.1);
+            }
+        }
+    }
+}

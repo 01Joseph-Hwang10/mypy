@@ -6,15 +6,18 @@ export default function Row( {
 } ) {
 
 	const deleteSelf = () => {
-		deleteDictionaryRow( key );
+		if ( deleteDictionaryRow ) {
+			deleteDictionaryRow( key );
+		} else {
+			alert( "You can't delete a first row" );
+		}
 	};
 
 	return (
 		<div className="dict__row">
-			<span>Key, value</span>
 			<input className="dict__key" placeholder="key"></input>
 			<input className="dict__value" placeholder="value"></input>
-			{ deleteDictionaryRow && <button onClick={deleteSelf}>Delete</button> }
+			<button className="bi bi-trash-fill" onClick={deleteSelf}></button>
 		</div>
 	);
 }

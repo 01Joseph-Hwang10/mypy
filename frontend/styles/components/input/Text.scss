@@ -1,0 +1,62 @@
+@use '../../base';
+@use '../../borderRadius';
+@use '../../transition';
+
+
+#appRoot {
+    .inputContainer {
+        .formElementWrapper {
+            .formElement {
+                .formElement__text {
+                    @extend %flex-col;
+                    @extend %rounded-lg;
+                    padding: 1rem 0;
+                    background-color: $highlight;
+                    border: 2px solid $line;
+                    width: 100%;
+                    .textInputName {
+                        display: block;
+                        padding: 0 1rem;
+                        font-size: x-large;
+                        font-weight: bold;
+                        color: $white-edge;
+                        margin-bottom: 1.5rem;
+                    }
+                    .textInputDescription {
+                        width: 100%;
+                        padding: 1rem;
+                        @extend %rounded-lg;
+                        background-color: $intermediate;
+                        @extend %flex-box;
+                        justify-content: center;
+                        p {
+                            text-align: center;
+                            color: $white-edge;
+                        }
+                    }
+                    .textInputWrapper {
+                        width: 100%;
+                        @extend %rounded-lg;
+                        @extend %flex-box;
+                        justify-content: center;
+                        background-color: $base;
+                        margin-top: 1rem;
+                        padding: 1.5rem 0.5rem;
+                        input {
+                            @extend %rounded-lg;
+                            width: $p11-12;
+                            padding: 0.5rem;
+                            text-align: left;
+                            border: 2px solid $intermediate;
+                            @extend %border-on-change;
+                        }
+    
+                        input:focus {
+                            border: 2px solid $highlight;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

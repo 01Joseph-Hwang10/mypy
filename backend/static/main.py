@@ -46,14 +46,16 @@ def execute(log_path):
 
     with open(log_file_path, 'w') as fw:
         sys.stdout = fw
+        sys.stderr = fw
 
         try:
             result = main()
-            sys.stdout = sys.__stdout__
         except Exception as e:
-            print(e)
+            fw.write(e)
+            fw.write('\n')
             result = 'An Error occured. Please reference the log'
-            sys.stdout = sys.__stdout__
+        sys.stdout = sys.__stdout__
+        sys.stderr = sys.__stderr__
     with open(log_file_path, 'r') as fr:
         logs = fr.readlines()
         log_array = []

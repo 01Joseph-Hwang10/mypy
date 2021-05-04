@@ -38,7 +38,7 @@ export const {
 export const deleteApp = async id => {
 
 	try {
-		const {  data, } = await axios.delete( `${DELETE_APP}?id=${id}` );
+		const {  data, } = await axios.delete( `${DELETE_APP}?id=${id}`, { withCredentials : true, } );
 
 		return {
 			ok : true,

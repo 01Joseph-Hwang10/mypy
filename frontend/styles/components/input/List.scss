@@ -1,0 +1,104 @@
+@use '../../base';
+@use '../../borderRadius';
+@use '../../transition';
+
+
+#appRoot {
+    .inputContainer {
+        .formElementWrapper {
+            .formElement {
+                .formElement__list {
+                    @extend %flex-col;
+                    @extend %rounded-lg;
+                    padding: 1rem 0;
+                    background-color: $highlight;
+                    border: 2px solid $line;
+                    width: 100%;
+                    .subject {
+                        @extend %flex-box;
+                        justify-content: center;
+                        padding: 0 1rem;
+                        margin-bottom: 1.5rem;
+                        span {
+                            margin: 0 0.2rem;
+                            font-weight: bold;
+                            font-size: x-large;
+                            color: $white-edge;
+                        }
+                    }
+                    .description {
+                        @extend %flex-box;
+                        @extend %rounded-lg;
+                        width: 100%;
+                        justify-content: center;
+                        background-color: $intermediate;
+                        padding: 1rem;
+                        margin-bottom: 1rem;
+                        
+                        p {
+                            text-align: center;
+                            color: $white-edge;
+                        }
+                    }
+                    .inputWrapper {
+                        @extend %flex-col;
+                        @extend %rounded-lg;
+                        background-color: $base;
+                        width: 100%;
+                        padding: 1rem;
+                        .list {
+                            .list__row {
+                                @extend %flex-box;
+                                justify-content: center;
+                                margin-bottom: 0.25rem;
+                                input {
+                                    flex: 3;
+                                    margin-right: 0.25rem;
+                                    padding: 0.5rem;
+                                    border: 2px solid $intermediate;
+                                    @extend %border-on-change;
+                                    @extend %rounded-lg;
+                                }
+                                input:focus {
+                                    border: 2px solid $highlight;
+                                }
+                                button {
+                                    flex: 1;
+                                    margin-left: 0.25rem;
+                                    font-size: large;
+                                    padding: 0.5rem;
+                                    border-radius: 50%;
+                                    @extend %bgcolor-on-change;
+                                }
+                                button:hover {
+                                    cursor: pointer;
+                                    background-color: $line;
+                                }
+                            }
+                            .list__add {
+                                background-color: $teal;
+                                width: 100%;
+                                @extend %rounded-lg;
+                                @extend %filter-on-change;
+                                button {
+                                    text-align: center;
+                                    width: 100%;
+                                    font-size: x-large;
+                                    font-weight: bolder;
+                                    color: $white-edge;
+                                }
+                                button:hover {
+                                    cursor: pointer;
+                                }
+                            }
+                            .list__add:hover {
+                                cursor: pointer;
+                                filter: brightness(1.1);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

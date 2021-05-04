@@ -10,7 +10,7 @@ from apps.functions import extract_recursively, replace_with_appropriates
 from common.pagination import ThreeFigurePagination
 from rest_framework.parsers import MultiPartParser
 # from common.functions import get_cookie
-from config.settings import ALGORITHM, MEDIA_ROOT, SECRET_KEY, STATIC_ROOT
+from config.settings import ALGORITHM, DEBUG, MEDIA_ROOT, SECRET_KEY, STATICFILES_DIRS, STATIC_ROOT
 from rest_framework.generics import CreateAPIView, ListAPIView, DestroyAPIView, UpdateAPIView, RetrieveAPIView
 from rest_framework.response import Response
 from apps.models import App, InputSpec
@@ -31,6 +31,10 @@ class CreateAppView(CreateAPIView):
 
     def post(self, request, *args, **kwargs):
         try:
+            # Initialize
+            save_directory = False
+            new_id = False
+
             # Gets cookie
             cookie = get_cookie(request)
             access_token = cookie['access_token']
@@ -39,13 +43,15 @@ class CreateAppView(CreateAPIView):
             user_id = decoded_token['user_id']
 
             # Recieves input
-            post_data = json.loads(request.data)
+            post_data = request.data
             name = post_data['name']
             description = post_data['description']
             created_by = CustomUser.objects.get(id=user_id)
             app_source = post_data['app']
-            has_file_input = post_data['has_file_input']
+            has_file_input = json.loads(post_data['has_file_input'])
             cover_img_source = post_data['cover_img']
+            if cover_img_source == 'undefined':
+                cover_img_source = False
 
             # Initially create Instance
             new = App.objects.create(
@@ -122,7 +128,10 @@ class CreateAppView(CreateAPIView):
                             os.path.join(folder, file), save_directory))
             """
             # Create __main__.py
-            main_script = os.path.join(STATIC_ROOT, '__main__.py')
+            if DEBUG:
+                main_script = os.path.join(STATICFILES_DIRS[0], '__main__.py')
+            else:
+                main_script = os.path.join(STATIC_ROOT, '__main__.py')
             shutil.copy(main_script, script_directory)
 
             # Change index.py to have its app's id included on it
@@ -132,7 +141,10 @@ class CreateAppView(CreateAPIView):
             os.rename(old_index_name, new_index_name)
 
             # Write __main__.py with importing index file whose name has id of its app
-            main_source = os.path.join(STATIC_ROOT, 'main.py')
+            if DEBUG:
+                main_source = os.path.join(STATICFILES_DIRS[0], 'main.py')
+            else:
+                main_source = os.path.join(STATIC_ROOT, 'main.py')
             # Read main.py
             with open(main_source, 'r') as f:
                 codelines = f.readlines()
@@ -169,7 +181,10 @@ class CreateAppView(CreateAPIView):
                 cover_img_directory = False
 
             # Make __args.py which will be base of inputs
-            args_script = os.path.join(STATIC_ROOT, '__args.py')
+            if DEBUG:
+                args_script = os.path.join(STATICFILES_DIRS[0], '__args.py')
+            else:
+                args_script = os.path.join(STATIC_ROOT, '__args.py')
             shutil.copy(args_script, input_dir)
 
             # Update initially created instance's app path and cover image path
@@ -189,7 +204,8 @@ class CreateAppView(CreateAPIView):
             print(e)
 
             # Delete all files uploaded and instance if creation failed
-            shutil.rmtree(save_directory)
+            if save_directory:
+                shutil.rmtree(save_directory)
             if new_id:
                 App.objects.filter(id=new_id).delete()
             return Response(status=400, data='Failed creating app')
@@ -289,7 +305,7 @@ class ExecuteAppView(CreateAPIView):
                 for key in list(variables.keys()):
                     if type(variables[key]) in [
                             type(str()), type(int()), type(float()), type(complex())]:
-                        f.write(f"'{key}':{str(variables[key])},\n")
+                        f.write(f"'{key}':\"\"\"{variables[key]}\"\"\",\n")
                     else:
                         f.write(f"'{key}':{variables[key]},\n")
                 f.write('}\n')
@@ -299,7 +315,7 @@ class ExecuteAppView(CreateAPIView):
                         extract_recursively('', dirs, zf, input_path)
                     root_name = os.listdir(input_path)[0]
                     root_path = os.path.join(input_path, root_name)
-                    f.write(f"__file_root='{root_path}'")
+                    f.write(f"__file_root='{root_path}'\n")
 
             # Execute app
             execute_path = os.path.join(app_path, 'app.pyz')

@@ -9,6 +9,7 @@ import { retrieveApp as axiosRetrieveApp } from '@slices/retrieve-app';
 import { deleteApp as axiosDeleteApp } from '@slices/delete-app';
 import executeAppDataForm from '@form/executeAppDataForm';
 import Input from '@components/inputs/Input';
+import File from '@components/inputs/File';
 
 
 function AppDetail( {
@@ -27,7 +28,6 @@ function AppDetail( {
 		name, 
 		description,
 		exports,
-		created_by,
 		id,
 		app,
 		has_file_input,
@@ -97,53 +97,72 @@ function AppDetail( {
 				)
 			}
 			<section className="appHeader">
-				<h2>{name}</h2>
-				<h3>{description}</h3>
-				<h3>Exports: {exports}</h3>
-				<h4>Created by: {CreatedUserName}</h4>
-				{
-					UserId == CreatedUserId && <button onClick={deleteApp}>Delete</button>
-				}
+				<div className="appHeader__generalInfo">
+					<h2>{name}</h2>
+					<h3>Exports: {exports}</h3>
+					<h4>Created by: {CreatedUserName}</h4>
+					{
+						UserId == CreatedUserId && <button onClick={deleteApp}>Delete</button>
+					}
+				</div>
+				<div className="appHeader__description">
+					<p>{description}</p>
+				</div>
 			</section>
 			<section className="inputContainer">
 				{
 					Inputs && Inputs.map( input => (
-						<div className="formElement" key={input.id}>
-							<Input input={input} />
+						<div className="formElementWrapper" key={input.id}>
+							<div className="formElement">
+								<Input input={input} />
+							</div>
 						</div>
 					) )
 				}
 				{
 					has_file_input && (
-						<div className="fileInput">
-							<div>Files</div>
-							<input name="files" type="file"></input>
+						<div className="formElementWrapper">
+							<div className="formElement">
+								<File />
+							</div>
 						</div>
 					)
 				}
+				<div className="runButtonWrapper">
+					<button className="runButton" onClick={executeApp}>Run</button>
+				</div>
 			</section>
-			<button onClick={executeApp}>Run</button>
 			<section className="outputContainer">
-				{
-					( ExecuteIsLoading && Result !== null ) ? (
-						<div className="outputContainer__loading">Loading...</div>
-					) : (
-						<>
-							<div className="outputContainer__result">
-								<h2>Result</h2>
-								{Result}
-							</div>
-							<div className="outputContainer__log">
-								<h2>Log</h2>
-								{
-									Log && Log.map( log => (
-										<div className='log' key={log.id}>{'>> '}{log.log}</div>
-									) )
+				<div className="outputContainer__result">
+					<h2 className="subject">Result</h2>
+					<div className="resultWrapper">
+						{
+							ExecuteIsLoading && Result !== null ? (
+								<div className="outputContainer__loading">Loading...</div>
+								) : (
+									<>{Result}</>
+									)
 								}
-							</div>
-						</>
-					)
-				}
+					</div>
+				</div>
+				<div className="outputContainer__log">
+					<h2 className="subject">Log</h2>
+					<div className="logWrapper">
+						{
+							ExecuteIsLoading && Result !== null ? (
+								<div className="outputContainer__loading">Loading...</div>
+							) : (
+								<>
+									{
+										Log && Log.map( log => (
+											<div className='log' key={log.id}>{'>> '}{log.log}</div>
+										) )
+									}
+								</>
+							)
+						}
+					</div>
+				</div>
 			</section>
 		</div>
 	);

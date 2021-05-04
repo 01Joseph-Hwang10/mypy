@@ -1,5 +1,6 @@
 import jwt
 from apps.models import App
+from users.models import CustomUser
 from common.functions import get_cookie
 from config.settings import ALGORITHM, SECRET_KEY
 from rest_framework.permissions import IsAuthenticated
@@ -17,7 +18,7 @@ class AllowedToModifyApp(AllowedToCreateApp):
         post_data = request.data
         decoded_token = jwt.decode(
             jwt=cookie['access_token'], key=SECRET_KEY, algorithms=ALGORITHM)
-        user_id = decoded_token['user_id']
+        user_id = int(decoded_token['user_id'])
 
         if request.method == 'POST':
             id = post_data['id']

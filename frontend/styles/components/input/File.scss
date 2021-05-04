@@ -7,14 +7,14 @@
     .inputContainer {
         .formElementWrapper {
             .formElement {
-                .formElement__bool {
+                .formElement__file {
                     @extend %flex-col;
                     @extend %rounded-lg;
                     padding: 1rem 0;
                     background-color: $highlight;
                     border: 2px solid $line;
                     width: 100%;
-                    .boolInputName {
+                    .fileInputName {
                         display: block;
                         padding: 0 1rem;
                         font-size: x-large;
@@ -22,7 +22,7 @@
                         color: $white-edge;
                         margin-bottom: 1.5rem;
                     }
-                    .boolInputDescription {
+                    .fileInputDescription {
                         width: 100%;
                         padding: 1rem;
                         @extend %rounded-lg;
@@ -34,7 +34,7 @@
                             color: $white-edge;
                         }
                     }
-                    .boolInputWrapper {
+                    .fileInputWrapper {
                         width: 100%;
                         @extend %rounded-lg;
                         @extend %flex-box;
@@ -43,20 +43,16 @@
                         margin-top: 1rem;
                         padding: 1.5rem 0.5rem;
                         input {
-                            display: none;
-                        }
-                        button {
-                            width: $p7-12;
-                            text-align: center;
-                            font-size: x-large;
-                            font-weight: 600;
-                            color: $white-edge;
-                            @extend %filter-on-change;
                             @extend %rounded-lg;
+                            width: $p11-12;
+                            padding: 0.5rem;
+                            text-align: left;
+                            border: 2px solid $intermediate;
+                            @extend %border-on-change;
                         }
-                        button:hover {
-                            filter: brightness(1.1);
-                            cursor: pointer;
+    
+                        input:focus {
+                            border: 2px solid $highlight;
                         }
                     }
                 }
