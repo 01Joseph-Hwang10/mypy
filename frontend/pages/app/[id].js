@@ -72,13 +72,16 @@ function AppDetail( {
 	};
 
 	const deleteApp = async () => {
-		DeleteLoading();
-		const { ok, data, } = await axiosDeleteApp( id );
-		if ( ok ) {
-			DeleteAppSuccessful();
-			router.push( '/' );
-		} else {
-			DeleteAppError( data );
+		const sureToDelete = confirm('Are you sure to delete the app? This action is not retreatable!!')
+		if (sureToDelete) {
+			DeleteLoading();
+			const { ok, data, } = await axiosDeleteApp( id );
+			if ( ok ) {
+				DeleteAppSuccessful();
+				router.push( '/' );
+			} else {
+				DeleteAppError( data );
+			}
 		}
 	};
 

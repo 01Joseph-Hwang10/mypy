@@ -106,8 +106,8 @@ class CreateAppView(CreateAPIView):
                     f.write('import os\n')
                     f.write(
                         f"with open('{os.path.join(save_directory,'input/__args.py')}', 'r') as f:\n")
-                    f.write('    code = f.read()\n')
-                    f.write('exec(code)\n')
+                    f.write('    __code = f.read()\n')
+                    f.write('exec(__code)\n')
                     for codeline in codelines:
                         specs, converted = replace_with_appropriates(codeline)
                         f.write(converted)

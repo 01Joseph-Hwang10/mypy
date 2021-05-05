@@ -1,3 +1,4 @@
+from index94 import main
 # How to make the application
 # 1. Make a function named 'main' in the 'index.py',
 # which recieves no argument( e.g. main() )
