@@ -1,4 +1,5 @@
 import zipapp
+import time
 import jwt
 import json
 import os
@@ -18,7 +19,7 @@ from apps.serializers import AppSerializer, InputSpecSerializer
 from users.models import CustomUser
 from apps.models import App
 from apps.permissions import AllowedToCreateApp, AllowedToModifyApp
-from common.functions import get_cookie
+from common.functions import decode_token, get_cookie
 from users.serializers import LightWeightUserSerializer
 
 
@@ -155,10 +156,10 @@ class CreateAppView(CreateAPIView):
                     f.write(codeline)  # \n already exists
 
             # Create .pyz file
-            zipapp.create_archive(script_directory)
+            # zipapp.create_archive(script_directory)
 
             # Remove app source which is not zipped
-            shutil.rmtree(script_directory)
+            # shutil.rmtree(script_directory)
 
             # Make folders which will used on execution
             log_dir = os.path.join(save_directory, 'log')
@@ -275,6 +276,8 @@ class ExecuteAppView(CreateAPIView):
             root_path = False
 
             # Get client inputs
+            cookie = get_cookie(request)
+            user_id = int(decode_token(cookie['access_token'])['user_id'])
             post_data = request.data
             app_path = post_data['app']
             variables = json.loads(post_data['variables'])
@@ -317,10 +320,16 @@ class ExecuteAppView(CreateAPIView):
                     root_path = os.path.join(input_path, root_name)
                     f.write(f"__file_root='{root_path}'\n")
 
+            # Make .pyz file
+            app_root_path = os.path.join(app_path, 'app/')
+            execute_path = os.path.join(
+                app_path, f'app_id{user_id}_d{time.time()}')
+            # Copy and paste the file, and modify each according to __args.py name
+            zipapp.create_archive(app_root_path, execute_path)
+
             # Execute app
-            execute_path = os.path.join(app_path, 'app.pyz')
             app_run = runpy.run_path(execute_path)
-            log_path = os.path.join(app_path, 'log')
+            log_path = os.path.join(app_path, f'log/log{str(user_id)}')
             result, log = app_run['execute'](log_path)
 
             # Clean up

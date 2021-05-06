@@ -42,9 +42,7 @@ import os
 
 def execute(log_path):
 
-    log_file_path = os.path.join(log_path, 'log.txt')
-
-    with open(log_file_path, 'w') as fw:
+    with open(log_path, 'w') as fw:
         sys.stdout = fw
         sys.stderr = fw
 
@@ -55,7 +53,7 @@ def execute(log_path):
             result = 'An Error occured. Please reference the log'
         sys.stdout = sys.__stdout__
         sys.stderr = sys.__stderr__
-    with open(log_file_path, 'r') as fr:
+    with open(log_path, 'r') as fr:
         logs = fr.readlines()
         log_array = []
         for i in range(len(logs)):

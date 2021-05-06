@@ -1,5 +1,5 @@
 import jwt
-from common.functions import get_cookie
+from common.functions import get_cookie, decode_token
 from config.settings import ALGORITHM, SECRET_KEY
 from rest_framework.permissions import IsAuthenticated
 
@@ -10,8 +10,7 @@ class AllowedToModifyUser(IsAuthenticated):
         cookie = get_cookie(request)
         post_data = request.data
         user_id = int(post_data['user_id'])
-        decoded_token = jwt.decode(
-            jwt=cookie['access_token'], key=SECRET_KEY, algorithms=ALGORITHM)
+        decoded_token = decode_token(cookie['access_token'])
         token_user_id = int(decoded_token['user_id'])
 
         cookie_user_id = int(post_data['user_id'])
