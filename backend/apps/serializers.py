@@ -13,6 +13,8 @@ class AppSerializer(Serializer):
     app = serializers.CharField(required=False)
     has_file_input = serializers.BooleanField()
     cover_img = serializers.ImageField(required=False)
+    server_number = serializers.IntegerField()
+    port = serializers.IntegerField()
 
     class Meta:
         model = App

@@ -1,6 +1,8 @@
 {
     "python.analysis.extraPaths": [
         "./backend",
-        "/home/josep/.local/share/virtualenvs/backend-kX_TUPiE/lib/python3.8/site-packages/"
+        "/home/josep/.local/share/virtualenvs/backend-kX_TUPiE/lib/python3.8/site-packages/",
+        "./server",
+        "/home/josep/.local/share/virtualenvs/server-bwNmZI-U/lib/python3.8/site-packages",
     ]
 }

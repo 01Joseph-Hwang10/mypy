@@ -16,3 +16,9 @@ with open(os.path.join(script_directory, file_path), 'w') as f:
 - Do the same thing at input, data, output, log. Think about how to deal with it.
 
 - In the case of \_\_args.py, append user id at the name. Same at log and output. You would need to change create app view accordingly.
+
+## Alternative
+
+- Deploy flask application for each apps
+
+- You need to figure out the way flask recieves input and serves it as global variable in that specific app.

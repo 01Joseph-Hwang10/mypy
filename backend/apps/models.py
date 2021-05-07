@@ -1,5 +1,6 @@
 from django.db import models
 from common.models import TimeStampedModel
+from config.settings import SERVER_NUMBER
 from users.models import CustomUser
 
 
@@ -13,6 +14,8 @@ class App(TimeStampedModel):
     exports = models.IntegerField(default=0)
     has_file_input = models.BooleanField(default=False)
     cover_img = models.TextField(null=True, default=True)
+    server_number = models.IntegerField(default=SERVER_NUMBER)
+    port = models.IntegerField()
 
 
 class InputSpec(TimeStampedModel):

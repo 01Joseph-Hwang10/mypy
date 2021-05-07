@@ -28,6 +28,9 @@ SECRET_KEY = '#08y$puf(yn%@a#-%!l0o2anef9rl(+n%_3a!$zp_zjfo+aeyh'
 
 ALGORITHM = 'HS256'
 
+# Set it with environment variable at deployment
+SERVER_NUMBER = 0
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(os.environ.get('DEBUG') != 'False')
 

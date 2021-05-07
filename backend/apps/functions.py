@@ -2,6 +2,8 @@ import os
 import re
 from django.core.exceptions import ValidationError
 
+from config.settings import DEBUG, STATICFILES_DIRS, STATIC_ROOT
+
 
 def upload_to(instance, filename):
     return '%s/' % instance.created.user.id
@@ -231,6 +233,49 @@ def input_to_sys_args(codeline):
         return input_specs, new_codeline
 
 
+def get_modules(dirs):
+
+    modules = []
+
+    for dir in dirs:
+        splitted = dir.split('/')
+        del splitted[0]
+        modules.append('.'.join(splitted))
+
+    return modules
+
+
+# Support relative import feature later
+def import_from_dependencies(codeline):
+
+    splitted_codeline = codeline.split()
+    if DEBUG:
+        builtins_list_path = os.path.join(
+            STATICFILES_DIRS[0], 'src/python_built_in_module_list.txt')
+    else:
+        builtins_list_path = os.path.join(
+            STATIC_ROOT, 'src/python_built_in_module_list.txt')
+
+    with open(builtins_list_path, 'r') as f:
+        builtins_list_raw = f.readlines()
+        builtins_list = []
+        for builtin in builtins_list_raw:
+            if len(builtin) > 0:
+                builtins_list.append(builtin[:-2])
+
+    if splitted_codeline[0] == 'from' and splitted_codeline[2] == 'import' and codeline[:5] == 'from ' and codeline[5] != ' ':
+        if splitted_codeline[1] not in builtins_list:
+            splitted_codeline[1] = f'__dependencies.{splitted_codeline[1]}'
+            return ' '.join(splitted_codeline)
+
+    if splitted_codeline[0] == 'import' and splitted_codeline[:7] == 'import ':
+        if splitted_codeline[1] not in builtins_list:
+            splitted_codeline[1] = f'__dependencies.{splitted_codeline[1]}'
+            return ' '.join(splitted_codeline)
+
+    return codeline
+
+
 def filter_banned_syntax(codeline):
 
     banned = [
@@ -258,5 +303,8 @@ def filter_banned_syntax(codeline):
 def replace_with_appropriates(codeline):
 
     # filter_banned_syntax(codeline)
-    result = input_to_sys_args(codeline)
-    return result
+    return input_to_sys_args(
+        import_from_dependencies(
+            codeline
+        )
+    )

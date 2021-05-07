@@ -1,17 +1,18 @@
 import zipapp
 import time
 import jwt
+import subprocess
 import json
 import os
 import shutil
 import runpy
 from zipfile import ZipFile
 from PIL import Image
-from apps.functions import extract_recursively, replace_with_appropriates
+from apps.functions import extract_recursively, get_modules, replace_with_appropriates
 from common.pagination import ThreeFigurePagination
 from rest_framework.parsers import MultiPartParser
 # from common.functions import get_cookie
-from config.settings import ALGORITHM, DEBUG, MEDIA_ROOT, SECRET_KEY, STATICFILES_DIRS, STATIC_ROOT
+from config.settings import ALGORITHM, DEBUG, MEDIA_ROOT, SECRET_KEY, SERVER_NUMBER, STATICFILES_DIRS, STATIC_ROOT
 from rest_framework.generics import CreateAPIView, ListAPIView, DestroyAPIView, UpdateAPIView, RetrieveAPIView
 from rest_framework.response import Response
 from apps.models import App, InputSpec
@@ -54,6 +55,13 @@ class CreateAppView(CreateAPIView):
             if cover_img_source == 'undefined':
                 cover_img_source = False
 
+            # Defines port number
+            max_port = App.objects.order_by('-port').first()
+            if max_port == None:
+                new_port = 10000
+            else:
+                new_port = max_port + 1
+
             # Initially create Instance
             new = App.objects.create(
                 name=name,
@@ -62,6 +70,8 @@ class CreateAppView(CreateAPIView):
                 app='',
                 cover_img=None,
                 has_file_input=has_file_input,
+                server_number=SERVER_NUMBER,
+                port=new_port
             )
 
             # Get Id out of it
@@ -78,7 +88,8 @@ class CreateAppView(CreateAPIView):
             # Rename extracted folder to 'app'
             root_name = os.listdir(save_directory)[0]
             root_directory = os.path.join(save_directory, root_name)
-            script_directory = os.path.join(save_directory, 'app/')
+            server_directory = os.path.join(save_directory, 'server/')
+            script_directory = os.path.join(server_directory, 'app/')
             os.rename(root_directory, script_directory)
 
             # Collect python script path for modification
@@ -110,6 +121,7 @@ class CreateAppView(CreateAPIView):
                     f.write('    __code = f.read()\n')
                     f.write('exec(__code)\n')
                     for codeline in codelines:
+                        # modules = get_modules(dirs)
                         specs, converted = replace_with_appropriates(codeline)
                         f.write(converted)
                         # Create Input Specs if it exists
@@ -167,6 +179,10 @@ class CreateAppView(CreateAPIView):
             output_dir = os.path.join(save_directory, 'output')
             data_dir = os.path.join(save_directory, 'data')
             static_dir = os.path.join(save_directory, 'static')
+            # Make sure to support dependencies installation with requirements.txt
+            dependencies_dir = os.path.join(script_directory, '__dependencies')
+            server_dependencies_dir = os.path.join(
+                save_directory, 'dependencies')
             os.mkdir(log_dir)
             os.mkdir(input_dir)
             os.mkdir(output_dir)
@@ -187,6 +203,48 @@ class CreateAppView(CreateAPIView):
             else:
                 args_script = os.path.join(STATIC_ROOT, '__args.py')
             shutil.copy(args_script, input_dir)
+
+            # Make flask app
+            with open(os.path.join(script_directory, '__init__.py'), 'w') as f:
+                log_file_directory = os.path.join(log_dir, 'log.txt')
+                f.write(
+                    'from dependencies.flask import Flask, redirect, url_for, request\n')
+                f.write('from app.__main__ import execute\n')
+                f.write('app=Flask(__name__)\n')
+                f.write('@app.route("/")\n')
+                f.write('def root():\n')
+                f.write('   return redirect(url_for("app"))\n')
+                f.write(f'@app.route("/{name}", method=["GET"])\n')
+                f.write('def app():\n')
+                f.write('   user_id = int(request.args.get("user_id"))\n')
+                # Do client input injection
+                f.write(f'   return execute("{log_file_directory}")\n')
+                f.write(f'app.run(port={new_port})\n')
+
+            # Make docker-compose file
+            with open(os.path.join(save_directory, 'docker-compose.yml'), 'w') as f:
+                f.write('version: "3"\n')
+                f.write('services:\n')
+                f.write('  server:\n')
+                f.write('    build: server/\n')
+                f.write('    ports:\n')
+                f.write(f"      - '{new_port}:5000'")
+
+            # Make Dockerfile
+            with open(os.path.join(server_directory, 'Dockerfile'), 'w') as f:
+                # Make sure to change the python version later
+                f.write('FROM python:3\n')
+                f.write('WORKDIR /app\n')
+                # f.write('COPY requirements.txt ./\n')
+                # f.write('RUN pip install --no-cache-dir requirements.txt\n')
+                f.write('RUN pip install -t /app flask')
+                f.write('COPY ./app/ /app/\n')
+                f.write('CMD [ "python", "./__init__.py" ]\n')
+
+            # Deploy the app
+            subp = subprocess.Popen(
+                ['docker-compose', 'up', '--build', '-d'], cwd=save_directory)
+            subp.wait()
 
             # Update initially created instance's app path and cover image path
             instance = App.objects.get(id=new_id)
@@ -372,7 +430,12 @@ class DeleteAppView(DestroyAPIView):
         try:
             # Delete every source of app
             id = int(self.request.query_params.get('id'))
-            shutil.rmtree(os.path.join(MEDIA_ROOT, f'{id}/'))
+            save_directory = os.path.join(MEDIA_ROOT, f'{id}/')
+            subp = subprocess.Popen(
+                ['docker-compose', 'down'], cwd=save_directory
+            )
+            subp.wait()
+            shutil.rmtree(save_directory)
             App.objects.filter(id=id)[0].delete()
             return Response(status=200, data='app successfully deleted')
         except Exception as e:
