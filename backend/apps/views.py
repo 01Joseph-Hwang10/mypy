@@ -77,6 +77,10 @@ class CreateAppView(CreateAPIView):
             # Get Id out of it
             new_id = int(self.get_serializer(new)['id'].value)
 
+            # Make media root if not exist
+            if not os.path.exists(MEDIA_ROOT):
+                os.mkdir(MEDIA_ROOT)
+
             # Set save directory by id
             save_directory = os.path.join(MEDIA_ROOT, f'{new_id}/')
             os.mkdir(save_directory)
@@ -168,11 +172,11 @@ class CreateAppView(CreateAPIView):
                             os.path.join(folder, file), save_directory))
             """
             # Create __main__.py
-            if DEBUG:
-                main_script = os.path.join(STATICFILES_DIRS[0], '__main__.py')
-            else:
-                main_script = os.path.join(STATIC_ROOT, '__main__.py')
-            shutil.copy(main_script, script_directory)
+            # if DEBUG:
+            #     main_script = os.path.join(STATICFILES_DIRS[0], '__main__.py')
+            # else:
+            #     main_script = os.path.join(STATIC_ROOT, '__main__.py')
+            # shutil.copy(main_script, script_directory)
 
             # Change index.py to have its app's id included on it
             # old_index_name = os.path.join(script_directory, 'index.py')
@@ -189,7 +193,7 @@ class CreateAppView(CreateAPIView):
             with open(main_source, 'r') as f:
                 codelines = f.readlines()
             # Modify __main__.py
-            with open(os.path.join(script_directory, '__main__.py'), 'w') as f:
+            with open(os.path.join(script_directory, '__main.py'), 'w') as f:
                 # f.write(f'from index{new_id} import main\n')
                 for codeline in codelines:
                     f.write(codeline)  # \n already exists
@@ -232,26 +236,50 @@ class CreateAppView(CreateAPIView):
             shutil.copy(args_script, input_dir)
 
             # Make flask app
-            with open(os.path.join(script_directory, '__init__.py'), 'w') as f:
+            with open(os.path.join(script_directory, 'app.py'), 'w') as f:
                 log_file_directory = os.path.join(log_dir, 'log.txt')
                 f.write('import json\n')
                 f.write(
                     'from flask import Flask, redirect, url_for, request\n')
-                f.write('from app.__main__ import execute\n')
+                f.write('from __main import execute\n')
                 f.write('app=Flask(__name__)\n')
                 f.write('@app.route("/")\n')
                 f.write('def root():\n')
-                f.write('   return redirect(url_for("app"))\n')
-                f.write(f'@app.route("/{name}", method=["GET","POST"])\n')
-                f.write('def app():\n')
+                f.write('   return "This is root page"\n')
+                f.write(f'@app.route("/{name}", methods=["GET","POST"])\n')
+                f.write('def api():\n')
                 # Do client input injection
                 f.write('    if request.method == "POST":\n')
                 f.write('        input_form = request.form\n')
                 f.write('    else:\n')
                 f.write('        input_form = dict()\n')
                 f.write(
-                    f'   return execute( input_form, "{log_file_directory}" )\n')
-                f.write(f'app.run()\n')
+                    f'    return execute( input_form, "{log_file_directory}" )\n')
+                f.write('if __name__ == "__main__":\n')
+                f.write('    app.run()\n')
+
+            # Modularize server folder
+            with open(os.path.join(server_directory, '__init__.py'), 'w') as f:
+                pass
+            with open(os.path.join(script_directory, '__init__.py'), 'w') as f:
+                pass
+
+            # Make api Dockerfile
+            with open(os.path.join(server_directory, 'Dockerfile'), 'w') as f:
+                # Make sure to change the python version later
+                f.write('FROM python:3.6.12-alpine\n')
+                f.write('RUN mkdir /app\n')
+                f.write('WORKDIR /app\n')
+                f.write('EXPOSE 5000\n')
+                f.write('ENV PATH="/app:${PATH}"\n')
+                # f.write('COPY requirements.txt ./\n')
+                # f.write('RUN pip install --no-cache-dir requirements.txt\n')
+                f.write('RUN pip install flask gunicorn pyjwt\n')
+                f.write('COPY ./app/ /app/\n')
+                f.write(
+                    'CMD ["gunicorn", "-b", "0.0.0.0:5000", "app:app" ]\n')
+
+            # Make nginx Dockerfile
 
             # Make docker-compose file
             with open(os.path.join(save_directory, 'docker-compose.yml'), 'w') as f:
@@ -261,20 +289,13 @@ class CreateAppView(CreateAPIView):
                 f.write('    build:\n')
                 f.write('      context: ./server\n')
                 f.write('    ports:\n')
-                f.write(f"      - '{new_port}:5000'")
-
-            # Make Dockerfile
-            with open(os.path.join(server_directory, 'Dockerfile'), 'w') as f:
-                # Make sure to change the python version later
-                f.write('FROM python:3\n')
-                f.write('RUN mkdir /app\n')
-                f.write('WORKDIR /app\n')
-                f.write('EXPOSE 5000')
-                # f.write('COPY requirements.txt ./\n')
-                # f.write('RUN pip install --no-cache-dir requirements.txt\n')
-                f.write('RUN pip install -t /app flask pyjwt')
-                f.write('COPY ./app/ /app/\n')
-                f.write('CMD [ "python", "./__init__.py" ]\n')
+                f.write(f"      - '{new_port}:5000'\n")
+                # f.write('  nginx:\n')
+                # f.write('    image: nginx:latest\n')
+                # f.write('    ports:\n')
+                # f.write(f'      - "{new_port}:{new_port}"\n')
+                # f.write('    depends_on:\n')
+                # f.write('       - server\n')
 
             # Deploy the app
             subp = subprocess.Popen(
@@ -475,4 +496,5 @@ class DeleteAppView(DestroyAPIView):
             return Response(status=200, data='app successfully deleted')
         except Exception as e:
             print(e)
+            App.objects.filter(id=id)[0].delete()
             return Response(status=500, data='app deletation failed')
