@@ -89,5 +89,10 @@ export const refreshToken = async () => {
 
 export const signOut = async () => {
     
-	await axios.get( LOGOUT, { withCredentials : true, } );
+	try {
+		await axios.get( LOGOUT, { withCredentials : true, } );
+		return { ok : true, };
+	} catch ( error ) {
+		return { ok : false, };
+	}
 };

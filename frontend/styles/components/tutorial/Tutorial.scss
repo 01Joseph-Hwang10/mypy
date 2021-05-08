@@ -8,8 +8,10 @@ $tutorial-content-sm: 65%;
 $tutorial-content-md: 70%;
 $tutorial-content-lg: 80%;
 
-.tutorialContent {
-    width: $tutorial-content-xs;
+.tutorialContentRoot {
+    .tutorialContent {
+        width: $tutorial-content-xs;
+    }
 
     .tutorialSideBarWrapper {
         width: calc(100% - #{$tutorial-content-xs});
@@ -17,8 +19,10 @@ $tutorial-content-lg: 80%;
 }
 
 @include small {
-    .tutorialContent {
-        width: $tutorial-content-sm;
+    .tutorialContentRoot {
+        .tutorialContent {
+            width: $tutorial-content-sm;
+        }
 
         .tutorialSideBarWrapper {
             width: calc(100% - #{$tutorial-content-sm});
@@ -27,8 +31,10 @@ $tutorial-content-lg: 80%;
 }
 
 @include medium {
-    .tutorialContent {
-        width: $tutorial-content-md;
+    .tutorialContentRoot {
+        .tutorialContent {
+            width: $tutorial-content-md;
+        }
 
         .tutorialSideBarWrapper {
             width: calc(100% - #{$tutorial-content-md});
@@ -37,8 +43,10 @@ $tutorial-content-lg: 80%;
 }
 
 @include large {
-    .tutorialContent {
-        width: $tutorial-content-lg;
+    .tutorialContentRoot {
+        .tutorialContent {
+            width: $tutorial-content-lg;
+        }
 
         .tutorialSideBarWrapper {
             width: calc(100% - #{$tutorial-content-lg});

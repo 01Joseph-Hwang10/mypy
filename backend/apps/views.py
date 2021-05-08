@@ -8,7 +8,7 @@ import shutil
 import runpy
 from zipfile import ZipFile
 from PIL import Image
-from apps.functions import extract_recursively, get_modules, replace_with_appropriates
+from apps.functions import detect_main_function, extract_recursively, get_modules, replace_with_appropriates
 from common.pagination import ThreeFigurePagination
 from rest_framework.parsers import MultiPartParser
 # from common.functions import get_cookie
@@ -56,11 +56,11 @@ class CreateAppView(CreateAPIView):
                 cover_img_source = False
 
             # Defines port number
-            max_port = App.objects.order_by('-port').first()
-            if max_port == None:
+            max_port_app = App.objects.order_by('-port').first()
+            if max_port_app == None:
                 new_port = 10000
             else:
-                new_port = max_port + 1
+                new_port = int(max_port_app.port) + 1
 
             # Initially create Instance
             new = App.objects.create(
@@ -79,16 +79,22 @@ class CreateAppView(CreateAPIView):
 
             # Set save directory by id
             save_directory = os.path.join(MEDIA_ROOT, f'{new_id}/')
+            os.mkdir(save_directory)
+
+            # Make server folder
+            server_directory = os.path.join(save_directory, 'server/')
+            os.mkdir(server_directory)
 
             # Extract given zipfile recursively
             with ZipFile(app_source) as zf:
                 dirs = zf.namelist()
-                extract_recursively('', dirs, zf, save_directory)
+                extract_recursively('', dirs, zf, server_directory)
+
+            # Get root name of the app
+            root_name = os.listdir(server_directory)[0]
+            root_directory = os.path.join(server_directory, root_name)
 
             # Rename extracted folder to 'app'
-            root_name = os.listdir(save_directory)[0]
-            root_directory = os.path.join(save_directory, root_name)
-            server_directory = os.path.join(save_directory, 'server/')
             script_directory = os.path.join(server_directory, 'app/')
             os.rename(root_directory, script_directory)
 
@@ -115,15 +121,18 @@ class CreateAppView(CreateAPIView):
                     codelines = f.readlines()
                 # Modify code
                 with open(os.path.join(script_directory, file_path), 'w') as f:
-                    f.write('import os\n')
-                    f.write(
-                        f"with open('{os.path.join(save_directory,'input/__args.py')}', 'r') as f:\n")
-                    f.write('    __code = f.read()\n')
-                    f.write('exec(__code)\n')
+                    # f.write('import os\n')
+                    # f.write(
+                    #     f"with open('{os.path.join(save_directory,'input/__args.py')}', 'r') as f:\n")
+                    # f.write('    __code = f.read()\n')
+                    # f.write('exec(__code)\n')
+                    specs_list = []
                     for codeline in codelines:
                         # modules = get_modules(dirs)
-                        specs, converted = replace_with_appropriates(codeline)
-                        f.write(converted)
+                        specs, converted = replace_with_appropriates(
+                            codeline, file_path)
+                        if converted:
+                            f.write(converted)
                         # Create Input Specs if it exists
                         for spec in specs:
                             InputSpec.objects.create(
@@ -132,6 +141,24 @@ class CreateAppView(CreateAPIView):
                                 type=spec['type'],
                                 app=App.objects.get(id=new_id)
                             )
+                            specs_list.append(spec)
+            index_directory = os.path.join(script_directory, 'index.py')
+            with open(index_directory, 'r') as f:
+                codelines = f.readlines()
+            with open(index_directory, 'w') as f:
+                to_inject = ['def main(__global_vars):\n']
+                for spec in specs_list:
+                    spec_name = spec['name']
+                    spec_type = spec['type']
+                    new_line = f"\t{spec_name}={spec_type}(__global_vars['{spec_name}'])\n"
+                    to_inject.append(new_line)
+                for codeline in codelines:
+                    if detect_main_function(codeline):
+                        for injecting_codeline in to_inject:
+                            f.write(injecting_codeline)
+                    else:
+                        f.write(codeline)
+
             """
             app_path = os.path.join(save_directory, f'{root_name}.zip')
             with ZipFile(os.path.join(save_directory, app_path), 'w') as zf:
@@ -148,10 +175,10 @@ class CreateAppView(CreateAPIView):
             shutil.copy(main_script, script_directory)
 
             # Change index.py to have its app's id included on it
-            old_index_name = os.path.join(script_directory, 'index.py')
-            new_index_name = os.path.join(
-                script_directory, f'index{new_id}.py')
-            os.rename(old_index_name, new_index_name)
+            # old_index_name = os.path.join(script_directory, 'index.py')
+            # new_index_name = os.path.join(
+            #     script_directory, f'index{new_id}.py')
+            # os.rename(old_index_name, new_index_name)
 
             # Write __main__.py with importing index file whose name has id of its app
             if DEBUG:
@@ -163,7 +190,7 @@ class CreateAppView(CreateAPIView):
                 codelines = f.readlines()
             # Modify __main__.py
             with open(os.path.join(script_directory, '__main__.py'), 'w') as f:
-                f.write(f'from index{new_id} import main\n')
+                # f.write(f'from index{new_id} import main\n')
                 for codeline in codelines:
                     f.write(codeline)  # \n already exists
 
@@ -207,26 +234,32 @@ class CreateAppView(CreateAPIView):
             # Make flask app
             with open(os.path.join(script_directory, '__init__.py'), 'w') as f:
                 log_file_directory = os.path.join(log_dir, 'log.txt')
+                f.write('import json\n')
                 f.write(
-                    'from dependencies.flask import Flask, redirect, url_for, request\n')
+                    'from flask import Flask, redirect, url_for, request\n')
                 f.write('from app.__main__ import execute\n')
                 f.write('app=Flask(__name__)\n')
                 f.write('@app.route("/")\n')
                 f.write('def root():\n')
                 f.write('   return redirect(url_for("app"))\n')
-                f.write(f'@app.route("/{name}", method=["GET"])\n')
+                f.write(f'@app.route("/{name}", method=["GET","POST"])\n')
                 f.write('def app():\n')
-                f.write('   user_id = int(request.args.get("user_id"))\n')
                 # Do client input injection
-                f.write(f'   return execute("{log_file_directory}")\n')
-                f.write(f'app.run(port={new_port})\n')
+                f.write('    if request.method == "POST":\n')
+                f.write('        input_form = request.form\n')
+                f.write('    else:\n')
+                f.write('        input_form = dict()\n')
+                f.write(
+                    f'   return execute( input_form, "{log_file_directory}" )\n')
+                f.write(f'app.run()\n')
 
             # Make docker-compose file
             with open(os.path.join(save_directory, 'docker-compose.yml'), 'w') as f:
-                f.write('version: "3"\n')
+                f.write('version: "3.3"\n')
                 f.write('services:\n')
                 f.write('  server:\n')
-                f.write('    build: server/\n')
+                f.write('    build:\n')
+                f.write('      context: ./server\n')
                 f.write('    ports:\n')
                 f.write(f"      - '{new_port}:5000'")
 
@@ -234,10 +267,12 @@ class CreateAppView(CreateAPIView):
             with open(os.path.join(server_directory, 'Dockerfile'), 'w') as f:
                 # Make sure to change the python version later
                 f.write('FROM python:3\n')
+                f.write('RUN mkdir /app\n')
                 f.write('WORKDIR /app\n')
+                f.write('EXPOSE 5000')
                 # f.write('COPY requirements.txt ./\n')
                 # f.write('RUN pip install --no-cache-dir requirements.txt\n')
-                f.write('RUN pip install -t /app flask')
+                f.write('RUN pip install -t /app flask pyjwt')
                 f.write('COPY ./app/ /app/\n')
                 f.write('CMD [ "python", "./__init__.py" ]\n')
 

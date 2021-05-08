@@ -38,21 +38,25 @@ function quickStart() {
 					Then, we&apos;ll recieve three inputs. 
 					Two of them is integers which will be calculated, 
 					and the other one is the type of calculation we&apos;ll operate.
+					The important thing here is that user inputs should be placed ONLY in &quot;index.py&quot; 
+					as global variables.
 				</p>
 				<CodeBox>
 					<span className="comment"># index.py</span>
 					<span className="breakLine"></span>
-					<span>def index():</span>
-					<span className="breakLine"></span>
-					<span className="tabbed">
+					<span>
 						num0 = float(input(&quot;First number to calculate&quot;))
 					</span>
-					<span className='tabbed'>
+					<span>
 						num1 = float(input(&quot;Second number to calculate&quot;))
 					</span>
-					<span className="tabbed">
+					<span>
 						operation = input(&quot;Calculation to operate&quot;)
 					</span>
+					<span className="breakLine"></span>
+					<span>def index():</span>
+					<span className="breakLine"></span>
+					<span className="comment tabbed"># we&apos;ll execute our codes here</span>
 					<span className="breakLine"></span>
 				</CodeBox>
 				<p>
@@ -100,19 +104,19 @@ function quickStart() {
 					<span className="breakLine"></span>
 					<span>from calculation import calculate</span>
 					<span className="breakLine"></span>
-					<span>def index():</span>
-					<span className="breakLine"></span>
-					<span className="tabbed">
+					<span>
 						num0 = float(input(&quot;First number to calculate&quot;))
 					</span>
-					<span className='tabbed'>
+					<span>
 						num1 = float(input(&quot;Second number to calculate&quot;))
 					</span>
-					<span className="tabbed">
+					<span>
 						operation = input(&quot;Calculation to operate&quot;)
 					</span>
 					<span className="breakLine"></span>
-					<span className="tabbed">result = calculate(num0, num2, operation)</span>
+					<span>def index():</span>
+					<span className="breakLine"></span>
+					<span className="tabbed">result = calculate(num0, num1, operation)</span>
 					<span className="breakLine"></span>
 					<span className="tabbed">return result</span>
 					<span className="breakLine"></span>

@@ -1,14 +1,15 @@
 from django.core.checks.messages import DEBUG
 from django.urls import reverse_lazy
 from django.views.generic import FormView, TemplateView
-from rest_framework import generics, status
+from rest_framework import status
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView
 )
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
-from users.serializers import CustomUserSerializer
 from users.models import CustomUser
 from common.functions import get_cookie
 from authentication.forms import SignUpForm
@@ -80,17 +81,15 @@ class CustomTokenRefreshView(TokenRefreshView):
             return Response(status=401, data='Authorization Error')
 
 
-class LogoutView(generics.RetrieveAPIView):
+@api_view(['GET'])
+@permission_classes([AllowAny, ])
+def logout(request):
 
-    queryset = CustomUser.objects.all()
-    serializer_class = CustomUserSerializer
-
-    def get(self, request, *args, **kwargs):
-        auth_response = Response(status=status.HTTP_200_OK)
-        auth_response.delete_cookie("access_token")
-        auth_response.delete_cookie("refresh_token")
-        auth_response.delete_cookie("user_id")
-        return auth_response
+    auth_response = Response(status=status.HTTP_200_OK)
+    auth_response.delete_cookie("access_token")
+    auth_response.delete_cookie("refresh_token")
+    auth_response.delete_cookie("user_id")
+    return auth_response
 
 
 class RedirectToLoginView(TemplateView):

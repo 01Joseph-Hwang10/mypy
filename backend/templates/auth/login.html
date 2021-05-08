@@ -1,40 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login | MYPY</title>
     <style>
-        body {
-            background-color: #f1f3f8;
-        }
-        .wrapper {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            height: 90vh;
-        }
-        .loading {
-            font-size: x-large;
-            color: black;
-            font-weight: bold;
-        }
+      body {
+        background-color: #f1f3f8;
+      }
+      .wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 90vh;
+      }
+      .loading {
+        font-size: x-large;
+        color: black;
+        font-weight: bold;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="wrapper">
-        <span class="loading">Loading...</span>
+      <span class="loading">Loading...</span>
     </div>
     <script>
-        window.onload = () => {
-            if (typeof window === 'object' && !window.matchMedia( '(min-width: 640px)' ).matches) {
-                window.location.href = 'http://localhost:3000/mobile/login/'
-            } else {
-                window.location.href = 'http://localhost:3000/'
-            }
-        }
+      window.onload = () => {
+        window.location.href = "http://localhost:3000/login/";
+      };
     </script>
-</body>
+  </body>
 </html>

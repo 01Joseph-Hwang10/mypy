@@ -2,6 +2,7 @@
 # 1. Make a function named 'main' in the 'index.py',
 # which recieves no argument( e.g. main() )
 # These names are MANDATORY and can't be the other names.
+# Also, if you want to recieve inputs from client, do it in index.py, wherever you want!
 # 2. Call every functions that you want to execute in main()
 # 3. Return value is recommended for main()
 # This return value can be the result of your app's output
@@ -37,17 +38,20 @@
 # path_to_picture1 = os.path.join(__file_root, 'images/picture1.png')
 
 import sys
-import os
+from index import main
 
 
-def execute(log_path):
+def execute(
+    global_variables,
+    log_path,
+):
 
     with open(log_path, 'w') as fw:
         sys.stdout = fw
         sys.stderr = fw
 
         try:
-            result = main()
+            result = main(global_variables)
         except Exception as e:
             fw.write(f'{str(e)}\n')
             result = 'An Error occured. Please reference the log'

@@ -1,10 +1,8 @@
-import jwt
 from common.functions import get_cookie, decode_token
-from config.settings import ALGORITHM, SECRET_KEY
-from rest_framework.permissions import IsAuthenticated
+from common.permissions import IsLoggedIn
 
 
-class AllowedToModifyUser(IsAuthenticated):
+class AllowedToModifyUser(IsLoggedIn):
 
     def has_object_permission(self, request, view, obj):
         cookie = get_cookie(request)

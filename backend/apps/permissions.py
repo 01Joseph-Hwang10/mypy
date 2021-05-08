@@ -3,10 +3,10 @@ from apps.models import App
 from users.models import CustomUser
 from common.functions import get_cookie, decode_token
 from config.settings import ALGORITHM, SECRET_KEY
-from rest_framework.permissions import IsAuthenticated
+from common.permissions import IsLoggedIn
 
 
-class AllowedToCreateApp(IsAuthenticated):
+class AllowedToCreateApp(IsLoggedIn):
 
     pass
 

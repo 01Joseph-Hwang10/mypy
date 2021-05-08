@@ -1,4 +1,4 @@
-import { loading as authLoading, logout, refreshToken, signInSuccessful } from '@redux/slices/auth';
+import { loading as authLoading, logout, refreshToken, signInSuccessful, signOut } from '@redux/slices/auth';
 import { retrieveMeError, retrieveMeSuccessful, retrieveUser, loading as retrieveUserLoading } from '@redux/slices/retrieve-user';
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
@@ -30,11 +30,14 @@ function Initialize( {
 				const { imported, } = data;
 				PropagateNewItems( imported );
 			} else {
+				signOut();
+				Logout();
 				RetrieveMeError( 'Something went wrong :/' );
 				MapStorageItemsToProps();
 				ShowMessage( 'Something went wrong :/', 'error' );
 			}
 		} else {
+			signOut();
 			Logout();
 			MapStorageItemsToProps();
 		}

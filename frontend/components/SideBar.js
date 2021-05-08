@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import React from 'react';
-import Search from './Search';
+// import Search from './Search';
 
 function SideBar() {
 	return (

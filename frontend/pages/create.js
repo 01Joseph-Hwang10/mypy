@@ -54,7 +54,7 @@ function create( {
 			<div className="createFormWrapper">
 				<form onSubmit={createAppSubmit}>
 					<span className="formSubject">Create New App</span>
-					<input className='name' name='name' placeholder='name' type='text' required />
+					<input className='name' name='name' placeholder='name' type='text' required autoComplete="off" />
 					<TextAreaAutosize className='description' name='description' placeholder='description' />
 					<label htmlFor='app'>Zipped Python App</label>
 					<input className='app' name='app' type='file' accept='.zip' required />

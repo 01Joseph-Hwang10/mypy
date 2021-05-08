@@ -1,4 +1,5 @@
 import os
+from os.path import split
 import re
 from django.core.exceptions import ValidationError
 
@@ -42,7 +43,7 @@ FROZENSET = 'frozenset'
 BOOL = 'bool'
 
 
-def input_to_sys_args(codeline):
+def input_to_sys_args(codeline, file_path):
 
     new_codeline = codeline
     name = ""
@@ -106,6 +107,9 @@ def input_to_sys_args(codeline):
         )
         if count_single_quote_index % 2 == 0 or count_double_quote_index % 2 == 0:
             input_func_index.append(index)
+
+    if file_path != 'index.py' and len(input_func_index) != 0:
+        raise SyntaxError("Input should only exist at index.py")
 
     if len(equal_operator_index) != 0:
         name = codeline[: equal_operator_index[0]]
@@ -202,9 +206,9 @@ def input_to_sys_args(codeline):
         return [], codeline
 
     if len(inputs) == 1:
-        new_codeline = new_codeline.replace(
-            inputs[0]["codeline"], f"__global_vars['{str(name)}']"
-        )
+        # new_codeline = new_codeline.replace(
+        #     inputs[0]["codeline"], f"__global_vars['{str(name)}']"
+        # )
         i = 0
         while inputs[0]["codeline"][i] == "(":
             i += 1
@@ -213,14 +217,14 @@ def input_to_sys_args(codeline):
             "description": inputs[0]["codeline"][i + 6: -1].strip()[1:-1],
             "type": inputs[0]["type"],
         }
-        return [input_spec], new_codeline
+        return [input_spec], False
     else:
         input_specs = []
         for index in range(len(inputs)):
-            new_codeline = new_codeline.replace(
-                inputs[index]["codeline"],
-                f"__global_vars['{str(name)+str('_')+str(index)}']",
-            )
+            # new_codeline = new_codeline.replace(
+            #     inputs[index]["codeline"],
+            #     f"__global_vars['{str(name)+str('_')+str(index)}']",
+            # )
             i = 0
             while inputs[index]["codeline"][i] == "(":
                 i += 1
@@ -230,7 +234,28 @@ def input_to_sys_args(codeline):
                 "type": inputs[index]["type"],
             }
             input_specs.append(input_spec)
-        return input_specs, new_codeline
+        return input_specs, False
+
+
+def detect_main_function(codeline):
+
+    splitted = codeline.split()
+
+    if len(splitted) == 2 and splitted == ['def', 'main():']:
+        return True
+
+    if len(splitted) == 3:
+        if splitted == ['def', 'main()', ':'] or splitted == ['def', 'main(', '):'] or splitted == ['def', 'main', '():']:
+            return True
+
+    if len(splitted) == 4:
+        if splitted == ['def', 'main(', ')', ':'] or splitted == ['def', 'main', '(', '):'] or splitted == ['def', 'main', '()', ':']:
+            return True
+
+    if len(splitted) == 5 and splitted == ['def', 'main', '(', ')', ':']:
+        return True
+
+    return False
 
 
 def get_modules(dirs):
@@ -300,11 +325,10 @@ def filter_banned_syntax(codeline):
                 raise Exception
 
 
-def replace_with_appropriates(codeline):
+def replace_with_appropriates(codeline, file_path):
 
     # filter_banned_syntax(codeline)
-    return input_to_sys_args(
-        import_from_dependencies(
-            codeline
-        )
-    )
+    layer1 = input_to_sys_args(codeline, file_path)
+    # layer2 = import_from_dependencies(layer1)
+    result = layer1
+    return result

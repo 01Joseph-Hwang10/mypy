@@ -15,6 +15,7 @@
     height: 100vh;
     @extend %mx-auto;
     width: 91.67%;
+    padding-top: 2rem;
 }
 
 @include small {
