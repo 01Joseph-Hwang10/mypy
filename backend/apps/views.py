@@ -150,11 +150,11 @@ class CreateAppView(CreateAPIView):
             with open(index_directory, 'r') as f:
                 codelines = f.readlines()
             with open(index_directory, 'w') as f:
-                to_inject = ['def main(__global_vars):\n']
+                to_inject = ['def main(__variables, __files):\n']
                 for spec in specs_list:
                     spec_name = spec['name']
                     spec_type = spec['type']
-                    new_line = f"\t{spec_name}={spec_type}(__global_vars['{spec_name}'])\n"
+                    new_line = f"\t{spec_name}={spec_type}(__variables['{spec_name}'])\n"
                     to_inject.append(new_line)
                 for codeline in codelines:
                     if detect_main_function(codeline):
@@ -237,8 +237,8 @@ class CreateAppView(CreateAPIView):
 
             # Make flask app
             with open(os.path.join(script_directory, 'app.py'), 'w') as f:
-                log_file_directory = os.path.join(log_dir, 'log.txt')
-                write_flask_app(f, name, log_file_directory)
+                # Temporary type reinforcement
+                write_flask_app(f, name, 'STRING')
 
             # Modularize server folder
             with open(os.path.join(server_directory, '__init__.py'), 'w') as f:
@@ -255,9 +255,13 @@ class CreateAppView(CreateAPIView):
                 write_docker_compose(f, new_port)
 
             # Deploy the app
-            subp = subprocess.Popen(
-                ['docker-compose', 'up', '--build', '-d'], cwd=save_directory)
-            subp.wait()
+            if DEBUG:
+                subp = subprocess.Popen(
+                    ['docker-compose', 'up', '--build'], cwd=save_directory)
+            else:
+                subp = subprocess.Popen(
+                    ['docker-compose', 'up', '--build', '-d'], cwd=save_directory)
+                subp.wait()
 
             # Update initially created instance's app path and cover image path
             instance = App.objects.get(id=new_id)

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { connect } from 'react-redux';
-import { loading as executeLoading, executeAppSuccessful, executeAppError } from '@slices/execute-app';
+import { loading as executeLoading, executeAppSuccessful, executeAppError, cleanAppPage } from '@slices/execute-app';
 import { loading as retrieveLoading, loadAppSuccessful, loadAppError } from '@slices/retrieve-app';
 import { loading as deleteLoading, deleteAppSuccessful, deleteAppError } from '@slices/delete-app';
 import { executeApp as axiosExecuteApp } from '@slices/execute-app';
@@ -25,13 +25,16 @@ function AppDetail( {
 		first_name : CreatedUserName,
 	},
 	appSpec : { 
+		id,
 		name, 
 		description,
 		exports,
-		id,
 		app,
 		has_file_input,
 		cover_img,
+		server_number,
+		port,
+		output_type,
 	},
 	retrieveLoading : RetrieveLoading,
 	loadAppError : LoadAppError,
@@ -42,6 +45,7 @@ function AppDetail( {
 	deleteLoading : DeleteLoading,
 	deleteAppSuccessful : DeleteAppSuccessful,
 	deleteAppError : DeleteAppError,
+	cleanAppPage : CleanAppPage,
 } ) {
     
 	const router = useRouter();
@@ -57,13 +61,19 @@ function AppDetail( {
 	};
 
 	useEffect( ()=>{
+		CleanAppPage();
 		retrieveApp();
 	}, [] );
     
 	const executeApp = async () => {
 		ExecuteLoading();
 		const postData = executeAppDataForm( app, id );
-		const { ok, data, } = await axiosExecuteApp( postData );
+		const appSpec = {
+			server_number,
+			port,
+			name,
+		};
+		const { ok, data, } = await axiosExecuteApp( postData, appSpec );
 		if ( ok ) {
 			ExecuteAppSuccessful( data );
 		} else {
@@ -72,8 +82,8 @@ function AppDetail( {
 	};
 
 	const deleteApp = async () => {
-		const sureToDelete = confirm('Are you sure to delete the app? This action is not retreatable!!')
-		if (sureToDelete) {
+		const sureToDelete = confirm( 'Are you sure to delete the app? This action is not retreatable!!' );
+		if ( sureToDelete ) {
 			DeleteLoading();
 			const { ok, data, } = await axiosDeleteApp( id );
 			if ( ok ) {
@@ -142,10 +152,10 @@ function AppDetail( {
 						{
 							ExecuteIsLoading && Result !== null ? (
 								<div className="outputContainer__loading">Loading...</div>
-								) : (
-									<>{Result}</>
-									)
-								}
+							) : (
+								<>{Result}</>
+							)
+						}
 					</div>
 				</div>
 				<div className="outputContainer__log">
@@ -197,6 +207,7 @@ const mapDispatchToProps = dispatch => {
 		deleteLoading : () => dispatch( deleteLoading() ),
 		deleteAppSuccessful : () => dispatch( deleteAppSuccessful() ),
 		deleteAppError : ( response ) => dispatch( deleteAppError( response ) ),
+		cleanAppPage : () => dispatch( cleanAppPage() ),
 	};
 };
 

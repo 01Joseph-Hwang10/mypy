@@ -334,55 +334,84 @@ def replace_with_appropriates(codeline, file_path):
     return result
 
 
-def write_flask_app(interface, name, log_file_directory):
+def write_flask_app(interface, name, output_type):
 
+    interface.write('import json\n')
     interface.write(
-        'from flask import Flask, redirect, url_for, request\n')
-    interface.write('from __main import execute\n')
-    interface.write('app=Flask(__name__)\n')
+        'from flask import Flask, redirect, request, Response\n')
+    interface.write('from flask_cors import cross_origin\n')
+    interface.write('from __main import execute\n\n')
+    interface.write('app=Flask(__name__)\n\n')
     interface.write('@app.route("/")\n')
     interface.write('def root():\n')
-    interface.write('\treturn "This is root page"\n')
+    # Temporal redirection
+    interface.write('\treturn redirect("http://localhost:3000/")\n\n')
     interface.write(f'@app.route("/{name}", methods=["GET","POST"])\n')
+    interface.write('@cross_origin()\n')
     interface.write('def api():\n')
     # Do client input injection
-    interface.write('\tif request.method == "POST":\n')
+    interface.write('\ttry:\n')
+    interface.write('\t\tif request.method == "POST":\n')
     # Everything should be multipart/form-data
-    interface.write('\t\tinput_data = request.form\n')
-    interface.write('\telse:\n')
-    interface.write('\t\tinput_data = dict()\n')
     interface.write(
-        f'\treturn execute( input_form, "{log_file_directory}" )\n')
+        '\t\t\tinput_data = json.loads(request.form["variables"])\n')
+    interface.write('\t\t\tif json.loads(request.form["has_file_input"]):\n')
+    interface.write('\t\t\t\tinput_files = request.files["files"]\n')
+    interface.write('\t\t\telse:\n')
+    interface.write('\t\t\t\tinput_files = dict()\n')
+    interface.write('\t\telse:\n')
+    interface.write('\t\t\tinput_data = dict()\n')
+    interface.write('\t\t\tinput_files = dict()\n')
+    interface.write(
+        f'\t\tresult, log_array = execute( input_data, input_files )\n')
+    interface.write('\t\tdata = {\n')
+    interface.write('\t\t\t"result": result,\n')
+    interface.write('\t\t\t"log": log_array\n')
+    interface.write('\t\t}\n')
+    interface.write(
+        '\t\treturn Response(response=json.dumps(data), status=200)\n')
+    interface.write('\texcept Exception as e:\n')
+    interface.write(
+        '\t\treturn Response(response=json.dumps(e), status=400)\n\n')
     interface.write('if __name__ == "__main__":\n')
-    interface.write('\tapp.run()\n')
+    if DEBUG:
+        interface.write('\tapp.run(debug=True)\n')
+    else:
+        interface.write('\tapp.run()\n')
 
 
 def write_dockerfile(interface):
     # Make sure to change the python version later
     interface.write('FROM python:3.6.12-alpine\n')
     interface.write('RUN mkdir /app\n')
+    interface.write('RUN mkdir /log\n')
     interface.write('WORKDIR /app\n')
     interface.write('EXPOSE 5000\n')
     interface.write('ENV PATH="/app:${PATH}"\n')
     # interface.write('COPY requirements.txt ./\n')
     # interface.write('RUN pip install --no-cache-dir requirements.txt\n')
-    interface.write('RUN pip install flask gunicorn pyjwt\n')
+    interface.write('RUN pip install flask flask-cors gunicorn pyjwt\n')
     interface.write('COPY ./app/ /app/\n')
     interface.write(
         'CMD ["gunicorn", "-b", "0.0.0.0:5000", "app:app" ]\n')
 
 
+def tap_as_two_spaces(codeline):
+
+    return codeline.replace('\t', '  ')
+
+
 def write_docker_compose(interface, port):
-    interface.write('version: "3.3"\n')
-    interface.write('services:\n')
-    interface.write('\tserver:\n')
-    interface.write('\t\tbuild:\n')
-    interface.write('\t\t\tcontext: ./server\n')
-    interface.write('\t\tports:\n')
-    interface.write(f"\t\t\t- '{port}:5000'\n")
-    # interface.write('\tnginx:\n')
-    # interface.write('\t\timage: nginx:latest\n')
-    # interface.write('\t\tports:\n')
-    # interface.write(f'\t\t\t- "{port}:{port}"\n')
-    # interface.write('\t\tdepends_on:\n')
-    # interface.write('\t\t\t- server\n')
+    interface.write(tap_as_two_spaces('version: "3.3"\n'))
+    interface.write(tap_as_two_spaces('services:\n'))
+    interface.write(tap_as_two_spaces('\tserver:\n'))
+    interface.write(tap_as_two_spaces('\t\tbuild:\n'))
+    interface.write(tap_as_two_spaces('\t\t\tcontext: ./server\n'))
+    interface.write(tap_as_two_spaces('\t\tports:\n'))
+    interface.write(tap_as_two_spaces(f"\t\t\t- '{port}:5000'\n"))
+    # interface.write(tap_as_two_spaces('\tnginx:\n'))
+    # interface.write(tap_as_two_spaces('\t\timage: nginx:latest\n'))
+    # interface.write(tap_as_two_spaces('\t\tports:\n'))
+    # interface.write(tap_as_two_spaces(f'\t\t\t- "{port}:{port}"\n'))
+    # interface.write(tap_as_two_spaces('\t\tdepends_on:\n'))
+    # interface.write(tap_as_two_spaces('\t\t\t- server\n'))

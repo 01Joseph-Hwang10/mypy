@@ -6,6 +6,22 @@ from users.models import CustomUser
 
 class App(TimeStampedModel):
 
+    STRING = 'STRING'
+    HTML = 'HTML'
+    IMAGE = 'IMAGE'
+    AUDIO = 'AUDIO'
+    VIDEO = 'VIDEO'
+    FILE = 'FILE'
+
+    OUTPUT_TYPES_CHOICES = (
+        (STRING, 'String'),
+        (HTML, 'Html'),
+        (IMAGE, 'Image'),
+        (AUDIO, 'Audio'),
+        (VIDEO, 'Video'),
+        (FILE, 'File'),
+    )
+
     name = models.CharField(max_length=50)
     description = models.TextField(max_length=300, null=True, blank=True)
     app = models.TextField(null=True, blank=True)
@@ -16,6 +32,8 @@ class App(TimeStampedModel):
     cover_img = models.TextField(null=True, default=True)
     server_number = models.IntegerField(default=SERVER_NUMBER)
     port = models.IntegerField()
+    output_type = models.CharField(
+        'output_type', choices=OUTPUT_TYPES_CHOICES, default=STRING, max_length=20)
 
 
 class InputSpec(TimeStampedModel):

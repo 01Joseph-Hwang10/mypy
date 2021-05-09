@@ -15,6 +15,7 @@ class AppSerializer(Serializer):
     cover_img = serializers.ImageField(required=False)
     server_number = serializers.IntegerField()
     port = serializers.IntegerField()
+    output_type = serializers.CharField(max_length=20)
 
     class Meta:
         model = App

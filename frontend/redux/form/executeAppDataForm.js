@@ -80,6 +80,12 @@ const executeAppDataForm = (  app, id  ) => {
 	formData.append( 'variables', JSON.stringify( variables ) );
 	formData.append( 'files', files );
 	formData.append( 'id', id );
+	
+	if ( files ) {
+		formData.append( 'has_file_input', true );
+	} else {
+		formData.append( 'has_file_input', false );
+	}
 
 	return formData;
 };

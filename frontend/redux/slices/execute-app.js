@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { EXECUTE_APP } from '@src/urls';
+import { BASE_APP_URL } from '@src/urls';
 import axios from 'axios';
 
 
@@ -9,6 +9,7 @@ export const {
 		loading,
 		executeAppSuccessful,
 		executeAppError,
+		cleanAppPage,
 	},
 } = createSlice( {
 	name : 'executeAppSlice',
@@ -34,17 +35,20 @@ export const {
 			state.loading = false;
 			state.error = payload;
 		},
+		cleanAppPage : ( state ) => {
+			state.result = null;
+			state.log = null;
+		},
 	},
 } );
 
-export const executeApp = async ( postData ) => {
+export const executeApp = async ( postData, { serverNumber, port, name, } ) => {
+
+
+	const postUrl = `${BASE_APP_URL}:${port}/${name}`;
     
 	try {
-		const {  data, } = await axios.post( EXECUTE_APP, postData, {
-			headers : {
-				'Content-Type' : 'multipart/form-data',
-			},
-		} );
+		const {  data, } = await axios.post( postUrl, postData );
 	
 		return {
 			ok : true,

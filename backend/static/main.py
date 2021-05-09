@@ -43,23 +43,27 @@ from index import main
 
 def execute(
     global_variables,
-    log_path,
+    global_files
 ):
 
-    with open(log_path, 'w') as fw:
+    LOG_PATH = '/log'
+    LOG_FILE_PATH = f'{LOG_PATH}/log.txt'
+
+    with open(LOG_FILE_PATH, 'w') as fw:
         sys.stdout = fw
         sys.stderr = fw
 
+        log_array = []
         try:
-            result = main(global_variables)
+            result = main(global_variables, global_files)
         except Exception as e:
             fw.write(f'{str(e)}\n')
             result = 'An Error occured. Please reference the log'
+            log_array.append(str(e))
         sys.stdout = sys.__stdout__
         sys.stderr = sys.__stderr__
-    with open(log_path, 'r') as fr:
+    with open(LOG_FILE_PATH, 'r') as fr:
         logs = fr.readlines()
-        log_array = []
         for i in range(len(logs)):
             log_array.append({'id': i+1, 'log': logs[i]})
     return result, log_array
