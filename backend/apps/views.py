@@ -8,7 +8,7 @@ import shutil
 import runpy
 from zipfile import ZipFile
 from PIL import Image
-from apps.functions import detect_main_function, extract_recursively, get_modules, replace_with_appropriates
+from apps.functions import detect_main_function, extract_recursively, get_modules, replace_with_appropriates, write_docker_compose, write_dockerfile, write_flask_app
 from common.pagination import ThreeFigurePagination
 from rest_framework.parsers import MultiPartParser
 # from common.functions import get_cookie
@@ -238,25 +238,7 @@ class CreateAppView(CreateAPIView):
             # Make flask app
             with open(os.path.join(script_directory, 'app.py'), 'w') as f:
                 log_file_directory = os.path.join(log_dir, 'log.txt')
-                f.write('import json\n')
-                f.write(
-                    'from flask import Flask, redirect, url_for, request\n')
-                f.write('from __main import execute\n')
-                f.write('app=Flask(__name__)\n')
-                f.write('@app.route("/")\n')
-                f.write('def root():\n')
-                f.write('   return "This is root page"\n')
-                f.write(f'@app.route("/{name}", methods=["GET","POST"])\n')
-                f.write('def api():\n')
-                # Do client input injection
-                f.write('    if request.method == "POST":\n')
-                f.write('        input_form = request.form\n')
-                f.write('    else:\n')
-                f.write('        input_form = dict()\n')
-                f.write(
-                    f'    return execute( input_form, "{log_file_directory}" )\n')
-                f.write('if __name__ == "__main__":\n')
-                f.write('    app.run()\n')
+                write_flask_app(f, name, log_file_directory)
 
             # Modularize server folder
             with open(os.path.join(server_directory, '__init__.py'), 'w') as f:
@@ -266,36 +248,11 @@ class CreateAppView(CreateAPIView):
 
             # Make api Dockerfile
             with open(os.path.join(server_directory, 'Dockerfile'), 'w') as f:
-                # Make sure to change the python version later
-                f.write('FROM python:3.6.12-alpine\n')
-                f.write('RUN mkdir /app\n')
-                f.write('WORKDIR /app\n')
-                f.write('EXPOSE 5000\n')
-                f.write('ENV PATH="/app:${PATH}"\n')
-                # f.write('COPY requirements.txt ./\n')
-                # f.write('RUN pip install --no-cache-dir requirements.txt\n')
-                f.write('RUN pip install flask gunicorn pyjwt\n')
-                f.write('COPY ./app/ /app/\n')
-                f.write(
-                    'CMD ["gunicorn", "-b", "0.0.0.0:5000", "app:app" ]\n')
-
-            # Make nginx Dockerfile
+                write_dockerfile(f)
 
             # Make docker-compose file
             with open(os.path.join(save_directory, 'docker-compose.yml'), 'w') as f:
-                f.write('version: "3.3"\n')
-                f.write('services:\n')
-                f.write('  server:\n')
-                f.write('    build:\n')
-                f.write('      context: ./server\n')
-                f.write('    ports:\n')
-                f.write(f"      - '{new_port}:5000'\n")
-                # f.write('  nginx:\n')
-                # f.write('    image: nginx:latest\n')
-                # f.write('    ports:\n')
-                # f.write(f'      - "{new_port}:{new_port}"\n')
-                # f.write('    depends_on:\n')
-                # f.write('       - server\n')
+                write_docker_compose(f, new_port)
 
             # Deploy the app
             subp = subprocess.Popen(
@@ -376,91 +333,6 @@ class RetrieveAppView(RetrieveAPIView):
         except Exception as e:
             print(e)
             return Response(status=500, data='Internal Server Error')
-
-
-class ExecuteAppView(CreateAPIView):
-
-    queryset = App.objects.all()
-    serializer_class = AppSerializer
-
-    def post(self, request, *args, **kwargs):
-
-        try:
-            # Initially set for exception
-            root_path = False
-
-            # Get client inputs
-            cookie = get_cookie(request)
-            user_id = int(decode_token(cookie['access_token'])['user_id'])
-            post_data = request.data
-            app_path = post_data['app']
-            variables = json.loads(post_data['variables'])
-            files = post_data['files']
-
-            # Make needed folders if not exist
-            log_dir = os.path.join(app_path, 'log')
-            input_dir = os.path.join(app_path, 'input')
-            output_dir = os.path.join(app_path, 'output')
-            data_dir = os.path.join(app_path, 'data')
-            static_dir = os.path.join(app_path, 'static')
-            if not os.path.exists(log_dir):
-                os.mkdir(log_dir)
-            if not os.path.exists(input_dir):
-                os.mkdir(input_dir)
-            if not os.path.exists(output_dir):
-                os.mkdir(output_dir)
-            if not os.path.exists(data_dir):
-                os.mkdir(data_dir)
-            if not os.path.exists(static_dir):
-                os.mkdir(static_dir)
-
-            # Modify __args.py and write the input from client
-            input_path = os.path.join(app_path, 'input')
-            args_path = os.path.join(input_path, '__args.py')
-            with open(args_path, 'w') as f:
-                f.write('__global_vars={\n')
-                for key in list(variables.keys()):
-                    if type(variables[key]) in [
-                            type(str()), type(int()), type(float()), type(complex())]:
-                        f.write(f"'{key}':\"\"\"{variables[key]}\"\"\",\n")
-                    else:
-                        f.write(f"'{key}':{variables[key]},\n")
-                f.write('}\n')
-                if files != 'false':
-                    with ZipFile(files) as zf:
-                        dirs = zf.namelist()
-                        extract_recursively('', dirs, zf, input_path)
-                    root_name = os.listdir(input_path)[0]
-                    root_path = os.path.join(input_path, root_name)
-                    f.write(f"__file_root='{root_path}'\n")
-
-            # Make .pyz file
-            app_root_path = os.path.join(app_path, 'app/')
-            execute_path = os.path.join(
-                app_path, f'app_id{user_id}_d{time.time()}')
-            # Copy and paste the file, and modify each according to __args.py name
-            zipapp.create_archive(app_root_path, execute_path)
-
-            # Execute app
-            app_run = runpy.run_path(execute_path)
-            log_path = os.path.join(app_path, f'log/log{str(user_id)}')
-            result, log = app_run['execute'](log_path)
-
-            # Clean up
-            if not result:
-                result = 'No return value made'
-            if root_path:
-                shutil.rmtree(root_path)
-
-            # What you need to do:
-            # Mock static fileSystem
-            return Response(status=200, data={'result': result, 'log': log})
-        except Exception as e:
-            # Delete all files uploaded
-            print(e)
-            if root_path:
-                shutil.rmtree(root_path)
-            return Response(status=500, data='Internal server error')
 
 
 class UpdateAppView(UpdateAPIView):

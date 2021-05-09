@@ -332,3 +332,57 @@ def replace_with_appropriates(codeline, file_path):
     # layer2 = import_from_dependencies(layer1)
     result = layer1
     return result
+
+
+def write_flask_app(interface, name, log_file_directory):
+
+    interface.write(
+        'from flask import Flask, redirect, url_for, request\n')
+    interface.write('from __main import execute\n')
+    interface.write('app=Flask(__name__)\n')
+    interface.write('@app.route("/")\n')
+    interface.write('def root():\n')
+    interface.write('\treturn "This is root page"\n')
+    interface.write(f'@app.route("/{name}", methods=["GET","POST"])\n')
+    interface.write('def api():\n')
+    # Do client input injection
+    interface.write('\tif request.method == "POST":\n')
+    # Everything should be multipart/form-data
+    interface.write('\t\tinput_data = request.form\n')
+    interface.write('\telse:\n')
+    interface.write('\t\tinput_data = dict()\n')
+    interface.write(
+        f'\treturn execute( input_form, "{log_file_directory}" )\n')
+    interface.write('if __name__ == "__main__":\n')
+    interface.write('\tapp.run()\n')
+
+
+def write_dockerfile(interface):
+    # Make sure to change the python version later
+    interface.write('FROM python:3.6.12-alpine\n')
+    interface.write('RUN mkdir /app\n')
+    interface.write('WORKDIR /app\n')
+    interface.write('EXPOSE 5000\n')
+    interface.write('ENV PATH="/app:${PATH}"\n')
+    # interface.write('COPY requirements.txt ./\n')
+    # interface.write('RUN pip install --no-cache-dir requirements.txt\n')
+    interface.write('RUN pip install flask gunicorn pyjwt\n')
+    interface.write('COPY ./app/ /app/\n')
+    interface.write(
+        'CMD ["gunicorn", "-b", "0.0.0.0:5000", "app:app" ]\n')
+
+
+def write_docker_compose(interface, port):
+    interface.write('version: "3.3"\n')
+    interface.write('services:\n')
+    interface.write('\tserver:\n')
+    interface.write('\t\tbuild:\n')
+    interface.write('\t\t\tcontext: ./server\n')
+    interface.write('\t\tports:\n')
+    interface.write(f"\t\t\t- '{port}:5000'\n")
+    # interface.write('\tnginx:\n')
+    # interface.write('\t\timage: nginx:latest\n')
+    # interface.write('\t\tports:\n')
+    # interface.write(f'\t\t\t- "{port}:{port}"\n')
+    # interface.write('\t\tdepends_on:\n')
+    # interface.write('\t\t\t- server\n')
