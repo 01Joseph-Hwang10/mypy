@@ -28,7 +28,6 @@ class App(TimeStampedModel):
     created_by = models.ForeignKey(
         CustomUser, related_name='myapp', on_delete=models.CASCADE)
     exports = models.IntegerField(default=0)
-    has_file_input = models.BooleanField(default=False)
     cover_img = models.TextField(null=True, default=True)
     server_number = models.IntegerField(default=SERVER_NUMBER)
     port = models.IntegerField()
@@ -68,5 +67,4 @@ class InputSpec(TimeStampedModel):
                             related_name='input_spec')
     name = models.CharField(max_length=200)
     description = models.TextField(null=True, blank=True)
-    type = models.CharField('type', choices=TYPES_CHOICES,
-                            default=STR, max_length=20)
+    type = models.CharField(max_length=20)

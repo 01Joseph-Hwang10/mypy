@@ -16,6 +16,7 @@ export const TEXT_COMPONENT = 'TextComponent';
 export const LIST_COMPONENT = 'ListComponent';
 export const DICTIONARY_COMPONENT = 'DictionaryComponent';
 export const BOOLEAN_COMPONENT = 'BooleanComponent';
+export const FILE_COMPONENT = 'FileComponent';
 
 // Responsive Width
 export const SCREEN_SMALL = 640;

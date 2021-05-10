@@ -1,11 +1,20 @@
 import React from 'react';
 
-function File() {
+function File( {
+	input : {
+		name,
+		description,
+		type,
+	},
+} ) {
 	return (
 		<div className="formElement__file">
-			<span className="fileInputName">Files</span>
+			<span className="fileInputName">{`${name}(${type})`}</span>
+			<div className="fileInputDescription">
+				<p>{description}</p>
+			</div>
 			<div className="fileInputWrapper">
-				<input name="files" type="file"></input>
+				<input name={name} type="file"></input>
 			</div>
 		</div>
 	);

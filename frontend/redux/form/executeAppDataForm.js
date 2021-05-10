@@ -16,6 +16,7 @@ const executeAppDataForm = (  app, id  ) => {
 	const listInput = qAll( '.formElement__list' );
 	const dictInput = qAll( '.formElement__dict' );
 	const boolInput = qAll( '.formElement__bool' );
+	const fileInput = qAll( '.formElement__file' );
 
 	if ( textInput ) {
 		textInput.forEach( element => {
@@ -70,15 +71,19 @@ const executeAppDataForm = (  app, id  ) => {
 	}
 
 	let files = false;
-	const fileInput = document.querySelector( '.fileInput' );
 	if ( fileInput ) {
-		files = fileInput.files[ 0 ];
+		files = true;
+		fileInput.forEach( element => {
+			const input = element.querySelector( 'input' );
+			const key = input.name;
+			const file = input.files[ 0 ];
+			formData.append( key, file );
+		} );
 	}
 
 	
 	formData.append( 'app', app );
 	formData.append( 'variables', JSON.stringify( variables ) );
-	formData.append( 'files', files );
 	formData.append( 'id', id );
 	
 	if ( files ) {

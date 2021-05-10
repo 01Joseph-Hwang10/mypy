@@ -30,7 +30,6 @@ function AppDetail( {
 		description,
 		exports,
 		app,
-		has_file_input,
 		cover_img,
 		server_number,
 		port,
@@ -131,15 +130,6 @@ function AppDetail( {
 							</div>
 						</div>
 					) )
-				}
-				{
-					has_file_input && (
-						<div className="formElementWrapper">
-							<div className="formElement">
-								<File />
-							</div>
-						</div>
-					)
 				}
 				<div className="runButtonWrapper">
 					<button className="runButton" onClick={executeApp}>Run</button>

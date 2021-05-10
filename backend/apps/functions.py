@@ -42,199 +42,78 @@ SET = 'set'
 FROZENSET = 'frozenset'
 BOOL = 'bool'
 
+TYPES = [
+    STR,
+    INT,
+    FLOAT,
+    COMPLEX,
+    LIST,
+    TUPLE,
+    RANGE,
+    DICT,
+    SET,
+    FROZENSET,
+    BOOL,
+]
+
+if DEBUG:
+    STATIC_PATH = STATICFILES_DIRS[0]
+else:
+    STATIC_PATH = STATIC_ROOT
+
+banned_extension_source = os.path.join(
+    STATIC_PATH, 'src/banned_extensions.txt')
+
+with open(banned_extension_source, 'r') as f:
+
+    BANNED_EXTENSIONS = [
+        extension.replace(' ', '')[:-1] for extension in f.readlines()
+    ]
+
 
 def input_to_sys_args(codeline, file_path):
 
-    new_codeline = codeline
-    name = ""
+    if file_path == 'index.py':
+        code = str(codeline)
 
-    single_quote_index = []
-    double_quote_index = []
-    hash_index = []
-    equal_operator_index = []
-    paren_open_index = []
-    paren_close_index = []
-    input_paren_open_index = []
-    input_paren_close_index = []
-    input_func_index = []
+        code = code.replace(' ', '')
 
-    # Get interested character's indexes
-    for i in range(len(codeline)):
-        if codeline[i] == "'":
-            single_quote_index.append(i)
-        if codeline[i] == '"':
-            double_quote_index.append(i)
-        if codeline[i] == "#":
-            hash_index.append(i)
-        if codeline[i] == "=":
-            equal_operator_index.append(i)
-        if codeline[i] == "(":
-            paren_open_index.append(i)
-        if codeline[i] == ")":
-            paren_close_index.append(i)
+        for i in range(len(code)):
 
-    # Search for input with parenthesis opened
-    for i in range(len(codeline) - 5):
-        # Search for keyword 'input'
-        if codeline[i: i + 5] == "input":
-            # Walk to right to check whether there is parenthesis next to the keyword
-            j = i + 4
-            while j < len(codeline) - 5:
-                j += 1
-                if codeline[j] != " ":
-                    if codeline[j] == "(":
-                        input_paren_open_index.append(j)
-                    break
+            if code[i] == '#':
+                code = code[:i]
 
-    # Cut comment, considering quote
-    for index in hash_index:
-        new_single_quote_index = list(
-            filter(lambda x: x < index, single_quote_index))
-        new_double_quote_index = list(
-            filter(lambda x: x < index, double_quote_index))
-        if len(new_single_quote_index) % 2 == 0 or len(new_double_quote_index) % 2 == 0:
-            new_codeline = codeline[:index]
-            single_quote_index = new_single_quote_index
-            double_quote_index = new_double_quote_index
-            break
+        spec = code.split('=')
+        if len(spec) == 2:
+            variable_name = spec[0]
+            variable_type = spec[1][:-2]
+            if variable_type in TYPES:
+                input_spec = {
+                    'name': variable_name,
+                    'description': f'Please give the input with type of "{variable_type}"',
+                    'type': variable_type
+                }
+                return [input_spec], False
+            else:
+                variable_type = [s for s in spec[1][1:-1].split(',')]
+                file_types = str()
+                for file_type in variable_type:
+                    if file_type[0] != '.':
+                        raise SyntaxError(
+                            'Not a valid file extension at input!!')
+                    if file_type in BANNED_EXTENSIONS:
+                        raise SyntaxError(
+                            f'Extension "{file_type}"" not allowed!!')
+                    file_types = file_types + f', {file_type}'
+                file_types = file_types[2:]
+                input_spec = {
+                    'name': variable_name,
+                    'descripiton': f'Please give the input with type of "{file_types}"',
+                    'type': file_types
+                }
+                return [input_spec], False
 
-    for index in input_paren_open_index:
-        count_single_quote_index = len(
-            list(filter(lambda x: x < index, single_quote_index))
-        )
-        count_double_quote_index = len(
-            list(filter(lambda x: x < index, double_quote_index))
-        )
-        if count_single_quote_index % 2 == 0 or count_double_quote_index % 2 == 0:
-            input_func_index.append(index)
-
-    if file_path != 'index.py' and len(input_func_index) != 0:
-        raise SyntaxError("Input should only exist at index.py")
-
-    if len(equal_operator_index) != 0:
-        name = codeline[: equal_operator_index[0]]
-        name = name.replace(" ", "")
-        name = name.replace("\t", "")
-
-    for index in input_func_index:
-        filtered_paren_close_index = list(
-            filter(lambda x: x > index, paren_close_index)
-        )
-        filtered_paren_close_index.sort()
-        if filtered_paren_close_index:
-            for position in range(len(filtered_paren_close_index)):
-
-                def decider(x):
-                    return bool(x < filtered_paren_close_index[position] and x > index)
-
-                count_paren_close_index = position + 1
-                count_paren_open_index = len(
-                    list(
-                        filter(
-                            decider,
-                            paren_open_index,
-                        )
-                    )
-                )
-                if count_paren_open_index + 1 == count_paren_close_index:
-                    input_paren_close_index.append(
-                        filtered_paren_close_index[position])
-
-    if len(input_paren_open_index) != len(input_paren_close_index):
-        raise SyntaxError(
-            "Your code is not properly written in perspective of syntax related with 'input' function"
-        )
-
-    input_start_index = []
-
-    for index in input_func_index:
-        j = index
-        while not new_codeline[j].isalpha():
-            j -= 1
-        input_start_index.append(j - 4)
-
-    input_codes = [
-        new_codeline[input_start_index[i]: input_paren_close_index[i] + 1]
-        for i in range(len(input_start_index))
-    ]
-
-    inputs = []
-
-    for index in range(len(input_codes)):
-        input_type = STR
-        type_start_index = int()
-        type_end_index = int()
-
-        before_input_keyword = new_codeline[: input_start_index[index]]
-        code_to_analyze = before_input_keyword[::-1]
-
-        i = 0
-        while not code_to_analyze[i].isalpha() and i < len(code_to_analyze) - 1:
-            i += 1
-        type_end_index = i
-        while code_to_analyze[i].isalpha() and i < len(code_to_analyze) - 1:
-            i += 1
-        type_start_index = i
-
-        type_extracted = code_to_analyze[type_end_index:type_start_index][::-1]
-
-        if type_extracted == INT:
-            input_type = INT
-        if type_extracted == FLOAT:
-            input_type = FLOAT
-        if type_extracted == COMPLEX:
-            input_type = COMPLEX
-        if type_extracted == LIST:
-            input_type = LIST
-        if type_extracted == TUPLE:
-            input_type = TUPLE
-        if type_extracted == RANGE:
-            input_type = RANGE
-        if type_extracted == DICT:
-            input_type = DICT
-        if type_extracted == SET:
-            input_type = SET
-        if type_extracted == FROZENSET:
-            input_type = FROZENSET
-        if type_extracted == BOOL:
-            input_type = BOOL
-
-        input_obj = {"codeline": input_codes[index], "type": input_type}
-        inputs.append(input_obj)
-
-    if len(inputs) == 0:
-        return [], codeline
-
-    if len(inputs) == 1:
-        # new_codeline = new_codeline.replace(
-        #     inputs[0]["codeline"], f"__global_vars['{str(name)}']"
-        # )
-        i = 0
-        while inputs[0]["codeline"][i] == "(":
-            i += 1
-        input_spec = {
-            "name": name,
-            "description": inputs[0]["codeline"][i + 6: -1].strip()[1:-1],
-            "type": inputs[0]["type"],
-        }
-        return [input_spec], False
-    else:
-        input_specs = []
-        for index in range(len(inputs)):
-            # new_codeline = new_codeline.replace(
-            #     inputs[index]["codeline"],
-            #     f"__global_vars['{str(name)+str('_')+str(index)}']",
-            # )
-            i = 0
-            while inputs[index]["codeline"][i] == "(":
-                i += 1
-            input_spec = {
-                "name": f"{name}_{index}",
-                "description": inputs[index]["codeline"][i + 6: -1].strip()[1:-1],
-                "type": inputs[index]["type"],
-            }
-            input_specs.append(input_spec)
-        return input_specs, False
+    return [], codeline
 
 
 def detect_main_function(codeline):
@@ -336,82 +215,39 @@ def replace_with_appropriates(codeline, file_path):
 
 def write_flask_app(interface, name, output_type):
 
-    interface.write('import json\n')
-    interface.write(
-        'from flask import Flask, redirect, request, Response\n')
-    interface.write('from flask_cors import cross_origin\n')
-    interface.write('from __main import execute\n\n')
-    interface.write('app=Flask(__name__)\n\n')
-    interface.write('@app.route("/")\n')
-    interface.write('def root():\n')
-    # Temporal redirection
-    interface.write('\treturn redirect("http://localhost:3000/")\n\n')
-    interface.write(f'@app.route("/{name}", methods=["GET","POST"])\n')
-    interface.write('@cross_origin()\n')
-    interface.write('def api():\n')
-    # Do client input injection
-    interface.write('\ttry:\n')
-    interface.write('\t\tif request.method == "POST":\n')
-    # Everything should be multipart/form-data
-    interface.write(
-        '\t\t\tinput_data = json.loads(request.form["variables"])\n')
-    interface.write('\t\t\tif json.loads(request.form["has_file_input"]):\n')
-    interface.write('\t\t\t\tinput_files = request.files["files"]\n')
-    interface.write('\t\t\telse:\n')
-    interface.write('\t\t\t\tinput_files = dict()\n')
-    interface.write('\t\telse:\n')
-    interface.write('\t\t\tinput_data = dict()\n')
-    interface.write('\t\t\tinput_files = dict()\n')
-    interface.write(
-        f'\t\tresult, log_array = execute( input_data, input_files )\n')
-    interface.write('\t\tdata = {\n')
-    interface.write('\t\t\t"result": result,\n')
-    interface.write('\t\t\t"log": log_array\n')
-    interface.write('\t\t}\n')
-    interface.write(
-        '\t\treturn Response(response=json.dumps(data), status=200)\n')
-    interface.write('\texcept Exception as e:\n')
-    interface.write(
-        '\t\treturn Response(response=json.dumps(e), status=400)\n\n')
+    with open(os.path.join(STATIC_PATH, 'flask_server/server/app/app.py'), 'r') as f:
+        codelines = f.readlines()
+
+    for codeline in codelines:
+        interface.write(codeline.replace('__NAME', name))
     interface.write('if __name__ == "__main__":\n')
+
     if DEBUG:
         interface.write('\tapp.run(debug=True)\n')
     else:
         interface.write('\tapp.run()\n')
 
 
+def write_flask_middleware(interface):
+
+    with open(os.path.join(STATIC_PATH, 'flask_server/server/app/middleware.py'), 'r') as f:
+        codelines = f.read()
+
+    interface.write(codelines)
+
+
 def write_dockerfile(interface):
-    # Make sure to change the python version later
-    interface.write('FROM python:3.6.12-alpine\n')
-    interface.write('RUN mkdir /app\n')
-    interface.write('RUN mkdir /log\n')
-    interface.write('WORKDIR /app\n')
-    interface.write('EXPOSE 5000\n')
-    interface.write('ENV PATH="/app:${PATH}"\n')
-    # interface.write('COPY requirements.txt ./\n')
-    # interface.write('RUN pip install --no-cache-dir requirements.txt\n')
-    interface.write('RUN pip install flask flask-cors gunicorn pyjwt\n')
-    interface.write('COPY ./app/ /app/\n')
-    interface.write(
-        'CMD ["gunicorn", "-b", "0.0.0.0:5000", "app:app" ]\n')
 
+    with open(os.path.join(STATIC_PATH, 'flask_server/server/Dockerfile'), 'r') as f:
+        codelines = f.read()
 
-def tap_as_two_spaces(codeline):
-
-    return codeline.replace('\t', '  ')
+    interface.write(codelines)
 
 
 def write_docker_compose(interface, port):
-    interface.write(tap_as_two_spaces('version: "3.3"\n'))
-    interface.write(tap_as_two_spaces('services:\n'))
-    interface.write(tap_as_two_spaces('\tserver:\n'))
-    interface.write(tap_as_two_spaces('\t\tbuild:\n'))
-    interface.write(tap_as_two_spaces('\t\t\tcontext: ./server\n'))
-    interface.write(tap_as_two_spaces('\t\tports:\n'))
-    interface.write(tap_as_two_spaces(f"\t\t\t- '{port}:5000'\n"))
-    # interface.write(tap_as_two_spaces('\tnginx:\n'))
-    # interface.write(tap_as_two_spaces('\t\timage: nginx:latest\n'))
-    # interface.write(tap_as_two_spaces('\t\tports:\n'))
-    # interface.write(tap_as_two_spaces(f'\t\t\t- "{port}:{port}"\n'))
-    # interface.write(tap_as_two_spaces('\t\tdepends_on:\n'))
-    # interface.write(tap_as_two_spaces('\t\t\t- server\n'))
+
+    with open(os.path.join(STATIC_PATH, 'flask_server/docker-compose.yml'), 'r') as f:
+        codelines = f.readlines()
+
+    for codeline in codelines:
+        interface.write(codeline.replace('__PORT', port))

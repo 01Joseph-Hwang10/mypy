@@ -1,0 +1,45 @@
+import json
+from flask import Flask, redirect, request, Response
+from flask_cors import cross_origin
+from __main import execute
+from middleware import Middleware
+
+app = Flask(__name__)
+
+app.wsgi_app = Middleware(app.wsgi_app)
+
+
+@app.route('/')
+def root():
+
+    # Temporal redirection
+    return redirect('http://localhost:3000')
+
+
+@app.route('/__NAME', methods=["GET", "POST"])
+@cross_origin()
+def api():
+
+    # Do client input injection
+    try:
+        if request.method == "POST":
+            # Everything should be multipart/form-data
+            input_data = json.loads[request.form['variables']]
+            if json.loads(request.form['has_file_input']):
+                input_files = request.files
+            else:
+                input_files = dict()
+        else:
+            input_data = dict()
+            input_files = dict()
+
+        result, log_array = execute(input_data, input_files)
+
+        data = {
+            'result': result,
+            'log': log_array
+        }
+
+        return Response(response=json.dumps(data), status=200)
+    except Exception as e:
+        return Response(response=json.dumps(e), status=400)
