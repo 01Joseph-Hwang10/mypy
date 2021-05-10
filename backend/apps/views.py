@@ -8,7 +8,7 @@ import shutil
 import runpy
 from zipfile import ZipFile
 from PIL import Image
-from apps.functions import detect_main_function, extract_recursively, get_modules, replace_with_appropriates, write_docker_compose, write_dockerfile, write_flask_app
+from apps.functions import TYPES, detect_main_function, extract_recursively, get_modules, input_to_sys_args, replace_with_appropriates, write_docker_compose, write_dockerfile, write_flask_app, write_flask_middleware
 from common.pagination import ThreeFigurePagination
 from rest_framework.parsers import MultiPartParser
 # from common.functions import get_cookie
@@ -50,7 +50,6 @@ class CreateAppView(CreateAPIView):
             description = post_data['description']
             created_by = CustomUser.objects.get(id=user_id)
             app_source = post_data['app']
-            has_file_input = json.loads(post_data['has_file_input'])
             cover_img_source = post_data['cover_img']
             if cover_img_source == 'undefined':
                 cover_img_source = False
@@ -69,7 +68,6 @@ class CreateAppView(CreateAPIView):
                 created_by=created_by,
                 app='',
                 cover_img=None,
-                has_file_input=has_file_input,
                 server_number=SERVER_NUMBER,
                 port=new_port
             )
@@ -103,9 +101,9 @@ class CreateAppView(CreateAPIView):
             os.rename(root_directory, script_directory)
 
             # Collect python script path for modification
-
             py_dirs = []
             new_dirs = []
+
             # Delete root_name on paths in dirs
             for path in dirs:
                 levels = path.split('/')
@@ -119,22 +117,25 @@ class CreateAppView(CreateAPIView):
                     py_dirs.append(item)
 
             # Modify codes
-            for file_path in py_dirs:
-                # Read code
-                with open(os.path.join(script_directory, file_path), 'r') as f:
-                    codelines = f.readlines()
-                # Modify code
-                with open(os.path.join(script_directory, file_path), 'w') as f:
-                    # f.write('import os\n')
-                    # f.write(
-                    #     f"with open('{os.path.join(save_directory,'input/__args.py')}', 'r') as f:\n")
-                    # f.write('    __code = f.read()\n')
-                    # f.write('exec(__code)\n')
-                    specs_list = []
-                    for codeline in codelines:
-                        # modules = get_modules(dirs)
-                        specs, converted = replace_with_appropriates(
-                            codeline, file_path)
+            index_directory = os.path.join(script_directory, 'index.py')
+            # for file_path in py_dirs:
+            # Read code
+            with open(os.path.join(script_directory, 'index.py'), 'r') as f:
+                codelines = f.readlines()
+            # Modify code
+            with open(os.path.join(script_directory, 'index.py'), 'w') as f:
+                # f.write('import os\n')
+                # f.write(
+                #     f"with open('{os.path.join(save_directory,'input/__args.py')}', 'r') as f:\n")
+                # f.write('    __code = f.read()\n')
+                # f.write('exec(__code)\n')
+                specs_list = []
+                walking = True
+                for codeline in codelines:
+                    # modules = get_modules(dirs)
+                    if codeline.split(' ')[0] not in ['from', 'import'] and walking:
+                        specs, converted = input_to_sys_args(
+                            codeline, 'index.py')
                         if converted:
                             f.write(converted)
                         # Create Input Specs if it exists
@@ -146,7 +147,10 @@ class CreateAppView(CreateAPIView):
                                 app=App.objects.get(id=new_id)
                             )
                             specs_list.append(spec)
-            index_directory = os.path.join(script_directory, 'index.py')
+                        if codeline.split(' ')[0] == 'def':
+                            walking = False
+                    else:
+                        f.write(codeline)
             with open(index_directory, 'r') as f:
                 codelines = f.readlines()
             with open(index_directory, 'w') as f:
@@ -154,7 +158,10 @@ class CreateAppView(CreateAPIView):
                 for spec in specs_list:
                     spec_name = spec['name']
                     spec_type = spec['type']
-                    new_line = f"\t{spec_name}={spec_type}(__variables['{spec_name}'])\n"
+                    if spec_type in TYPES:
+                        new_line = f"\t{spec_name}={spec_type}(__variables['{spec_name}'])\n"
+                    else:
+                        new_line = f"\t{spec_name}=__files['{spec_name}']"
                     to_inject.append(new_line)
                 for codeline in codelines:
                     if detect_main_function(codeline):
@@ -205,20 +212,20 @@ class CreateAppView(CreateAPIView):
             # shutil.rmtree(script_directory)
 
             # Make folders which will used on execution
-            log_dir = os.path.join(save_directory, 'log')
-            input_dir = os.path.join(save_directory, 'input')
-            output_dir = os.path.join(save_directory, 'output')
-            data_dir = os.path.join(save_directory, 'data')
+            # log_dir = os.path.join(save_directory, 'log')
+            # input_dir = os.path.join(save_directory, 'input')
+            # output_dir = os.path.join(save_directory, 'output')
+            # data_dir = os.path.join(save_directory, 'data')
             static_dir = os.path.join(save_directory, 'static')
             # Make sure to support dependencies installation with requirements.txt
-            dependencies_dir = os.path.join(script_directory, '__dependencies')
-            server_dependencies_dir = os.path.join(
-                save_directory, 'dependencies')
-            os.mkdir(log_dir)
-            os.mkdir(input_dir)
-            os.mkdir(output_dir)
-            os.mkdir(data_dir)
-            os.mkdir(static_dir)
+            # dependencies_dir = os.path.join(script_directory, '__dependencies')
+            # server_dependencies_dir = os.path.join(
+            #     save_directory, 'dependencies')
+            # os.mkdir(log_dir)
+            # os.mkdir(input_dir)
+            # os.mkdir(output_dir)
+            # os.mkdir(data_dir)
+            # os.mkdir(static_dir)
 
             # Save cover image if there is cover image
             if cover_img_source:
@@ -229,11 +236,11 @@ class CreateAppView(CreateAPIView):
                 cover_img_directory = False
 
             # Make __args.py which will be base of inputs
-            if DEBUG:
-                args_script = os.path.join(STATICFILES_DIRS[0], '__args.py')
-            else:
-                args_script = os.path.join(STATIC_ROOT, '__args.py')
-            shutil.copy(args_script, input_dir)
+            # if DEBUG:
+            #     args_script = os.path.join(STATICFILES_DIRS[0], '__args.py')
+            # else:
+            #     args_script = os.path.join(STATIC_ROOT, '__args.py')
+            # shutil.copy(args_script, input_dir)
 
             # Make flask app
             with open(os.path.join(script_directory, 'app.py'), 'w') as f:

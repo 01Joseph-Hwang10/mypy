@@ -60,10 +60,6 @@ function create( {
 					<input className='app' name='app' type='file' accept='.zip' required />
 					<label htmlFor='image'>App Cover Image</label>
 					<input className='coverImg' name='cover_img' type='file' accept='image/*' />
-					<div className="hasFileInputWrapper">
-						<label htmlFor='hasFileInput'>Do App Has File Input?</label>
-						<input className='hasFileInput' name='has_file_input' type='checkbox' />
-					</div>
 					<button>Create</button>
 				</form>
 				{ IsFirstTime ? ( <></> ) : (

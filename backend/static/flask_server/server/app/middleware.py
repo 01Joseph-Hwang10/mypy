@@ -5,7 +5,7 @@ import json
 
 class FileSizeValidator:
 
-    def __call__(self, *args: Any, **kwds: Any) -> Any:
+    def __call__(self, *args, **kwargs):
         if json.loads(request.form['has_file_input']):
             for file in request.files:
                 max_size = 10 * 1048576

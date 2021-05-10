@@ -9,7 +9,7 @@ function SideBar() {
 			<div className="sideBar__aboutApp">
 				<span>MYPY: Python app everywhere!</span>
 				<span>
-                    MYPY serves your python app online! 
+                    MYPY serves your python app {'&'} api online! 
 					<Link href='/about'>Learn more!</Link>
 				</span>
 			</div>

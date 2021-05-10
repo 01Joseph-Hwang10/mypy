@@ -28,7 +28,7 @@ function quickStart() {
 					</span>
 					<span className='breakLine'></span>
 					<span>
-						def index():
+						def main():
 						<strong> &lt;= This name is mandatory too!</strong>
 					</span>
 					<span className="comment tabbed"># we&apos;ll execute our codes here</span>
@@ -38,23 +38,23 @@ function quickStart() {
 					Then, we&apos;ll recieve three inputs. 
 					Two of them is integers which will be calculated, 
 					and the other one is the type of calculation we&apos;ll operate.
-					The important thing here is that user inputs should be placed ONLY in &quot;index.py&quot; 
-					as global variables.
+					You can define the user input by assigning a type of it, 
+					before the &quot;main&quot; function is defined.
 				</p>
 				<CodeBox>
 					<span className="comment"># index.py</span>
 					<span className="breakLine"></span>
 					<span>
-						num0 = float(input(&quot;First number to calculate&quot;))
+						num1 = float()
 					</span>
 					<span>
-						num1 = float(input(&quot;Second number to calculate&quot;))
+						num2 = float()
 					</span>
 					<span>
-						operation = input(&quot;Calculation to operate&quot;)
+						operation = str()
 					</span>
 					<span className="breakLine"></span>
-					<span>def index():</span>
+					<span>def main():</span>
 					<span className="breakLine"></span>
 					<span className="comment tabbed"># we&apos;ll execute our codes here</span>
 					<span className="breakLine"></span>
@@ -105,18 +105,18 @@ function quickStart() {
 					<span>from calculation import calculate</span>
 					<span className="breakLine"></span>
 					<span>
-						num0 = float(input(&quot;First number to calculate&quot;))
+						num1 = float()
 					</span>
 					<span>
-						num1 = float(input(&quot;Second number to calculate&quot;))
+						num2 = float()
 					</span>
 					<span>
-						operation = input(&quot;Calculation to operate&quot;)
+						operation = str()
 					</span>
 					<span className="breakLine"></span>
-					<span>def index():</span>
+					<span>def main():</span>
 					<span className="breakLine"></span>
-					<span className="tabbed">result = calculate(num0, num1, operation)</span>
+					<span className="tabbed">result = calculate(num1, num2, operation)</span>
 					<span className="breakLine"></span>
 					<span className="tabbed">return result</span>
 					<span className="breakLine"></span>

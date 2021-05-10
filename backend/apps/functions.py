@@ -67,16 +67,15 @@ banned_extension_source = os.path.join(
 with open(banned_extension_source, 'r') as f:
 
     BANNED_EXTENSIONS = [
-        extension.replace(' ', '')[:-1] for extension in f.readlines()
+        str(extension).replace(' ', '')[:-1] for extension in f.readlines()
     ]
 
 
 def input_to_sys_args(codeline, file_path):
 
     if file_path == 'index.py':
-        code = str(codeline)
-
-        code = code.replace(' ', '')
+        code = str(codeline).replace(' ', '').replace(
+            '\t', '').replace('\n', '')
 
         for i in range(len(code)):
 
@@ -96,22 +95,25 @@ def input_to_sys_args(codeline, file_path):
                 return [input_spec], False
             else:
                 variable_type = [s for s in spec[1][1:-1].split(',')]
-                file_types = str()
+                file_types = ''
+                initial = True
                 for file_type in variable_type:
-                    if file_type[0] != '.':
-                        raise SyntaxError(
-                            'Not a valid file extension at input!!')
-                    if file_type in BANNED_EXTENSIONS:
-                        raise SyntaxError(
-                            f'Extension "{file_type}"" not allowed!!')
-                    file_types = file_types + f', {file_type}'
-                file_types = file_types[2:]
-                input_spec = {
-                    'name': variable_name,
-                    'descripiton': f'Please give the input with type of "{file_types}"',
-                    'type': file_types
-                }
-                return [input_spec], False
+                    if file_type[0] == '.':
+                        initial = False
+                        if file_type[1:] not in BANNED_EXTENSIONS:
+                            file_types = file_types + f', {file_type}'
+                    else:
+                        break
+                if len(file_types) == 0 and initial:
+                    return [], codeline
+                else:
+                    file_types = file_types[2:]
+                    input_spec = {
+                        'name': variable_name,
+                        'descripiton': f'Please give the input with type of "{file_types}"',
+                        'type': file_types
+                    }
+                    return [input_spec], False
 
     return [], codeline
 
@@ -219,7 +221,7 @@ def write_flask_app(interface, name, output_type):
         codelines = f.readlines()
 
     for codeline in codelines:
-        interface.write(codeline.replace('__NAME', name))
+        interface.write(codeline.replace('__NAME', str(name)))
     interface.write('if __name__ == "__main__":\n')
 
     if DEBUG:
@@ -250,4 +252,4 @@ def write_docker_compose(interface, port):
         codelines = f.readlines()
 
     for codeline in codelines:
-        interface.write(codeline.replace('__PORT', port))
+        interface.write(codeline.replace('__PORT', str(port)))

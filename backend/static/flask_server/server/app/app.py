@@ -1,12 +1,10 @@
 import json
+import os
 from flask import Flask, redirect, request, Response
 from flask_cors import cross_origin
 from __main import execute
-from middleware import Middleware
 
 app = Flask(__name__)
-
-app.wsgi_app = Middleware(app.wsgi_app)
 
 
 @app.route('/')
@@ -24,8 +22,13 @@ def api():
     try:
         if request.method == "POST":
             # Everything should be multipart/form-data
-            input_data = json.loads[request.form['variables']]
+            input_data = json.loads(request.form['variables'])
             if json.loads(request.form['has_file_input']):
+                for file in request.files:
+                    max_size = 10 * 1048576
+                    if os.stat(file).st_size > max_size:
+                        error_msg = 'File is over 10 mb which is not allowed!!'
+                        raise BufferError(error_msg)
                 input_files = request.files
             else:
                 input_files = dict()

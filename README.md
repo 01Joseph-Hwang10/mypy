@@ -2,6 +2,8 @@
 
 ## Todo
 
-- Modify frontend axios
+- Complete tutorial page (Including self made API guide)
 
-- Flask app side minimum authentication
+- Social login
+
+- Update input spec view, Update app view
