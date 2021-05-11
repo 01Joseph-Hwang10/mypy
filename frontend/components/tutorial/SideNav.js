@@ -15,22 +15,25 @@ function SideNav() {
 	return (
 		<div className='tutorial__sideNav'>
 			<Link onClick href='/tutorial/ch0'>
-				<button className="btn0" onClick={indicatePage}>Quick Start</button>
+				<button className="btn0" onClick={indicatePage}>About Mypy</button>
 			</Link>
 			<Link onClick href='/tutorial/ch1'>
-				<button className="btn1" onClick={indicatePage}>Deploying on mypy</button>
+				<button className="btn1" onClick={indicatePage}>Quick Start</button>
 			</Link>
 			<Link onClick href='/tutorial/ch2'>
-				<button className="btn2" onClick={indicatePage}>Log and Output</button>
+				<button className="btn2" onClick={indicatePage}>Deploying on mypy</button>
 			</Link>
 			<Link onClick href='/tutorial/ch3'>
-				<button className="btn3" onClick={indicatePage}>Input</button>
+				<button className="btn3" onClick={indicatePage}>Log and Output</button>
 			</Link>
 			<Link onClick href='/tutorial/ch4'>
-				<button className="btn4" onClick={indicatePage}>File I/O</button>
+				<button className="btn4" onClick={indicatePage}>Input</button>
 			</Link>
 			<Link onClick href='/tutorial/ch5'>
 				<button className="btn5" onClick={indicatePage}>Customize app page</button>
+			</Link>
+			<Link onClick href='/tutorial/ch6'>
+				<button className="btn6" onClick={indicatePage}>Using as API</button>
 			</Link>
 		</div>
 	);

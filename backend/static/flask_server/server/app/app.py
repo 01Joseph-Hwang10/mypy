@@ -24,6 +24,9 @@ def api():
             # Everything should be multipart/form-data
             input_data = json.loads(request.form['variables'])
             if json.loads(request.form['has_file_input']):
+                if len(request.files) > 4:
+                    error_msg = 'Too many files which is not allowed!!'
+                    raise BufferError(error_msg)
                 for file in request.files:
                     max_size = 10 * 1048576
                     if os.stat(file).st_size > max_size:

@@ -31,15 +31,19 @@ function create( {
 	const createAppSubmit = async ( e ) => {
 		e.preventDefault();
 		Loading();
+		const button = e.target.querySelector( 'button' );
+		button.disabled = true;
 		let formData = createAppDataForm( e );
 		formData.append( 'user_id', Number( UserId ) );
 		const { ok, data, } = await createApp( formData );
 		if ( ok ) {
 			const { id, } = data;
 			CreateAppSuccessful();
+			button.disabled = false;
 			router.push( `/app/${id}` );
 		} else {
 			CreateAppError();
+			button.disabled = false;
 		}
 	};
 

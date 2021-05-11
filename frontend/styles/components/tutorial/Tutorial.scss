@@ -162,3 +162,25 @@ $tutorial-content-lg: 80%;
         }
     }
 }
+
+
+.tutorial__about {
+    .feedbackButtonWrapper {
+        width: 10rem;
+        margin-bottom: 3rem;
+        button {
+            @extend %base-basic-button;
+            background-color: $teal;
+            @extend %rounded-lg;
+            width: 100%;
+            transition: filter 0.2s ease;
+            padding: 0.5rem 0;
+            font-weight: 600;
+        }
+    
+        button:hover {
+            cursor: pointer;
+            filter: brightness(1.1);
+        }
+    }
+}

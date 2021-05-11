@@ -2,6 +2,7 @@
 FROM python:3.6.12-alpine
 RUN mkdir /app
 RUN mkdir /log
+# RUN mkdir /files
 WORKDIR /app
 EXPOSE 5000
 ENV PATH="/app:${PATH}"

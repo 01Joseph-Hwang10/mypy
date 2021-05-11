@@ -17,16 +17,21 @@ function feedback( {
 	const submitFeedback = async ( e ) => {
 		setLoading( true );
 		e.preventDefault();
-		const textareaContent = e.target.querySelector( 'textarea' ).value;
+		const button = e.target.querySelector( 'button' );
+		button.diabled = true;
+		const email = e.target.querySelector( 'input' ).value | 'anonymous';
+		const content = e.target.querySelector( 'textarea' ).value;
 		const { status, } = await axios
-			.post( CREATE_FEEDBACK, { 'content' : textareaContent, }, { withCredentials : true, } );
-
+			.post( CREATE_FEEDBACK, { email, content, }, { withCredentials : true, } );
+		
 		if ( status === 200 ) {
 			setLoading( false );
+			button.diabled = false;
 			router.push( '/' );
 			ShowMessage( { message : 'Thanks for your feedback :)', level : 'info', } );
 		} else {
 			setLoading( false );
+			button.diabled = false;
 			ShowMessage( { message : 'Sending feedback failed with error. Sorry for the inconvenience :/', level : 'error', } );
 		}
 	};
@@ -35,6 +40,7 @@ function feedback( {
 		<div className="feedbackContentWrapper">
 			<form onSubmit={submitFeedback}>
 				<span>Sending Feedback</span>
+				<input name="email" placeholder="Your Email(To response your feedback. Optional)"></input>
 				<TextareaAutosize name='content' required placeholder='Thank you so much for your feedback!!' />
 				<button>{loading ? 'Loading...' : 'Send'}</button>
 			</form>

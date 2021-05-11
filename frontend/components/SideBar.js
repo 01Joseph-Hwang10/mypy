@@ -7,10 +7,10 @@ function SideBar() {
 		<div className="sideBar">
 			{/* <Search placeholder="Search for python IPO apps!" /> */}
 			<div className="sideBar__aboutApp">
-				<span>MYPY: Python app everywhere!</span>
+				<span>MYPY: The fastest way to serve a python application!</span>
 				<span>
-                    MYPY serves your python app {'&'} api online! 
-					<Link href='/about'>Learn more!</Link>
+                    Serve your python app {'&'} api online with no devOps!
+					<Link href='/tutorial/ch0'>Learn more!</Link>
 				</span>
 			</div>
 			<div className="sideBar__buttons">

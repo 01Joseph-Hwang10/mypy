@@ -59,22 +59,39 @@
                 margin-bottom: 1rem;
             }
 
+            .link {
+                margin-bottom: 0.5rem;
+                i {
+                    text-decoration: underline;
+                    color: $python-blue;
+                }
+            }
+
             h4 {
                 font-size: x-large;
                 font-weight: bold;
                 color: $black-edge;
+                margin-bottom: 0.5rem;
             }
 
             button {
-                background-color: tomato;
                 @extend %rounded-lg;
                 margin-top: 0.5rem;
                 padding: 0.5rem 0;
                 width: 100%;
-                color: $white-edge;
                 font-weight: 600;
                 font-size: large;
                 @extend %filter-on-change;
+            }
+
+            .deleteButton {
+                background-color: tomato;
+                color: $white-edge;
+            }
+
+            .updateButton {
+                background-color: $teal;
+                color: $white-edge;
             }
 
             button:hover {
@@ -161,12 +178,6 @@ section {
 @include small {
     section {
         width: $p11-12;
-    }
-
-    #appRoot {
-        .appHeader {
-            grid-template-columns: 0.9fr 1.1fr;
-        }
     }
 }
 

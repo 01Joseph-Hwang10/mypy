@@ -28,9 +28,17 @@ function MypySideBar( {
 
 	const toggleButton = async ( e ) => {
 		if ( isEditing ) {
+			const parent = e.target.parentNode;
+			const buttons = parent.querySelectorAll( 'button' );
+			buttons.forEach( button => {
+				button.disabled = true;
+			} );
 			setIsSubmitting( true );
 			const [ formData, object, ] = updateUserDataForm( e );
 			const { ok, data, } = await updateUser( Me.id, formData );
+			buttons.forEach( button => {
+				button.disabled = false;
+			} );
 			if ( ok ) {
 				const newMe = {
 					...Me,

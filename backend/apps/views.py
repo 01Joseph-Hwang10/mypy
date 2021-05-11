@@ -118,7 +118,6 @@ class CreateAppView(CreateAPIView):
 
             # Modify codes
             index_directory = os.path.join(script_directory, 'index.py')
-            # for file_path in py_dirs:
             # Read code
             with open(os.path.join(script_directory, 'index.py'), 'r') as f:
                 codelines = f.readlines()
@@ -151,6 +150,13 @@ class CreateAppView(CreateAPIView):
                             walking = False
                     else:
                         f.write(codeline)
+                files_count = 0
+                for spec in specs_list:
+                    if spec['type'] not in TYPES:
+                        files_count += 1
+                if files_count > 4:
+                    raise BufferError(
+                        'Number of file input should not exceed 3!!')
             with open(index_directory, 'r') as f:
                 codelines = f.readlines()
             with open(index_directory, 'w') as f:
@@ -169,6 +175,14 @@ class CreateAppView(CreateAPIView):
                             f.write(injecting_codeline)
                     else:
                         f.write(codeline)
+
+            # for file_path in py_dirs:
+            #     with open(os.path.join(script_directory, file_path), 'r') as f:
+            #         codelines = f.readlines()
+            #     with open(os.path.join(script_directory, file_path), 'w') as f:
+            #         f.write('__FILES_ROOT = "/files/files"\n')
+            #         for codeline in codelines:
+            #             f.write(codeline)
 
             """
             app_path = os.path.join(save_directory, f'{root_name}.zip')

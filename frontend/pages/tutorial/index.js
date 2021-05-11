@@ -16,6 +16,11 @@ function Tutorial() {
 				<div className="tutorial_onContentNavigation">
 					<Link href='/tutorial/ch0'>
 						<span>
+							About Mypy <i className="bi bi-arrow-right-circle"></i>
+						</span>
+					</Link>
+					<Link href='/tutorial/ch1'>
+						<span>
 							Quick Start <i className="bi bi-arrow-right-circle"></i>
 						</span>
 					</Link>

@@ -12,8 +12,12 @@ class CreateFeedBackView(CreateAPIView):
     def post(self, request, *args, **kwargs):
         try:
             post_data = request.data
+            email = post_data['email']
             content = post_data['content']
-            FeedBack.objects.create(content=content)
+            FeedBack.objects.create(
+                email=email,
+                content=content
+            )
             return Response(status=200, data="Feedback successfully recieved")
         except Exception as e:
             print(e)

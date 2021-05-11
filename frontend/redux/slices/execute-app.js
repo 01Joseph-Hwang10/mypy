@@ -48,7 +48,8 @@ export const executeApp = async ( postData, { serverNumber, port, name, } ) => {
 	const postUrl = `${BASE_APP_URL}:${port}/${name}`;
     
 	try {
-		const {  data, } = await axios.post( postUrl, postData );
+		const result = await axios.post( postUrl, postData );
+		const { data, } = result;
 	
 		return {
 			ok : true,

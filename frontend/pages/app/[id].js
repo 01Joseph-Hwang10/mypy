@@ -10,6 +10,7 @@ import { deleteApp as axiosDeleteApp } from '@slices/delete-app';
 import executeAppDataForm from '@form/executeAppDataForm';
 import Input from '@components/inputs/Input';
 import File from '@components/inputs/File';
+import { BASE_APP_URL } from '@src/urls';
 
 
 function AppDetail( {
@@ -112,9 +113,15 @@ function AppDetail( {
 				<div className="appHeader__generalInfo">
 					<h2>{name}</h2>
 					<h3>Exports: {exports}</h3>
+					<span className="link">API Endpoint: <i>{`${BASE_APP_URL}:${port}/${name}`}</i></span>
 					<h4>Created by: {CreatedUserName}</h4>
 					{
-						UserId == CreatedUserId && <button onClick={deleteApp}>Delete</button>
+						UserId == CreatedUserId && (
+							<>
+								<button className="updateButton">Update</button>
+								<button className="deleteButton" onClick={deleteApp}>Delete</button>
+							</>
+						)
 					}
 				</div>
 				<div className="appHeader__description">
