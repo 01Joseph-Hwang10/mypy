@@ -127,19 +127,21 @@ $quick-start-content-lg: 70%;
                 filter: brightness(1.1)
             }
 
-            .hasFileInputWrapper {
-                @extend %flex-box;
-                justify-content: space-between;
+            .selectionWrapper {
+                display: flex;
+                align-items: flex-start;
                 width: 100%;
-                margin-bottom: 1rem;
+                justify-content: space-between;
+                margin-top: 0.25rem;
+                margin-bottom: 0.5rem;
+                font-weight: 600;
+            }
 
-                input, label {
-                    width: auto;
-                }
-
-                label {
-                    margin: 0;
-                }
+            .errorMessage {
+                line-height: 1.1rem;
+                color: tomato;
+                text-align: left;
+                margin-bottom: 0.5rem;
             }
         }
     }

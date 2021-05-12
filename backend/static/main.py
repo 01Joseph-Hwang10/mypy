@@ -58,7 +58,7 @@ def execute(
             result = main(global_variables, global_files)
         except Exception as e:
             fw.write(f'{str(e)}\n')
-            result = 'An Error occured. Please reference the log'
+            result = str(e)
             log_array.append(str(e))
         sys.stdout = sys.__stdout__
         sys.stderr = sys.__stderr__

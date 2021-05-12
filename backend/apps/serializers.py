@@ -11,7 +11,7 @@ class AppSerializer(Serializer):
     created_by_id = PrimaryKeyRelatedField(read_only=True)
     exports = serializers.IntegerField(required=False)
     app = serializers.CharField(required=False)
-    cover_img = serializers.ImageField(required=False)
+    cover_img = serializers.CharField(required=False)
     server_number = serializers.IntegerField()
     port = serializers.IntegerField()
     output_type = serializers.CharField(max_length=20)

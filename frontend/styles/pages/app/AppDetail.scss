@@ -28,6 +28,27 @@
         backdrop-filter: blur(5px);
     }
 
+    @include small {
+        .pseudoBackgroundImg, .backgroundImg {
+            height: 20rem;
+            font-size: 4rem;
+        }
+    }
+    
+    @include large {
+        .pseudoBackgroundImg, .backgroundImg {
+            height: 30rem;
+            font-size: 6rem;
+        }
+    }
+    
+    @include xx-large {
+        .pseudoBackgroundImg, .backgroundImg {
+            height: 40rem;
+            font-size: 8rem;
+        }
+    }
+
     .appHeader {
         display: grid;
         grid-template-columns: repeat(auto-fit, 1fr);
@@ -43,61 +64,93 @@
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
-            align-items: flex-start;
+            align-items: center;
 
-            h2 {
-                font-size: xx-large;
-                font-weight: bold;
-                color: $black-edge;
-                margin-bottom: 1rem;
-            }
+            .infoWrapper {
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start;
+                align-items: center;
 
-            h3 {
-                font-size: large;
-                font-weight: 600;
-                color: $black-edge;
-                margin-bottom: 1rem;
-            }
-
-            .link {
-                margin-bottom: 0.5rem;
-                i {
-                    text-decoration: underline;
-                    color: $python-blue;
+                h2 {
+                    font-size: xx-large;
+                    font-weight: bold;
+                    color: $black-edge;
+                    margin-bottom: 1rem;
+                }
+    
+                h3 {
+                    font-size: large;
+                    font-weight: 600;
+                    color: $black-edge;
+                    margin-bottom: 1rem;
+                }
+    
+                .link {
+                    margin-bottom: 0.5rem;
+                    i {
+                        text-decoration: underline;
+                        color: $python-blue;
+                    }
+                }
+    
+                h4 {
+                    font-size: x-large;
+                    font-weight: bold;
+                    color: $black-edge;
+                    margin-bottom: 0.5rem;
                 }
             }
 
-            h4 {
-                font-size: x-large;
-                font-weight: bold;
-                color: $black-edge;
-                margin-bottom: 0.5rem;
-            }
+            .buttonWrapper {
 
-            button {
-                @extend %rounded-lg;
-                margin-top: 0.5rem;
-                padding: 0.5rem 0;
                 width: 100%;
-                font-weight: 600;
-                font-size: large;
-                @extend %filter-on-change;
-            }
 
-            .deleteButton {
-                background-color: tomato;
-                color: $white-edge;
-            }
-
-            .updateButton {
-                background-color: $teal;
-                color: $white-edge;
+                button {
+                    @extend %rounded-lg;
+                    margin-top: 0.5rem;
+                    padding: 0.5rem 0;
+                    width: 100%;
+                    font-weight: 600;
+                    font-size: large;
+                    @extend %filter-on-change;
+                }
+    
+                .deleteButton {
+                    background-color: tomato;
+                    color: $white-edge;
+                }
+    
+                .updateButton {
+                    background-color: $teal;
+                    color: $white-edge;
+                }
             }
 
             button:hover {
                 cursor: pointer;
                 filter: brightness(1.1);
             }
+
+        }
+
+        @include medium {
+            .appHeader__generalInfo {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                width: 100%;
+                .infoWrapper {
+                    align-items: flex-start;
+                }
+                .buttonWrapper {
+                    width: auto;
+                    button {
+                        min-width: 10rem;
+                    }
+                }
+            }    
         }
 
         .appHeader__description {
@@ -135,6 +188,7 @@
                 padding: 1rem;
                 @extend %rounded-lg;
                 border: 2px solid $line;
+                font-weight: 600;
             }
         }
         .outputContainer__log {

@@ -24,11 +24,10 @@ export const {
 		loading : ( state ) => {
 			state.loading = true;
 		},
-		executeAppSuccessful : ( state, { payload : { result, log, }, } ) => {
+		executeAppSuccessful : ( state, { payload,  } ) => {
 			state.isSuccessful = true;
 			state.loading = false;
-			state.result = result.toString(); // For temporal
-			state.log = log;
+			state.result = payload;
 		},
 		executeAppError : ( state, { payload, } ) => {
 			state.isSuccessful = false;

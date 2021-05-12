@@ -9,8 +9,8 @@ import { retrieveApp as axiosRetrieveApp } from '@slices/retrieve-app';
 import { deleteApp as axiosDeleteApp } from '@slices/delete-app';
 import executeAppDataForm from '@form/executeAppDataForm';
 import Input from '@components/inputs/Input';
-import File from '@components/inputs/File';
-import { BASE_APP_URL } from '@src/urls';
+import { BASE_APP_URL, MEDIA_URL } from '@src/urls';
+import ResultWrapper from '@components/outputs/Result';
 
 
 function AppDetail( {
@@ -103,7 +103,7 @@ function AppDetail( {
 				cover_img ? (
 					<div 
 						className='backgroundImg'
-						style={{ backgroundImage : cover_img, }}
+						style={{ backgroundImage : `url(${MEDIA_URL}${cover_img})`, }}
 					>{name}</div>
 				) : (
 					<div className='pseudoBackgroundImg'>{name}</div>
@@ -111,18 +111,22 @@ function AppDetail( {
 			}
 			<section className="appHeader">
 				<div className="appHeader__generalInfo">
-					<h2>{name}</h2>
-					<h3>Exports: {exports}</h3>
-					<span className="link">API Endpoint: <i>{`${BASE_APP_URL}:${port}/${name}`}</i></span>
-					<h4>Created by: {CreatedUserName}</h4>
-					{
-						UserId == CreatedUserId && (
-							<>
-								<button className="updateButton">Update</button>
-								<button className="deleteButton" onClick={deleteApp}>Delete</button>
-							</>
-						)
-					}
+					<div className='infoWrapper'>
+						<h2>{name}</h2>
+						<h3>Exports: {exports}</h3>
+						<span className="link">API Endpoint: <i>{`${BASE_APP_URL}:${port}/${name}`}</i></span>
+						<h4>Created by: {CreatedUserName}</h4>
+					</div>
+					<div className="buttonWrapper">
+						{
+							UserId == CreatedUserId && (
+								<>
+									<button className="updateButton">Update</button>
+									<button className="deleteButton" onClick={deleteApp}>Delete</button>
+								</>
+							)
+						}
+					</div>
 				</div>
 				<div className="appHeader__description">
 					<p>{description}</p>
@@ -150,12 +154,15 @@ function AppDetail( {
 							ExecuteIsLoading && Result !== null ? (
 								<div className="outputContainer__loading">Loading...</div>
 							) : (
-								<>{Result}</>
+								<ResultWrapper 
+									outputType={output_type}
+									result={Result}
+								/>
 							)
 						}
 					</div>
 				</div>
-				<div className="outputContainer__log">
+				{/* <div className="outputContainer__log">
 					<h2 className="subject">Log</h2>
 					<div className="logWrapper">
 						{
@@ -172,7 +179,7 @@ function AppDetail( {
 							)
 						}
 					</div>
-				</div>
+				</div> */}
 			</section>
 		</div>
 	);

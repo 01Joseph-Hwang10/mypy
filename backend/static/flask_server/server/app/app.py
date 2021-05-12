@@ -1,13 +1,12 @@
 import json
 import os
 from flask import Flask, redirect, request, Response
-from flask.helpers import send_file
 from flask_cors import cross_origin
 from __main import execute
 
 app = Flask(__name__)
 
-__MIMETYPE = '__MIMETYPE'
+__MIMETYPE = '$MIMETYPE'
 
 
 @app.route('/')
@@ -17,7 +16,7 @@ def root():
     return redirect('http://localhost:3000')
 
 
-@app.route('/__NAME', methods=["GET", "POST"])
+@app.route('/$NAME', methods=["GET", "POST"])
 @cross_origin()
 def api():
 
@@ -46,22 +45,16 @@ def api():
 
         if __MIMETYPE == 'application/json':
             data = json.dumps(result)
-            return Response(response=data, status=200, mimetype=__MIMETYPE)
+            return Response(response=json.dumps(data), status=200, mimetype=__MIMETYPE)
 
-        if __MIMETYPE == 'text/*':
-            data = result
-            return Response(response=data, status=200, mimetype=__MIMETYPE)
+        if __MIMETYPE == 'text/markdown':
+            data = markdown(result)
+            return Response(response=data, status=200, mimetype='text/html')
 
-        if __MIMETYPE == 'image/*':
-            data = result
-            return send_file(data, mimetype=__MIMETYPE)
+        # if __MIMETYPE == 'text/csv':
+        #     data = result
+        #     return Response(response=data, status=200, mimetype=__MIMETYPE)
 
-        if __MIMETYPE == 'audio':
-            data = result
-            return send_file(data, mimetype=__MIMETYPE)
-
-        data = result
-
-        return Response(response=data, status=200)
+        return Response(response=result, status=200, mimetype='text/plain')
     except Exception as e:
         return Response(response=json.dumps(e), status=400)

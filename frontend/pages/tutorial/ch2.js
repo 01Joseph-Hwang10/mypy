@@ -73,7 +73,7 @@ function deployingOnMypy() {
 					</Link>
 					<Link href='/tutorial/ch3'>
 						<span>
-							Log and Output <i className="bi bi-arrow-right-circle"></i>
+							Input <i className="bi bi-arrow-right-circle"></i>
 						</span>
 					</Link>
 				</div>

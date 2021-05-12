@@ -6,4 +6,4 @@
 
 - Update input spec view, Update app view
 
-- File Output
+- Text file output of md and txt

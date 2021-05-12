@@ -3,55 +3,142 @@ import React from 'react';
 import Link from 'next/link';
 import CodeBox from '@components/mixins/CodeBox';
 
-function logAndOutput() {
+function input() {
 	return (
 		<TutorialLayout>
-			<div className="tutorialContent__root tutorial__logAndOutput">
-				<h1>Log And Output</h1>
-				<h2>
-					We&apos;ll going to go through about logging and returning output in this chapter
-				</h2>
-				<h3>#1 Logging</h3>
+			<div className="tutorialContent__root tutorial__input">
+				<h1>Input</h1>
+				<h2>We&apos;ll see the type of inputs and how to recieve inputs from user of api consumer</h2>
 				<p>
-					If the app is executed, every message from &quot;print&quot; function will be logged and displayed at your app page.
-					It would be easier to understand that you&apos;ll going to see every message at the log as if it is like a python console.
+					To recieve client input, there are several rules to follow 
+					so that our code compiler can generate the input specification, 
+					generate input user interface for your application,
+					and deploy your app as an API.
+				</p>
+				<h3>#1. Python built in data types and what mypy supports</h3>
+				<p>
+					According to w3schools.com, there are total 14 built in data types in python:
+					str, int, float, complex, list, tuple, range, dict, set, frozenset, bool, bytes, bytearray, memoryview.
+					Among these, data types mypy supports are those of followings.
+				</p>
+				<h4>
+					Text / Numeric Types: str, int, float, complex <br />
+					Sequence / Set Types: list, tuple, set, frozenset <br />
+					Mapping Type: dict <br />
+					Boolean Type: bool <br />
+				</h4>
+				<h3>#2. How to recieve client input of python built in data types</h3>
+				<p>
+					To recieve client input, you should 
+					<strong>
+						(1) Assign the variable of type which your app wants to recieve,
+						(2) At &quot;index.py&quot; which &quot;main&quot; function exists,
+						(3) Before the &quot;main&quot; function is assigned.
+					</strong>
+					Here below is the example code of recieving integer and list input
 				</p>
 				<CodeBox>
-					<span>from some.where import some_func</span>
+					<span className="comment"># index.py</span>
 					<span className="breakLine"></span>
+					<span className="from somewhere import some_operation"></span>
+					<span className='breakLine'></span>
+					<span>iteration = int()</span>
+					<span>target_list = list()</span>
+					<span className='breakLine'></span>
 					<span>def main():</span>
-					<span className="breakLine"></span>
-					<span className="tabbed">result = some_func()</span>
-					<span className="tabbed">
-						print(&quot;Result successfully calculated!!&quot;) <strong>&lt;= This will be logged</strong>
-					</span>
-					<span className="breakLine"></span>
+					<span className='breakLine'></span>
+					<span className="tabbed">result = some_operation(target_list, iteration)</span>
 					<span className="tabbed">return result</span>
 					<span className="breakLine"></span>
 				</CodeBox>
-				<h3>#2 Output</h3>
 				<p>
-					It is recommended to return the output value of your app. 
-					Currently, there is no output type limitation at this app. 
-					Since mypy is in prototype stage, we&apos;ll soon add some restrictions of output type.
+					In this case, mypy will make two input specification, 
+					&quot;iteration&quot; with type &quot;integer&quot; and
+					&quot;target_list&quot; with type &quot;list&quot;.
+					Then based on the specification, user interface of that specific
+					input type will be generated at your mypy app page.
 					<br /> <br />
-					Side note, every response will be JSON serialized, currently.
+					You can use real value during the development. In the example above, 
+					one might set &quot;iteration&quot; as &quot;3&quot; 
+					and &quot;target_list&quot; as &quot;[2, 4, 5, 9]&quot; for test purpose.
+					Just make sure to change that variable 
+					to the input type want to recieve from client when you&apos;re about to deploy your app.
+					<br /> <br />
+					Note that input assignment should be done ONLY at &quot;index.py&quot; and
+					the variable should be used ONLY at &quot;index.py&quot;.
+					It is not able to import that variable at the other python script file.
+					That will simply not work if the app is deployed to mypy.
+				</p>
+				<h3>#3. How to recieve client input of file</h3>
+				<p>
+					To recieve file input, you should
+					<strong>
+						(1) Assign the variable of file extention 
+						(2) one file extension as string or multiple file extension as string seperated with comma,
+						(3) At &quot;index.py&quot; which &quot;main&quot; function exists,
+						(4) Before the &quot;main&quot; function is assigned. 
+					</strong>
+					Here below is the example code of recieving a file with extensions of &quot;.csv, .txt&quot;
 				</p>
 				<CodeBox>
-					<span>from some.where import some_func</span>
+					<span className="comment"># index.py</span>
+					<span className="breakLine"></span>
+					<span>from somewhere import make_specification</span>
+					<span className='breakLine'></span>
+					<span>product_list=&quot;.csv, .txt&quot;</span>
 					<span className="breakLine"></span>
 					<span>def main():</span>
 					<span className="breakLine"></span>
-					<span className="tabbed">result = some_func()</span>
-					<span className="tabbed">
-						print(&quot;Result successfully calculated!!&quot;)
-					</span>
+					<span className="tabbed">with open(product_list, &quot;r&quot;) as f:</span>
+					<span className="doubleTabbed">rows = f.readlines()</span>
 					<span className="breakLine"></span>
-					<span className="tabbed">
-						return result<strong>&lt;= Return value recommended</strong>
-					</span>
+					<span className="tabbed">specs=[]</span>
+					<span className="tabbed">for row in rows:</span>
+					<span className="doubleTabbed">spec = make_specification(row)</span>
+					<span className="doubleTabbed">specs.append(spec)</span>
+					<span className="breakLine"></span>
+					<span className="tabbed">return specs</span>
 					<span className="breakLine"></span>
 				</CodeBox>
+				{/* <p>
+					You can use the server file system during runtime. At runtime, 
+					a variable named &quot;__FILES_ROOT&quot; which is string of the path 
+					whose path can be temporarily used to store your file input.
+					Here below is another example recieving zip file with 2 .csv files zipped and storing it to server file system.
+				</p>
+				<CodeBox>
+					<span className="comment"># index.py</span>
+					<span className="breakLine"></span>
+					<span>from somewhere import process_data</span>
+					<span>from zipfile import ZipFile</span>
+					<span className='breakLine'></span>
+					<span>your_zipfile=&quot;.zip&quot;</span>
+					<span className="breakLine"></span>
+					<span>def main():</span>
+					<span className="breakLine"></span>
+					<span className='tabbed'>with ZipFile(your_zipfile) as zf:</span>
+					<span className='doubleTabbed'>for file in zf.namelist():</span>
+					<span className="tripleTabbed">zf.extract(file, __FILES_ROOT)</span>
+					<span className="breakLine"></span>
+					<span className='tabbed'>with open(os.path.join(__FILES_ROOT, &quot;your_zipfile_name/csv1.csv&quot;), &quot;r&quot;) as f:</span>
+					<span className="doubleTabbed">csv1 = f.readlines()</span>
+					<span className="breakLine"></span>
+					<span className='tabbed'>with open(os.path.join(__FILES_ROOT, &quot;your_zipfile_name/csv2.csv&quot;), &quot;r&quot;) as f:</span>
+					<span className="doubleTabbed">csv2 = f.readlines()</span>
+					<span className="tabbed comment"># Something will occur with1 files extracted from zipfile</span>
+					<span className="tabbed">processed = process_data(csv1, csv2)</span>
+					<span className="breakLine"></span>
+					<span className="tabbed">return processed</span>
+					<span className="breakLine"></span>
+				</CodeBox> */}
+				<p>
+					There are several restrictions at file input. 
+					<strong>
+						(1) Each file should not exceed 10 megabytes,
+						(2) Total file number should not exceed 3.
+					</strong>
+					Since mypy is in prototype stage, mypy is not capable to serve big, heavy files. Sorry for the inconvenience.
+				</p>
 				<div className="tutorial_onContentNavigation">
 					<Link href='/tutorial/ch2'>
 						<span>
@@ -60,7 +147,7 @@ function logAndOutput() {
 					</Link>
 					<Link href='/tutorial/ch4'>
 						<span>
-							Input <i className="bi bi-arrow-right-circle"></i>
+							Log and Output <i className="bi bi-arrow-right-circle"></i>
 						</span>
 					</Link>
 				</div>
@@ -69,4 +156,4 @@ function logAndOutput() {
 	);
 }
 
-export default logAndOutput;
+export default input;

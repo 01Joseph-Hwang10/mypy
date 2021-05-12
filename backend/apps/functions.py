@@ -1,8 +1,7 @@
 import os
-from os.path import split
 import re
 from django.core.exceptions import ValidationError
-
+from apps.constants import BANNED_EXTENSIONS, MD, STATIC_PATH, TYPES
 from config.settings import DEBUG, STATICFILES_DIRS, STATIC_ROOT
 
 
@@ -28,47 +27,6 @@ def extract_recursively(basename, namelist, interface, save_directory):
                 extract_recursively(folder.name, new_namelist, interface)
         else:
             interface.extract(full_name, save_directory + basename)
-
-
-STR = 'str'
-INT = 'int'
-FLOAT = 'float'
-COMPLEX = 'complex'
-LIST = 'list'
-TUPLE = 'tuple'
-RANGE = 'range'
-DICT = 'dict'
-SET = 'set'
-FROZENSET = 'frozenset'
-BOOL = 'bool'
-
-TYPES = [
-    STR,
-    INT,
-    FLOAT,
-    COMPLEX,
-    LIST,
-    TUPLE,
-    RANGE,
-    DICT,
-    SET,
-    FROZENSET,
-    BOOL,
-]
-
-if DEBUG:
-    STATIC_PATH = STATICFILES_DIRS[0]
-else:
-    STATIC_PATH = STATIC_ROOT
-
-banned_extension_source = os.path.join(
-    STATIC_PATH, 'src/banned_extensions.txt')
-
-with open(banned_extension_source, 'r') as f:
-
-    BANNED_EXTENSIONS = [
-        str(extension).replace(' ', '')[:-1] for extension in f.readlines()
-    ]
 
 
 def input_to_sys_args(codeline, file_path):
@@ -220,8 +178,13 @@ def write_flask_app(interface, name, output_type):
     with open(os.path.join(STATIC_PATH, 'flask_server/server/app/app.py'), 'r') as f:
         codelines = f.readlines()
 
+    if output_type == MD:
+        interface.write('from markdown import markdown\n')
+
     for codeline in codelines:
-        interface.write(codeline.replace('__NAME', str(name)))
+        new_codeline = codeline.replace('$NAME', str(
+            name)).replace('$MIMETYPE', str(output_type))
+        interface.write(new_codeline)
     interface.write('if __name__ == "__main__":\n')
 
     if DEBUG:
@@ -238,12 +201,16 @@ def write_flask_middleware(interface):
     interface.write(codelines)
 
 
-def write_dockerfile(interface):
+def write_dockerfile(interface, output_type):
 
     with open(os.path.join(STATIC_PATH, 'flask_server/server/Dockerfile'), 'r') as f:
-        codelines = f.read()
+        codelines = f.readlines()
 
-    interface.write(codelines)
+    for codeline in codelines:
+        if output_type == MD:
+            interface.write(codeline.replace('__MARKDOWN', 'markdown'))
+        else:
+            interface.write(codeline.replace('__MARKDOWN', ''))
 
 
 def write_docker_compose(interface, port):

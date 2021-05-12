@@ -18,7 +18,7 @@ function customizeAppPage() {
 				<div className="tutorial_onContentNavigation">
 					<Link href='/tutorial/ch4'>
 						<span>
-							Input <i className="bi bi-arrow-left-circle"></i>
+							Log and Output <i className="bi bi-arrow-left-circle"></i>
 						</span>
 					</Link>
 					<Link href='/tutorial/ch6'>

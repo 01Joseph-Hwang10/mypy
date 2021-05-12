@@ -33,3 +33,8 @@ export const HIGHLIGHT = '#393b44';
 export const TEAL = '#008080';
 export const PYTHON_BLUE = '#3776ab';
 export const PYTHON_YELLOW = '#ffd343';
+
+// Mimetypes
+export const JSON = 'application/json';
+export const TXT = 'text/plain';
+export const MD = 'text/markdown';

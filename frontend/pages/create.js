@@ -18,6 +18,7 @@ function create( {
 	isFirstTime : IsFirstTime,
 	userId : UserId,
 	signedIn : SignedIn,
+	error : Error,
 } ) {
 
 	const router = useRouter();
@@ -64,27 +65,17 @@ function create( {
 					<input className='app' name='app' type='file' accept='.zip' required />
 					<label htmlFor='image'>App Cover Image</label>
 					<input className='coverImg' name='cover_img' type='file' accept='image/*' />
-					<button>Create</button>
+					<div className="selectionWrapper">
+						<span htmlFor='outputType'>Output Type</span>
+						<select className="outputType" name="output_type">
+							<option value="application/json" selected>JSON</option>
+							<option value="text/markdown">Markdown</option>
+							<option value="text/plain">Plain text</option>
+						</select>
+					</div>
+					<button>{IsLoading ? 'Creating...' : 'Create'}</button>
+					{ !SignedIn && <span className="errorMessage">{Error}</span> }
 				</form>
-				{ IsFirstTime ? ( <></> ) : (
-					<>
-						{
-							IsLoading ? (
-								<div>Creating the app...</div>
-							) : (
-								<>
-									{
-										IsSuccessful ? (
-											<div>App successfully created</div>
-										) : (
-											<div>App creation failed</div>
-										)
-									}
-								</>
-							)
-						}
-					</>
-				) }
 			</div>
 		</div>
 	);
@@ -100,6 +91,7 @@ const mapStateToProps = ( state ) => {
 		isFirstTime : state.createApp.isFirstTime,
 		userId : state.auth.userId,
 		signedIn : state.auth.signedIn,
+		error : state.createApp.error,
 	};
 };
 

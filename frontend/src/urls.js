@@ -1,6 +1,9 @@
-const BASE_URL = 'http://localhost:8000/source';
+const FUNDAMENTAL_URL = 'http://localhost:8000';
+const BASE_URL = `${FUNDAMENTAL_URL}/source`;
 const API_URL = `${BASE_URL}/api`;
 const AUTH_URL = `${BASE_URL}/auth`;
+// Media
+export const MEDIA_URL = `${FUNDAMENTAL_URL}/media`;
 // Apps
 export const CREATE_APP = `${API_URL}/apps/create/`;
 export const LIST_APP = `${API_URL}/apps/list/`;

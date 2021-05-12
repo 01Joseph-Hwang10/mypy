@@ -6,10 +6,15 @@ const createAppDataForm = ( e ) => {
 	const description = form.querySelector( '.description' ).value || '';
 	const app = form.querySelector( '.app' ).files[ 0 ];
 	const coverImg = form.querySelector( '.coverImg' ).files[ 0 ];
+	const outputTypeElement = form.querySelector( '.outputType' );
+	const outputType = outputTypeElement
+		.options[ outputTypeElement.selectedIndex ]
+		.value;
 	formData.append( 'name', appName );
 	formData.append( 'description', description );
 	formData.append( 'app', app );
 	formData.append( 'cover_img', coverImg );
+	formData.append( 'output_type', outputType );
 	return formData;
 };
 

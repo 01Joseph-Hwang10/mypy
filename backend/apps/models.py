@@ -1,22 +1,11 @@
 from django.db import models
+from apps.constants import JSON, OUTPUT_TYPES_CHOICES
 from common.models import TimeStampedModel
 from config.settings import SERVER_NUMBER
 from users.models import CustomUser
 
 
 class App(TimeStampedModel):
-
-    JSON = 'application/json'
-    TEXT = 'text/*'
-    IMAGE = 'image/*'
-    AUDIO = 'audio/*'
-
-    OUTPUT_TYPES_CHOICES = (
-        (JSON, 'JSON'),
-        (TEXT, 'Text'),
-        (IMAGE, 'Image'),
-        (AUDIO, 'Audio'),
-    )
 
     name = models.CharField(max_length=50)
     description = models.TextField(max_length=300, null=True, blank=True)
@@ -28,36 +17,10 @@ class App(TimeStampedModel):
     server_number = models.IntegerField(default=SERVER_NUMBER)
     port = models.IntegerField()
     output_type = models.CharField(
-        'output_type', choices=OUTPUT_TYPES_CHOICES, default=JSON, max_length=20)
+        'output_type', choices=OUTPUT_TYPES_CHOICES, default=JSON, max_length=30)
 
 
 class InputSpec(TimeStampedModel):
-
-    STR = 'str'
-    INT = 'int'
-    FLOAT = 'float'
-    COMPLEX = 'complex'
-    LIST = 'list'
-    TUPLE = 'tuple'
-    RANGE = 'range'
-    DICT = 'dict'
-    SET = 'set'
-    FROZENSET = 'frozenset'
-    BOOL = 'bool'
-
-    TYPES_CHOICES = (
-        (STR, 'String'),
-        (INT, 'Integer'),
-        (FLOAT, 'Float'),
-        (COMPLEX, 'Complex Number'),
-        (LIST, 'List'),
-        (TUPLE, 'Tuple'),
-        (RANGE, 'Range'),
-        (DICT, 'Dictionary'),
-        (SET, 'Set'),
-        (FROZENSET, 'Frozenset'),
-        (BOOL, 'Boolean'),
-    )
 
     app = models.ForeignKey(App, on_delete=models.CASCADE,
                             related_name='input_spec')

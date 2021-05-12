@@ -8,6 +8,7 @@ import shutil
 import runpy
 from zipfile import ZipFile
 from PIL import Image
+from apps.constants import OUTPUT_TYPES
 from apps.functions import TYPES, detect_main_function, extract_recursively, get_modules, input_to_sys_args, replace_with_appropriates, write_docker_compose, write_dockerfile, write_flask_app, write_flask_middleware
 from common.pagination import ThreeFigurePagination
 from rest_framework.parsers import MultiPartParser
@@ -51,6 +52,7 @@ class CreateAppView(CreateAPIView):
             created_by = CustomUser.objects.get(id=user_id)
             app_source = post_data['app']
             cover_img_source = post_data['cover_img']
+            output_type = post_data['output_type']
             if cover_img_source == 'undefined':
                 cover_img_source = False
 
@@ -61,6 +63,10 @@ class CreateAppView(CreateAPIView):
             else:
                 new_port = int(max_port_app.port) + 1
 
+            # Check whether output type is proper
+            if output_type not in OUTPUT_TYPES:
+                raise ValueError('Not a valid output type!')
+
             # Initially create Instance
             new = App.objects.create(
                 name=name,
@@ -69,7 +75,8 @@ class CreateAppView(CreateAPIView):
                 app='',
                 cover_img=None,
                 server_number=SERVER_NUMBER,
-                port=new_port
+                port=new_port,
+                output_type=output_type
             )
 
             # Get Id out of it
@@ -239,12 +246,15 @@ class CreateAppView(CreateAPIView):
             # os.mkdir(input_dir)
             # os.mkdir(output_dir)
             # os.mkdir(data_dir)
-            # os.mkdir(static_dir)
+            os.mkdir(static_dir)
 
             # Save cover image if there is cover image
             if cover_img_source:
                 cover_img = Image.open(cover_img_source)
-                cover_img_directory = os.path.join(static_dir, 'cover_img')
+                img_extension = cover_img_source.name.split('.')[-1]
+                cover_img_directory = os.path.join(
+                    static_dir, f'cover_img.{img_extension}')
+                cover_img_uri = f'/{new_id}/static/cover_img.{img_extension}'
                 cover_img.save(cover_img_directory)
             else:
                 cover_img_directory = False
@@ -258,8 +268,7 @@ class CreateAppView(CreateAPIView):
 
             # Make flask app
             with open(os.path.join(script_directory, 'app.py'), 'w') as f:
-                # Temporary type reinforcement
-                write_flask_app(f, name, 'STRING')
+                write_flask_app(f, name, output_type)
 
             # Modularize server folder
             with open(os.path.join(server_directory, '__init__.py'), 'w') as f:
@@ -269,7 +278,7 @@ class CreateAppView(CreateAPIView):
 
             # Make api Dockerfile
             with open(os.path.join(server_directory, 'Dockerfile'), 'w') as f:
-                write_dockerfile(f)
+                write_dockerfile(f, output_type)
 
             # Make docker-compose file
             with open(os.path.join(save_directory, 'docker-compose.yml'), 'w') as f:
@@ -288,7 +297,7 @@ class CreateAppView(CreateAPIView):
             instance = App.objects.get(id=new_id)
             instance.app = save_directory
             if cover_img_directory:
-                instance.cover_img = cover_img_directory
+                instance.cover_img = cover_img_uri
             instance.save()
 
             # Return id which will be used at retrieve on frontend
@@ -305,7 +314,7 @@ class CreateAppView(CreateAPIView):
                 shutil.rmtree(save_directory)
             if new_id:
                 App.objects.filter(id=new_id).delete()
-            return Response(status=400, data='Failed creating app')
+            return Response(status=400, data=json.dumps(e))
 
 
 class ListAppView(ListAPIView):
