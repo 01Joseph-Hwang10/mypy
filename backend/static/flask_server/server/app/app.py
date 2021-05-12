@@ -1,10 +1,13 @@
 import json
 import os
 from flask import Flask, redirect, request, Response
+from flask.helpers import send_file
 from flask_cors import cross_origin
 from __main import execute
 
 app = Flask(__name__)
+
+__MIMETYPE = '__MIMETYPE'
 
 
 @app.route('/')
@@ -39,13 +42,26 @@ def api():
             input_data = dict()
             input_files = dict()
 
-        result, log_array = execute(input_data, input_files)
+        result, _ = execute(input_data, input_files)
 
-        data = {
-            'result': result,
-            'log': log_array
-        }
+        if __MIMETYPE == 'application/json':
+            data = json.dumps(result)
+            return Response(response=data, status=200, mimetype=__MIMETYPE)
 
-        return Response(response=json.dumps(data), status=200)
+        if __MIMETYPE == 'text/*':
+            data = result
+            return Response(response=data, status=200, mimetype=__MIMETYPE)
+
+        if __MIMETYPE == 'image/*':
+            data = result
+            return send_file(data, mimetype=__MIMETYPE)
+
+        if __MIMETYPE == 'audio':
+            data = result
+            return send_file(data, mimetype=__MIMETYPE)
+
+        data = result
+
+        return Response(response=data, status=200)
     except Exception as e:
         return Response(response=json.dumps(e), status=400)

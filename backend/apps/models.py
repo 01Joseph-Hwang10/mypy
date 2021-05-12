@@ -6,20 +6,16 @@ from users.models import CustomUser
 
 class App(TimeStampedModel):
 
-    STRING = 'STRING'
-    HTML = 'HTML'
-    IMAGE = 'IMAGE'
-    AUDIO = 'AUDIO'
-    VIDEO = 'VIDEO'
-    FILE = 'FILE'
+    JSON = 'application/json'
+    TEXT = 'text/*'
+    IMAGE = 'image/*'
+    AUDIO = 'audio/*'
 
     OUTPUT_TYPES_CHOICES = (
-        (STRING, 'String'),
-        (HTML, 'Html'),
+        (JSON, 'JSON'),
+        (TEXT, 'Text'),
         (IMAGE, 'Image'),
         (AUDIO, 'Audio'),
-        (VIDEO, 'Video'),
-        (FILE, 'File'),
     )
 
     name = models.CharField(max_length=50)
@@ -32,7 +28,7 @@ class App(TimeStampedModel):
     server_number = models.IntegerField(default=SERVER_NUMBER)
     port = models.IntegerField()
     output_type = models.CharField(
-        'output_type', choices=OUTPUT_TYPES_CHOICES, default=STRING, max_length=20)
+        'output_type', choices=OUTPUT_TYPES_CHOICES, default=JSON, max_length=20)
 
 
 class InputSpec(TimeStampedModel):
