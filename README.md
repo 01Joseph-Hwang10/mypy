@@ -4,7 +4,7 @@
 
 - Social login
 
-- Modify app view
+- Modify app view, input spec view (Needa make update input spec slices)
 
 <!-- - Text file output of md and txt and Image outpout -->
 

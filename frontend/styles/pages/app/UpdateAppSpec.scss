@@ -1,0 +1,69 @@
+@use '../../base';
+@use '../../borderRadius';
+@use '../../shadow';
+
+
+#appRoot {
+    width: 100%;
+
+    .updateAppSpecFormWrapper {
+        width: 100%;
+        @extend %flex-col;
+        padding-top: 2rem;
+
+        form {
+            width: $p11-12;
+            background-color: $white-edge;
+            @extend %flex-col;
+            @extend %rounded-lg;
+            @extend %shadow-lg;
+            padding: 1.5rem;
+
+            label {
+                width: 100%;
+                margin-top: 1.5rem;
+                font-weight: 600;
+                text-align: left;
+            }
+            
+            input, textarea {
+                width: 100%;
+                padding: 0.5rem;
+                text-align: left;
+                margin: 0.25rem 0;
+                background-color: transparent;
+                border: 2px solid $intermediate;
+                transition: all 0.2s ease;
+                @extend %rounded-lg;
+            }
+    
+            textarea {
+                min-height: 7rem;
+            }
+    
+            input:focus, textarea:focus {
+                border: 2px solid $highlight;
+            }
+    
+            button {
+                @extend %basic-button;
+                @extend %rounded-lg;
+                transition: all 0.2s ease;
+                font-size: large;
+                background-color: $teal;
+            }
+    
+            button:hover {
+                cursor: pointer;
+                filter: brightness(1.1)
+            }
+
+            .errorMessage {
+                line-height: 1.1rem;
+                color: tomato;
+                text-align: left;
+                margin-bottom: 0.5rem;
+            }
+        }
+    }
+}

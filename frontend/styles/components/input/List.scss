@@ -27,10 +27,9 @@
                         }
                     }
                     .description {
-                        @extend %flex-box;
+                        @extend %flex-col;
                         @extend %rounded-lg;
                         width: 100%;
-                        justify-content: center;
                         background-color: $intermediate;
                         padding: 1rem;
                         margin-bottom: 1rem;

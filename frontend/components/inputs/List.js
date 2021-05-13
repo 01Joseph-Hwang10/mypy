@@ -7,6 +7,7 @@ function List( {
 		description,
 		type,
 	},
+	allowedToModify,
 } ) {
 
 	const [ row, setRow, ] = useState( [ <Row key={1} id={1} setRow={setRow} row={row} />, ] );

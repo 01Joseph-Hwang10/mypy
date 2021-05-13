@@ -6,11 +6,12 @@ function File( {
 		description,
 		type,
 	},
+	allowedToModify,
 } ) {
 	return (
 		<div className="formElement__file">
-			<span className="fileInputName">{`${name}(${type})`}</span>
-			<div className="fileInputDescription">
+			<span className="fileInputName name">{`${name}(${type})`}</span>
+			<div className="fileInputDescription description">
 				<p>{description}</p>
 			</div>
 			<div className="fileInputWrapper">

@@ -63,7 +63,7 @@ function create( {
 					<TextAreaAutosize className='description' name='description' placeholder='description' />
 					<label htmlFor='app'>Zipped Python App</label>
 					<input className='app' name='app' type='file' accept='.zip' required />
-					<label htmlFor='image'>App Cover Image</label>
+					<label htmlFor='cover_img'>App Cover Image</label>
 					<input className='coverImg' name='cover_img' type='file' accept='image/*' />
 					<div className="selectionWrapper">
 						<span htmlFor='outputType'>Output Type</span>

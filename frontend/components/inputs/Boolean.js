@@ -7,6 +7,7 @@ function Boolean( {
 		description,
 		type,
 	},
+	allowedToModify,
 } ) {
 
 	const [ isChecked, setIsChecked, ] = useState( false );
@@ -30,8 +31,8 @@ function Boolean( {
 
 	return (
 		<div className="formElement__bool">
-			<div className="boolInputName">{`${name}(${type})`}</div>
-			<div className="boolInputDescription">
+			<div className="boolInputName name">{`${name}(${type})`}</div>
+			<div className="boolInputDescription description">
 				<p>{description}</p>
 			</div>
 			<div className="boolInputWrapper">

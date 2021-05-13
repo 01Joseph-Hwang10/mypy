@@ -11,6 +11,7 @@ import executeAppDataForm from '@form/executeAppDataForm';
 import Input from '@components/inputs/Input';
 import { BASE_APP_URL, MEDIA_URL } from '@src/urls';
 import ResultWrapper from '@components/outputs/Result';
+import Link from 'next/link';
 
 
 function AppDetail( {
@@ -18,7 +19,7 @@ function AppDetail( {
 	executeAppSuccessful : ExecuteAppSuccessful,
 	executeAppError : ExecuteAppError,
 	result : Result,
-	log : Log,
+	// log : Log,
 	inputs : Inputs,
 	userId : UserId,
 	createdBy : {
@@ -121,7 +122,9 @@ function AppDetail( {
 						{
 							UserId == CreatedUserId && (
 								<>
-									<button className="modifyButton">Modify App Page</button>
+									<Link href={`/app/${id}/update`} passHref>
+										<button className="modifyButton">Modify App Page</button>
+									</Link>
 									{/* <button className="updateButton">Update App(Redeploy)</button> */}
 									<button className="deleteButton" onClick={deleteApp}>Delete App</button>
 								</>

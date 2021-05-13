@@ -37,8 +37,7 @@
                     .fileInputWrapper {
                         width: 100%;
                         @extend %rounded-lg;
-                        @extend %flex-box;
-                        justify-content: center;
+                        @extend %flex-col;
                         background-color: $base;
                         margin-top: 1rem;
                         padding: 1.5rem 0.5rem;

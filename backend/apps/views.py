@@ -41,7 +41,11 @@ from apps.models import App, InputSpec
 from apps.serializers import AppSerializer, InputSpecSerializer
 from users.models import CustomUser
 from apps.models import App
-from apps.permissions import AllowedToCreateApp, AllowedToModifyApp
+from apps.permissions import (
+    AllowedToCreateApp,
+    AllowedToModifyApp,
+    AllowedToModifyInputSpec
+)
 from common.functions import get_cookie
 from users.serializers import LightWeightUserSerializer
 
@@ -402,9 +406,42 @@ class UpdateAppView(UpdateAPIView):
     permission_classes = (AllowedToModifyApp,)
 
     def patch(self, request, *args, **kwargs):
+        try:
+            post_data = request.data
+            app_id = int(post_data['id'])
+            name = post_data['name']
+            description = post_data['description']
 
-        # Partial update
-        return Response(status=200, data='app successfully updated')
+            app = App.objects.filter(id=app_id)[0]
+            app.name = name
+            app.description = description
+
+            if json.loads(post_data['has_cover_img']):
+                cover_img_source = post_data['cover_img']
+                img_extension = cover_img_source.name.split('.')[-1]
+                static_dir = os.path.join(MEDIA_ROOT, f'{app_id}/static')
+                cover_img_directory = os.path.join(
+                    static_dir, f'cover_img.{img_extension}')
+                os.remove(cover_img_directory)
+                cover_img = Image.open(cover_img_source)
+                cover_img.save(cover_img_directory)
+
+            app.save()
+
+            return Response(status=200, data='app successfully updated')
+        except Exception as e:
+            print(e)
+            return Response(status=400, data="app update failed!")
+
+
+class UpdateInputSpecView(UpdateAPIView):
+
+    queryset = InputSpec.objects.all()
+    serializer_class = InputSpecSerializer
+    permission_classes = (AllowedToModifyInputSpec,)
+
+    def patch(self, request, *args, **kwargs):
+        return super().patch(request, *args, **kwargs)
 
 
 class DeleteAppView(DestroyAPIView):

@@ -6,11 +6,12 @@ function Text( {
 		description,
 		type,
 	},
+	allowedToModify,
 } ) {
 	return (
 		<div className="formElement__text">
-			<span className="textInputName">{`${name}(${type})`}</span>
-			<div className="textInputDescription">
+			<span className="textInputName name">{`${name}(${type})`}</span>
+			<div className="textInputDescription description">
 				<p>{description}</p>
 			</div>
 			<div className="textInputWrapper">

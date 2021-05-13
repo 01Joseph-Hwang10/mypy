@@ -9,7 +9,8 @@ export const CREATE_APP = `${API_URL}/apps/create/`;
 export const LIST_APP = `${API_URL}/apps/list/`;
 export const LIST_SELECTED_APP = `${API_URL}/apps/list/selected/`;
 export const RETRIEVE_APP = `${API_URL}/apps/retrieve/`;
-export const UPDATE_APP = `${API_URL}/apps/update/`;
+export const UPDATE_APP_SPEC = `${API_URL}/apps/update/app-spec/`;
+export const UPDATE_INPUT_SPEC = `${API_URL}/apps/update/input-spec/`;
 export const DELETE_APP = `${API_URL}/apps/delete/`;
 
 export const BASE_APP_URL = `http://localhost`;

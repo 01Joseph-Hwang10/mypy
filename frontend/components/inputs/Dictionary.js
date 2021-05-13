@@ -7,6 +7,7 @@ function Dictionary( {
 		description,
 		type,
 	},
+	allowedToModify,
 } ) {
 
 	const [ row, setRow, ] = useState( [ <Row key={1} id={1} />, ] );

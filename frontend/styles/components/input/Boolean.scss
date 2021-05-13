@@ -27,8 +27,7 @@
                         padding: 1rem;
                         @extend %rounded-lg;
                         background-color: $intermediate;
-                        @extend %flex-box;
-                        justify-content: center;
+                        @extend %flex-col;
                         p {
                             text-align: center;
                             color: $white-edge;
