@@ -8,6 +8,6 @@ EXPOSE 5000
 ENV PATH="/app:${PATH}"
 # COPY requirements.txt ./
 # RUN pip install --no-cache-dir requirements.txt
-RUN pip install flask flask-cors gunicorn pyjwt __MARKDOWN
+RUN pip install flask flask-cors gunicorn pyjwt __MARKDOWN __PILLOW
 COPY ./app/ /app/
 CMD ["gunicorn", "-b", "0.0.0.0:5000", "__app:app"]

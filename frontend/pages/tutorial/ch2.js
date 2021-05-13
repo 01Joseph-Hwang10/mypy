@@ -65,6 +65,12 @@ function deployingOnMypy() {
 					In mypy, just click &quot;Create New&quot; button at home or your app page and upload that zipfile
 					to make your own mypy app!
 				</p>
+				<h3>#4. About Re-Deploying the app</h3>
+				<p>
+					Currently, the only way to re deploy the app is just to delete the former app and create new one. 
+					We&apos;ll soon add the other methods that are faster than just deleting and re-creating the app.
+					Sorry for the inconvenience.
+				</p>
 				<div className="tutorial_onContentNavigation">
 					<Link href='/tutorial/ch1'>
 						<span>

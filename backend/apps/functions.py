@@ -2,7 +2,7 @@ import os
 from os.path import split
 import re
 from django.core.exceptions import ValidationError
-from apps.constants import BANNED_EXTENSIONS, MD, STATIC_PATH, TYPES
+from apps.constants import BANNED_EXTENSIONS, JPG, MD, PNG, STATIC_PATH, TYPES
 from config.settings import DEBUG, STATICFILES_DIRS, STATIC_ROOT
 
 
@@ -224,6 +224,11 @@ def write_dockerfile(interface, output_type):
             interface.write(codeline.replace('__MARKDOWN', 'markdown'))
         else:
             interface.write(codeline.replace('__MARKDOWN', ''))
+
+        if output_type in [PNG, JPG]:
+            interface.write(codeline.replace('__PILLOW', 'pillow'))
+        else:
+            interface.write(codeline.replace('__PILLOW', ''))
 
 
 def write_docker_compose(interface, port):

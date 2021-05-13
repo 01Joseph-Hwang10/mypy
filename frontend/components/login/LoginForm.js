@@ -53,8 +53,8 @@ function LoginForm( {
 						<button className="googleLogin">
 							<i className="bi bi-google"></i>
 						</button>
-						<button className="kakaoLogin">
-							<i className='bi bi-chat-fill'></i>
+						<button className="facebookLogin">
+							<i className='bi bi-facebook'></i>
 						</button>
 					</div>
 				</div>

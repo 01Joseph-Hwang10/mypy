@@ -4,6 +4,7 @@ from flask import Flask, redirect, request, Response
 from flask_cors import cross_origin
 from __main import execute
 import __constants
+import io
 
 app = Flask(__name__)
 
@@ -45,17 +46,47 @@ def api():
         result, _ = execute(input_data, input_files)
 
         if __MIMETYPE == __constants.JSON:
+            if type(result) not in __constants.TYPE_CLASSES:
+                types_allowed = ', '.join(__constants.TYPES)
+                raise TypeError(
+                    f"""
+                    The return value of your app is not JSON serializable type. 
+                    The type you can return are those of follows: {types_allowed}
+                    """
+                )
             data = json.dumps(result)
             return Response(response=json.dumps(data), status=200, mimetype=__MIMETYPE)
 
         if __MIMETYPE == __constants.MD:
+            if type(result) != type(str()):
+                raise TypeError(
+                    'The type of return value of your app should be "str"')
             data = markdown(result)
             return Response(response=data, status=200, mimetype='text/html')
+
+        if __MIMETYPE in [__constants.JPG, __constants.PNG]:
+            if type(result) == type(bytes):
+                data = result
+            else:
+                try:
+                    temp = io.BytesIO()
+                    ext = __MIMETYPE.split('/')[1].upper()
+                    result.save(temp, format=ext)
+                    data = temp.getvalue()
+                except:
+                    raise TypeError(
+                        """
+                        Not a valid type of return value of your app. 
+                        The return value of your app should be either 
+                        Image object provided by PIL library or bytes.
+                        """
+                    )
+            return Response(response=data, status=200, mimetype=__MIMETYPE)
 
         if __MIMETYPE in __constants.OUTPUT_TYPES:
             data = result
             return Response(response=data, status=200, mimetype=__MIMETYPE)
 
-        return Response(response=result, status=200, mimetype='text/plain')
+        raise TypeError('Not a valid mimetype. Please re-deploy your app')
     except Exception as e:
         return Response(response=json.dumps(e), status=400)

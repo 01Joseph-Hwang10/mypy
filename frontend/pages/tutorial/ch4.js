@@ -139,8 +139,51 @@ function logAndOutput() {
 				<h3>#2.3 Image output</h3>
 				<p>
 					Currently there are two available image extensions that can be returned by your app: .jpg, .jpeg and .png.
-					The return value of &quot;main&quot; function at &quot;index.py&quot; should be binary object.
+					The return value of &quot;main&quot; function at &quot;index.py&quot; should be 
+					either &quot;Image&quot; object from &quot;Pillow&quot; which is python imaging library or binary object(Python data type of &quot;bytes&quot;).
+					Here below is short example of making image with crossline on black background which is the example of pillow documentation.
 				</p>
+				<CodeBox>
+					<span className="comment"># index.py</span>
+					<span className="breakLine"></span>
+					<span>from PIL import Image, ImageDraw</span>
+					<span className="breakLine"></span>
+					<span>def main():</span>
+					<span className="breakLine"></span>
+					<span className='tabbed'>im = Image.new(&quot;L&quot;, size=(100, 100))</span>
+					<span className="tabbed">draw = ImageDraw.Draw(im)</span>
+					<span className="tabbed">draw.line((0, 0) + im.size, fill=128)</span>
+					<span className="tabbed">draw.line((0, im.size[1], im.size[0], 0), fill=128)</span>
+					<span className="breakLine"></span>
+					<span className="tabbed">
+							return im
+					</span>
+					<span className="breakLine"></span>
+				</CodeBox>
+				<p>
+					Or you can return binary object like the code example below.
+				</p>
+				<CodeBox>
+					<span className="comment"># index.py</span>
+					<span className="breakLine"></span>
+					<span>from PIL import Image, ImageDraw</span>
+					<span>import io</span>
+					<span className="breakLine"></span>
+					<span>def main():</span>
+					<span className="breakLine"></span>
+					<span className='tabbed'>im = Image.new(&quot;L&quot;, size=(100, 100))</span>
+					<span className="tabbed">draw = ImageDraw.Draw(im)</span>
+					<span className="tabbed">draw.line((0, 0) + im.size, fill=128)</span>
+					<span className="tabbed">draw.line((0, im.size[1], im.size[0], 0), fill=128)</span>
+					<span className="breakLine"></span>
+					<span className="tabbed">fp = io.BytesIO()</span>
+					<span className="tabbed">im.save(fp, format=&quot;PNG&quot;)</span>
+					<span className="tabbed">result = fp.getvalue()</span>
+					<span className="tabbed">
+							return result
+					</span>
+					<span className="breakLine"></span>
+				</CodeBox>
 				<h3>#2.4 TXT output</h3>
 				<p>
 					Text output only returns result text at the app result. 

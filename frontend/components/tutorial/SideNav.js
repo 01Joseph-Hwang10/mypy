@@ -27,7 +27,7 @@ function SideNav() {
 				<button className="btn3" onClick={indicatePage}>Input</button>
 			</Link>
 			<Link onClick href='/tutorial/ch4'>
-				<button className="btn4" onClick={indicatePage}>Log and Output</button>
+				<button className="btn4" onClick={indicatePage}>Error and Output</button>
 			</Link>
 			<Link onClick href='/tutorial/ch5'>
 				<button className="btn5" onClick={indicatePage}>Customize app page</button>

@@ -1,27 +1,48 @@
-import zipapp
-import time
 import jwt
 import subprocess
 import json
 import os
 import shutil
-import runpy
 from zipfile import ZipFile
 from PIL import Image
 from apps.constants import OUTPUT_TYPES
-from apps.functions import TYPES, detect_main_function, extract_recursively, filter_banned_codeline, get_modules, input_to_sys_args, replace_with_appropriates, write_constants, write_docker_compose, write_dockerfile, write_flask_app, write_flask_middleware
+from apps.functions import (
+    TYPES,
+    detect_main_function,
+    extract_recursively,
+    filter_banned_codeline,
+    input_to_sys_args,
+    write_constants,
+    write_docker_compose,
+    write_dockerfile,
+    write_flask_app
+)
 from common.pagination import ThreeFigurePagination
 from rest_framework.parsers import MultiPartParser
 # from common.functions import get_cookie
-from config.settings import ALGORITHM, DEBUG, MEDIA_ROOT, SECRET_KEY, SERVER_NUMBER, STATICFILES_DIRS, STATIC_ROOT
-from rest_framework.generics import CreateAPIView, ListAPIView, DestroyAPIView, UpdateAPIView, RetrieveAPIView
+from config.settings import (
+    ALGORITHM,
+    DEBUG,
+    MEDIA_ROOT,
+    SECRET_KEY,
+    SERVER_NUMBER,
+    STATICFILES_DIRS,
+    STATIC_ROOT
+)
+from rest_framework.generics import (
+    CreateAPIView,
+    ListAPIView,
+    DestroyAPIView,
+    UpdateAPIView,
+    RetrieveAPIView
+)
 from rest_framework.response import Response
 from apps.models import App, InputSpec
 from apps.serializers import AppSerializer, InputSpecSerializer
 from users.models import CustomUser
 from apps.models import App
 from apps.permissions import AllowedToCreateApp, AllowedToModifyApp
-from common.functions import decode_token, get_cookie
+from common.functions import get_cookie
 from users.serializers import LightWeightUserSerializer
 
 

@@ -87,6 +87,10 @@
     padding: 0.75rem;
     background-color: $line;
     transition: filter 0.2s ease;
+
+    i {
+        font-size: 1.2rem;
+    }
 }
 
 .socialLogins__buttons button:hover {

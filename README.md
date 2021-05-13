@@ -6,9 +6,9 @@
 
 - Modify app view
 
-- Text file output of md and txt and Image outpout
+<!-- - Text file output of md and txt and Image outpout -->
 
-- More specific tutorial
+<!-- - More specific tutorial -->
 
 <!-- - Ban os, sys, subprocess, pathlib, tempfile module -->
 
