@@ -121,8 +121,9 @@ function AppDetail( {
 						{
 							UserId == CreatedUserId && (
 								<>
-									<button className="updateButton">Update</button>
-									<button className="deleteButton" onClick={deleteApp}>Delete</button>
+									<button className="modifyButton">Modify App Page</button>
+									{/* <button className="updateButton">Update App(Redeploy)</button> */}
+									<button className="deleteButton" onClick={deleteApp}>Delete App</button>
 								</>
 							)
 						}

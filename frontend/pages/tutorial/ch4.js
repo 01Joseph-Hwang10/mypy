@@ -56,7 +56,7 @@ function logAndOutput() {
 					<span className="breakLine"></span>
 				</CodeBox>
 				<h2>
-					Mypy currently supports 3 output type: .json, markdown, and .txt. 
+					Mypy currently supports 4 output type: .json, markdown, images, and .txt. 
 					If the output is not match with one of that for extensions except .txt,
 					your output will eventually be returned with the type of plain text: .txt.
 					Side note, those extensions don&apos;t mean file extensions, but mimetypes. 
@@ -136,7 +136,12 @@ function logAndOutput() {
 					</span>
 					<span className="breakLine"></span>
 				</CodeBox>
-				<h3>#2.3 TXT output</h3>
+				<h3>#2.3 Image output</h3>
+				<p>
+					Currently there are two available image extensions that can be returned by your app: .jpg, .jpeg and .png.
+					The return value of &quot;main&quot; function at &quot;index.py&quot; should be binary object.
+				</p>
+				<h3>#2.4 TXT output</h3>
 				<p>
 					Text output only returns result text at the app result. 
 					It is quite clean way to display the result since it does not have

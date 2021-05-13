@@ -121,8 +121,13 @@
                     color: $white-edge;
                 }
     
-                .updateButton {
+                .modifyButton {
                     background-color: $teal;
+                    color: $white-edge;
+                }
+
+                .updateButton {
+                    background-color: $python-yellow;
                     color: $white-edge;
                 }
             }

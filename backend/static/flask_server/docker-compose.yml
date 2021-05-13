@@ -6,6 +6,11 @@ services:
       context: ./server
     ports:
       - "__PORT:5000"
+    deploy:
+      resources:
+        limits:
+          cpus: 0.50
+          memory: 128M
   # nginx:
   #     image: nginx:latest
   #     ports:

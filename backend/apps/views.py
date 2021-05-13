@@ -9,7 +9,7 @@ import runpy
 from zipfile import ZipFile
 from PIL import Image
 from apps.constants import OUTPUT_TYPES
-from apps.functions import TYPES, detect_main_function, extract_recursively, get_modules, input_to_sys_args, replace_with_appropriates, write_docker_compose, write_dockerfile, write_flask_app, write_flask_middleware
+from apps.functions import TYPES, detect_main_function, extract_recursively, filter_banned_codeline, get_modules, input_to_sys_args, replace_with_appropriates, write_constants, write_docker_compose, write_dockerfile, write_flask_app, write_flask_middleware
 from common.pagination import ThreeFigurePagination
 from rest_framework.parsers import MultiPartParser
 # from common.functions import get_cookie
@@ -183,13 +183,14 @@ class CreateAppView(CreateAPIView):
                     else:
                         f.write(codeline)
 
-            # for file_path in py_dirs:
-            #     with open(os.path.join(script_directory, file_path), 'r') as f:
-            #         codelines = f.readlines()
-            #     with open(os.path.join(script_directory, file_path), 'w') as f:
-            #         f.write('__FILES_ROOT = "/files/files"\n')
-            #         for codeline in codelines:
-            #             f.write(codeline)
+            for file_path in py_dirs:
+                with open(os.path.join(script_directory, file_path), 'r') as f:
+                    codelines = f.readlines()
+                with open(os.path.join(script_directory, file_path), 'w') as f:
+                    for codeline in codelines:
+                        new_codeline = filter_banned_codeline(codeline)
+                        if new_codeline:
+                            f.write(new_codeline)
 
             """
             app_path = os.path.join(save_directory, f'{root_name}.zip')
@@ -269,6 +270,10 @@ class CreateAppView(CreateAPIView):
             # Make flask app
             with open(os.path.join(script_directory, 'app.py'), 'w') as f:
                 write_flask_app(f, name, output_type)
+
+            # Make constants
+            with open(os.path.join(script_directory, '__constants.py'), 'w') as f:
+                write_constants(f)
 
             # Modularize server folder
             with open(os.path.join(server_directory, '__init__.py'), 'w') as f:

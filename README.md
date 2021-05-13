@@ -4,10 +4,12 @@
 
 - Social login
 
-- Update input spec view, Update app view
+- Modify app view
 
-- Text file output of md and txt
+- Text file output of md and txt and Image outpout
 
-- Ban os, sys, subprocess, pathlib module
+- More specific tutorial
 
-- Static file insertion
+<!-- - Ban os, sys, subprocess, pathlib, tempfile module -->
+
+<!-- - Static file insertion -->

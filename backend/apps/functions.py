@@ -1,4 +1,5 @@
 import os
+from os.path import split
 import re
 from django.core.exceptions import ValidationError
 from apps.constants import BANNED_EXTENSIONS, MD, STATIC_PATH, TYPES
@@ -164,6 +165,19 @@ def filter_banned_syntax(codeline):
                 raise Exception
 
 
+def filter_banned_codeline(codeline):
+
+    banned_module = ['os', 'sys', 'subprocess', 'pathlib', 'tempfile']
+
+    splitted_by_spaces = codeline.split()
+    if splitted_by_spaces[0] in ['from', 'import']:
+        splitted_by_dots = splitted_by_spaces[1].split('.')
+        if splitted_by_dots[0] in banned_module:
+            return False
+
+    return codeline
+
+
 def replace_with_appropriates(codeline, file_path):
 
     # filter_banned_syntax(codeline)
@@ -175,7 +189,7 @@ def replace_with_appropriates(codeline, file_path):
 
 def write_flask_app(interface, name, output_type):
 
-    with open(os.path.join(STATIC_PATH, 'flask_server/server/app/app.py'), 'r') as f:
+    with open(os.path.join(STATIC_PATH, 'flask_server/server/app/__app.py'), 'r') as f:
         codelines = f.readlines()
 
     if output_type == MD:
@@ -193,12 +207,11 @@ def write_flask_app(interface, name, output_type):
         interface.write('\tapp.run()\n')
 
 
-def write_flask_middleware(interface):
+def write_constants(interface):
 
-    with open(os.path.join(STATIC_PATH, 'flask_server/server/app/middleware.py'), 'r') as f:
+    with open(os.path.join(STATIC_PATH, 'flask_server/server/app/__constants.py'), 'r') as f:
         codelines = f.read()
-
-    interface.write(codelines)
+        interface.write(codelines)
 
 
 def write_dockerfile(interface, output_type):

@@ -79,6 +79,16 @@ OUTPUT_TYPES = (
     JSON,
     TXT,
     MD,
+    # CSV,
+    # BMP,
+    # GIF,
+    # ICO,
+    JPG,
+    PNG,
+    # SVG,
+    # TIF,
+    # WEBP,
+    # PDF,
 )
 
 OUTPUT_TYPES_CHOICES = (
