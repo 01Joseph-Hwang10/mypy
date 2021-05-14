@@ -2,7 +2,7 @@
 
 ## Todo
 
-- Social login
+- Social login(Just do only google)
 
 - Modify app view, input spec view (Needa make update input spec slices)
 
