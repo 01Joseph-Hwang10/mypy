@@ -14,6 +14,18 @@ import ResultWrapper from '@components/outputs/Result';
 import Link from 'next/link';
 
 
+export async function getServerSideProps( context ) {
+	const { ok, data, } = await axiosRetrieveApp();
+
+	return {
+		props : {
+			ok,
+			data,
+		},
+	};
+}
+
+
 function AppDetail( {
 	executeLoading : ExecuteLoading,
 	executeAppSuccessful : ExecuteAppSuccessful,
@@ -37,7 +49,7 @@ function AppDetail( {
 		port,
 		output_type,
 	},
-	retrieveLoading : RetrieveLoading,
+	// retrieveLoading : RetrieveLoading,
 	loadAppError : LoadAppError,
 	loadAppSuccessful : LoadAppSuccessful,
 	retrieveIsLoading : RetrieveIsLoading,
@@ -47,13 +59,14 @@ function AppDetail( {
 	deleteAppSuccessful : DeleteAppSuccessful,
 	deleteAppError : DeleteAppError,
 	cleanAppPage : CleanAppPage,
+	ok,
+	data,
 } ) {
     
 	const router = useRouter();
 
 	const retrieveApp = async () => {
-		RetrieveLoading();
-		const { ok, data, } = await axiosRetrieveApp( router.query.id );
+		// RetrieveLoading();
 		if ( ok ) {
 			LoadAppSuccessful( data );
 		} else {

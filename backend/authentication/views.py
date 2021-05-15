@@ -13,6 +13,8 @@ from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 from users.models import CustomUser
 from common.functions import get_cookie
 from authentication.forms import SignUpForm
+from django.contrib.auth import password_validation
+from django.core.exceptions import ValidationError
 
 
 class CustomTokenObtainPairView(TokenObtainPairView):
@@ -106,3 +108,67 @@ class SignUpView(FormView):
     def form_valid(self, form):
         form.save()
         return super().form_valid(form)
+
+
+BANNED_NAME = ['Guest']
+
+
+def signup(request):
+
+    try:
+        post_data = request.data
+        email = post_data['email']
+        first_name = post_data['first_name']
+        password = post_data['password']
+        password_confirm = post_data['password_confirm']
+
+        not_able_to_signup = False
+
+        errors = {
+            'error': 'Signup failed',
+        }
+
+        try:
+            password_validation.validate_password(password)
+        except ValidationError as e:
+            not_able_to_signup = True
+            errors['passwordError'] = list(e.messages)
+
+        if password != password_confirm:
+            not_able_to_signup = True
+            errors['passwordError'].append(
+                'Password and password confirmation do not match each other')
+
+        user = CustomUser.objects.filter(email=email)
+        if user:
+            not_able_to_signup = True
+            errors['emailError'] = ['User with the email already exists.']
+        else:
+            errors['emailError'] = []
+
+        if first_name in BANNED_NAME:
+            not_able_to_signup = True
+            errors['nameError'] = ['This name is not allowed']
+        else:
+            errors['nameError'] = []
+
+        if not_able_to_signup:
+            return Response(status=200, data=errors)
+
+        new_user = CustomUser.objects.create(
+            first_name=first_name,
+            email=email,
+            username=email,
+        )
+        new_user.set_password(password)
+        new_user.save()
+        response = Response(status=201, data='User successfully created!')
+        return response
+    except Exception as e:
+        print(e)
+        return Response(status=500, data="Something went wrong")
+
+
+def google_login(request):
+
+    pass

@@ -10,6 +10,7 @@ export const {
 		signInSuccessful,
 		signInError,
 		logout,
+		toggleSignUp,
 	},
 } = createSlice( {
 	name : 'authSlice',
@@ -18,6 +19,7 @@ export const {
 		userId : null,
 		error : null,
 		loading : false,
+		onSignUp : false,
 	},
 	reducers : {
 		loading : ( state ) => {
@@ -39,6 +41,13 @@ export const {
 			state.loading = false;
 			state.signedIn = false;
 			state.userId = null;
+		},
+		toggleSignUp : ( state ) => {
+			if ( state.onSignUp ) {
+				state.onSignUp = false;
+			} else {
+				state.onSignUp = true;
+			}
 		},
 	},
 } );

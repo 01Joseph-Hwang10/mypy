@@ -6,15 +6,34 @@ import LoginForm from '@components/login/LoginForm';
 import { translateDistance } from '@functions/SignIn';
 import { connect } from 'react-redux';
 import { listApp, loading, loadListError, loadListSuccessful } from '@redux/slices/list-app';
+import { toggleSignUp } from '@redux/slices/auth';
+import SignUpForm from '@components/login/SignUpForm';
+
+
+export async function getServerSideProps( context ) {
+	const { ok, data, } = await listApp();
+
+	return {
+		props : {
+			ok,
+			data,
+		},
+	};
+}
+
 
 function Home( {
 	isLoading : IsLoading,
 	appList : ListApps,
 	loadListSuccessful : LoadListSuccessful,
 	loadListError : LoadListError,
-	loading : Loading,
+	// loading : Loading,
 	errorMessage : ErrorMessage,
 	isSuccessful : IsSuccessful,
+	ok,
+	data,
+	onSignUp : OnSignUp,
+	toggleSignUp : ToggleSignUp,
 } ) {
 
 
@@ -23,8 +42,7 @@ function Home( {
 	};
 
 	const axiosAppList = async () => {
-		Loading();
-		const { ok, data, } = await listApp();
+		// Loading();
 		if ( ok ) {
 			LoadListSuccessful( data );
 		} else {
@@ -59,7 +77,13 @@ function Home( {
 			<section className="sideBarWrapper">
 				<SideBar />
 				<div id="loginFormWrapper" style={animationStyle}>
-					<LoginForm />
+					{
+						OnSignUp ? (
+							<SignUpForm />
+						) : (
+							<LoginForm />
+						)
+					}
 				</div>
 			</section>
 		</div>
@@ -73,6 +97,7 @@ const mapStateToProps = state => {
 		isSuccessful : state.listApp.isSuccessful,
 		isLoading : state.listApp.loading,
 		errorMessage : state.listApp.errorMessage,
+		onSignUp : state.auth.onSignUp,
 	};
 };
 
@@ -81,6 +106,7 @@ const mapDispatchToProps = dispatch => {
 		loadListSuccessful : ( appList ) => dispatch( loadListSuccessful( appList ) ),
 		loadListError : ( error ) => dispatch( loadListError( error ) ),
 		loading : () => dispatch( loading() ),
+		toggleSignUp : () => dispatch( toggleSignUp() ),
 	};   
 };
 

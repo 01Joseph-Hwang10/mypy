@@ -9,6 +9,7 @@ django-filter = "*"
 pillow = "*"
 django-cors-headers = "*"
 djangorestframework-simplejwt = "*"
+requests = "*"
 
 [dev-packages]
 

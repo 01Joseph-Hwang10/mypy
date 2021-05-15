@@ -3,15 +3,16 @@
 @use '../shadow';
 @use '../margin';
 @use '../media';
+@use '../transition';
 
 
-#loginContentRoot, .sideBarWrapper .loginFormWrapper {
+#loginContentRoot, #signupContentRoot, .sideBarWrapper .loginFormWrapper {
     @extend %flex-box;
     flex-direction: column;
     justify-content: start;
 }
 
-#loginContentRoot {
+#loginContentRoot, #signupContentRoot {
     height: 100vh;
     @extend %mx-auto;
     width: 91.67%;
@@ -19,25 +20,25 @@
 }
 
 @include small {
-    #loginContentRoot {
+    #loginContentRoot, #signupContentRoot {
         width: 70%;
     }
 }
 
 @include medium {
-    #loginContentRoot {
+    #loginContentRoot, #signupContentRoot {
         width: 60%;
     }
 }
 
 @include large {
-    #loginContentRoot {
+    #loginContentRoot, #signupContentRoot {
         width: 50%;
     }
 }
 
 @include x-large {
-    #loginContentRoot {
+    #loginContentRoot, #signupContentRoot {
         width: 40%
     }
 }
@@ -52,15 +53,16 @@
 }
 
 
-.loginForm {
+.loginForm, .signupForm {
     width: 100%;
 }
 
-.loginForm__main {
+.loginForm__main, .signupForm__main {
     padding: 1rem;
     background-color: $white-edge;
     @extend %rounded-lg;
     @extend %shadow-lg;
+    min-height: 20rem;
 }
 
 .socialLogins {
@@ -79,28 +81,57 @@
 .socialLogins__buttons {
     @extend %flex-box;
     justify-content: center;
-    padding: 1rem;
-}
-
-.socialLogins__buttons button {
-    border-radius: 50%;
-    padding: 0.75rem;
-    background-color: $line;
-    transition: filter 0.2s ease;
-
-    i {
-        font-size: 1.2rem;
+    padding: 1rem 0;
+    width: 100%;
+    #gSignInWrapper {
+        width: 100%;
+        span.label {
+            font-family: serif;
+            font-weight: normal;
+        }
+        #customBtn {
+            @extend %flex-box;
+            justify-content: center;
+            padding: 1rem;
+            background: transparent;
+            color: $highlight;
+            width: 100%;
+            @extend %rounded-lg;
+            font-weight: 600;
+            font-size: large;
+            border: 2px solid $line;
+            @extend %bgcolor-on-change;
+            span {
+                vertical-align: middle;
+                margin: 0 0.5rem;
+            }
+          }
+            #customBtn:hover {
+            cursor: pointer;
+            background-color: $line;
+            }
     }
 }
 
-.socialLogins__buttons button:hover {
-    cursor: pointer;
-    filter: brightness(1.1);
-}
+// .socialLogins__buttons button {
+//     border-radius: 50%;
+//     padding: 0.75rem;
+//     background-color: $line;
+//     transition: filter 0.2s ease;
 
-.socialLogins__buttons button:first-child, .socialLogins__buttons button:last-child {
-    margin: 0 1rem;
-}
+//     i {
+//         font-size: 1.2rem;
+//     }
+// }
+
+// .socialLogins__buttons button:hover {
+//     cursor: pointer;
+//     filter: brightness(1.1);
+// }
+
+// .socialLogins__buttons button:first-child, .socialLogins__buttons button:last-child {
+//     margin: 0 1rem;
+// }
 
 
 .emailLogin {
@@ -111,6 +142,12 @@
 
 .emailLogin__subject {
     margin-bottom: 0.25rem;
+}
+
+.emailLogin__signup {
+    margin-bottom: 1rem;
+    font-weight: 600;
+    font-size: x-large;
 }
 
 
@@ -130,7 +167,7 @@
     border: 2px solid $intermediate;
 }
 
-.emailLogin .submitButton, .emailLogin .loadingButton {
+.emailLogin .submitButton, .emailLogin .loadingButton, .emailLogin .cancelButton {
     margin-top: 0.25rem;
     background-color: $teal;
     border-radius: 1rem;
@@ -140,7 +177,7 @@
     padding: 0.6rem;
     width: 100%;
     color: $white-edge;
-    transition: filter 0.2s ease;
+    @extend %filter-on-change;
 }
 
 .emailLogin .submitButton:hover {
@@ -150,6 +187,17 @@
 
 .emailLogin .loadingButton {
     filter: saturate(50%);
+}
+
+.emailLogin .cancelButton {
+    background-color: gray;
+    margin-top: 0.5rem;
+    @extend %filter-on-change;
+}
+
+.emailLogin .cancelButton:hover {
+    cursor: pointer;
+    filter: brightness(1.1);
 }
 
 .emailLogin__error {
@@ -162,16 +210,18 @@
     @extend %flex-box;
     justify-content: center;
     margin-top: 1rem;
-}
 
-.signUp span {
-    text-align: center;
-}
-
-.signUp span a {
-    text-decoration: none;
-    font-weight: bold;
-    color: $python-blue;
+    button {
+        text-align: center;
+        strong {
+            text-decoration: none;
+            font-weight: bold;
+            color: $python-blue;
+        }
+        strong:hover {
+            cursor: pointer;
+        }
+    }
 }
 
 .loginContent__subject {
@@ -179,4 +229,14 @@
     font-weight: bold;
     color: $black-edge;
     text-align: left;
+}
+
+.signupForm {
+    .notice span, .errorMessage {
+        text-align: left;
+        display: block;
+        color: tomato;
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
 }

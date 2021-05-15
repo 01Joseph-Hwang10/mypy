@@ -2,11 +2,13 @@ import React from 'react';
 import Link from 'next/link';
 import { SIGN_UP } from '@src/urls';
 import { connect } from 'react-redux';
-import { loading, signInError, signInSuccessful, signIn } from '@redux/slices/auth';
+import { loading, signInError, signInSuccessful, signIn, toggleSignUp } from '@redux/slices/auth';
 import SignInDataForm from '@redux/form/SignInDataForm';
 import { useRouter } from 'next/router';
-import { showMessage, playAnimation } from '@redux/slices/message';
+import { showMessage } from '@redux/slices/message';
 import { cleanUp } from '@functions/SignIn';
+import GoogleLogin from 'react-google-login';
+
 
 function LoginForm( {
 	isLoading : IsLoading,
@@ -16,12 +18,13 @@ function LoginForm( {
 	signInSuccessful : SignInSuccessful,
 	signInError : SignInError,
 	showMessage : ShowMessage,
+	toggleSignUp : ToggleSignUp,
 } ) {
 
 	const router = useRouter();
 	const { route, } = router;
 
-	const signInSubmit = async ( e ) => {
+	const emailSignIn = async ( e ) => {
 		e.preventDefault();
 		Loading();
 		const postData = SignInDataForm( e );
@@ -44,21 +47,41 @@ function LoginForm( {
 		}
 	};
 
+	const googleSignIn = async ( response ) => {
+		const {
+			profileObj : {
+				email,
+				name,
+			},
+		} = response;
+	};
+
+
+
 	return (
 		<div className="loginForm">
 			<div className="loginForm__main">
 				<div className="socialLogins">
-					<span>Sign In With...</span>
+					{/* <span>Sign In With...</span> */}
 					<div className="socialLogins__buttons">
-						<button className="googleLogin">
-							<i className="bi bi-google"></i>
-						</button>
-						<button className="facebookLogin">
-							<i className='bi bi-facebook'></i>
-						</button>
+						<GoogleLogin 
+							clientId='502846912783-u6geb0s3adj8f16l8qm5dqedb9r03tb9.apps.googleusercontent.com'
+							render={renderProps => (
+								<button className="gSignInWrapper" onClick={renderProps.onClick} disabled={renderProps.disabled} id="gSignInWrapper">
+									<div id="customBtn" className="customGPlusSignIn">
+										<span className="icon bi bi-google"></span>
+										<span className="buttonText">Sign In With Google</span>
+									</div>
+								</button>
+							)}
+							buttonText='Login'
+							onSuccess={googleSignIn}
+							onFailure={googleSignIn}
+							cookiePolicy={'single_host_origin'}
+						/>
 					</div>
 				</div>
-				<form onSubmit={signInSubmit} className="emailLogin">
+				<form onSubmit={emailSignIn} className="emailLogin">
 					<span className="emailLogin__subject">...or with Email</span>
 					<input required className="emailLogin__email" type='email' placeholder='email'></input>
 					<input required className="emailLogin__password" type='password' placeholder="password"></input>
@@ -74,7 +97,7 @@ function LoginForm( {
 					}
 				</form>
 				<div className="signUp">
-					<span>Have no account? <Link href={SIGN_UP}>Sign Up</Link></span>
+					<button onClick={ToggleSignUp}>Have no account? <strong>Sign Up</strong></button>
 				</div>
 			</div>
 		</div>
@@ -95,6 +118,7 @@ const mapDispatchToProps = dispatch => {
 		signInSuccessful : ( response ) => dispatch( signInSuccessful( response ) ),
 		signInError : ( response ) => dispatch( signInError( response ) ),
 		showMessage : ( data ) => dispatch( showMessage( data ) ),
+		toggleSignUp : () => dispatch( toggleSignUp() ),
 	};
 };
 

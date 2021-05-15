@@ -3,8 +3,9 @@ from authentication.views import (
     CustomTokenObtainPairView,
     CustomTokenRefreshView,
     RedirectToLoginView,
-    SignUpView,
-    logout
+    # SignUpView,
+    logout,
+    signup
 )
 
 app_name = 'auth'
@@ -14,5 +15,5 @@ urlpatterns = [
     path('refresh/', CustomTokenRefreshView.as_view(), name='refresh'),
     path('logout/', logout, name='logout'),
     path('redirect-to-login/', RedirectToLoginView.as_view(), name='login'),
-    path('signup/', SignUpView.as_view(), name='signup')
+    path('signup/', signup, name='signup')
 ]

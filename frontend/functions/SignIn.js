@@ -49,7 +49,17 @@ export const maintainWhenFocusWithin = ( e ) => {
 		loginFormWrapper,
 	} = returnLoginElements();
 
-	if ( !loginFormWrapper.contains( e.target ) && !signInButton.contains( e.target ) ) {
+	const loginForm = loginFormWrapper.querySelector( '.loginForm' );
+	const signupForm = loginFormWrapper.querySelector( '.signupForm' );
+
+	console.log( loginForm );
+
+	const loginFormBool = Boolean( !loginForm || ( loginForm && !loginForm.contains( e.target ) ) );
+	const signupFormBool = Boolean( !signupForm || ( signupForm && !signupForm.contains( e.target ) ) );
+
+	console.log( loginFormBool, signupFormBool );
+
+	if ( loginFormBool && signupFormBool  && !signInButton.contains( e.target ) ) {
 		signInButton.removeAttribute( 'style' );
 		loginFormWrapper.style.transform = `translateX(${translateDistance}rem)`;
 		document.removeEventListener( 'click', maintainWhenFocusWithin );
