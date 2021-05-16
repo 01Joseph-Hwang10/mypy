@@ -1,3 +1,4 @@
+import login from "@pages/login";
 import { SCREEN_LARGE, SCREEN_MEDIUM, SCREEN_SMALL, SCREEN_XLARGE, SCREEN_XXLARGE } from "@src/constants";
 
 const defaultDistance = 20;
@@ -42,6 +43,7 @@ export const checkLoginExists = () => {
 	return false;
 };
 
+
 export const maintainWhenFocusWithin = ( e ) => {
 
 	const {
@@ -49,21 +51,25 @@ export const maintainWhenFocusWithin = ( e ) => {
 		loginFormWrapper,
 	} = returnLoginElements();
 
-	const loginForm = loginFormWrapper.querySelector( '.loginForm' );
-	const signupForm = loginFormWrapper.querySelector( '.signupForm' );
+	const signUpButton = loginFormWrapper?.querySelector( '.signUpButton' )?.querySelector( 'a' );
 
-	console.log( loginForm );
-
-	const loginFormBool = Boolean( !loginForm || ( loginForm && !loginForm.contains( e.target ) ) );
-	const signupFormBool = Boolean( !signupForm || ( signupForm && !signupForm.contains( e.target ) ) );
-
-	console.log( loginFormBool, signupFormBool );
-
-	if ( loginFormBool && signupFormBool  && !signInButton.contains( e.target ) ) {
-		signInButton.removeAttribute( 'style' );
-		loginFormWrapper.style.transform = `translateX(${translateDistance}rem)`;
+	if (
+		(
+			loginFormWrapper && 
+			signInButton && 
+			!loginFormWrapper.contains( e.target )  && 
+			!signInButton.contains( e.target ) 
+		) || (
+			signUpButton && 
+			signUpButton === e.target &&
+			!loginFormWrapper
+		)
+	) {
+		if ( signInButton ) signInButton.removeAttribute( 'style' );
+		if ( loginFormWrapper ) loginFormWrapper.style.transform = `translateX(${translateDistance}rem)`;
 		document.removeEventListener( 'click', maintainWhenFocusWithin );
 	}
+
 };
 
 export const signInToggle = () => {

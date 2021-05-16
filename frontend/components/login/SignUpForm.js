@@ -1,8 +1,11 @@
 import React from 'react';
-import { toggleSignUp } from '@slices/auth';
+import { loading as signInLoading, signIn, signInError, signInSuccessful, toggleSignUp } from '@slices/auth';
 import { connect } from 'react-redux';
-import { createUser, createUserError, createUserSuccessful, loading } from '@redux/slices/create-user';
-import SignUpDataForm from '@redux/form/SignUpDataForm';
+import { createUser, createUserError, createUserSuccessful, loading as signUpLoading } from '@redux/slices/create-user';
+import SignUpDataForm, { getSignUpData } from '@redux/form/SignUpDataForm';
+import { makeSignInDataForm } from '@redux/form/SignInDataForm';
+import { showMessage } from '@redux/slices/message';
+import { useRouter } from 'next/router';
 
 function SignUpForm( {
 	onSignUp : OnSignUp,
@@ -13,21 +16,40 @@ function SignUpForm( {
 	nameError : NameError,
 	emailError : EmailError,
 	passwordError : PasswordError,
-	loading : Loading,
+	signUpLoading : SignUpLoading,
 	createUserSuccessful : CreateUserSuccessful,
 	createUserError : CreateUserError,
+	signInLoading : SignInLoading,
+	signInSuccessful : SignInSuccessful,
+	signInError : SignInError,
+	showMessage : ShowMessage,
 } ) {
+
+	const router = useRouter();
 
 	const onSubmit = async ( e ) => {
 		e.preventDefault();
-		Loading();
-		const postData = SignUpDataForm( e );
-		const { ok, data, } = await createUser( postData );
-		if ( ok ) {
-			// You need to axios again
+		SignUpLoading();
+		const signUpPostData = SignUpDataForm( e );
+		const { ok : signUpOk, data : signUpData, } = await createUser( signUpPostData );
+		if ( signUpOk ) {
 			CreateUserSuccessful();
+			SignInLoading();
+			const { email, password, } = getSignUpData( e );
+			const SignInPostData = makeSignInDataForm( email, password );
+			const { ok : signInOk, data : signInData, } = await signIn( SignInPostData );
+			if ( signInOk ) {
+				const { user_id, } = signInData;
+				SignInSuccessful( user_id );
+				router.push( `/mypy/${user_id}` );
+				ShowMessage( { message : `Welcome!!`, } );
+			} else {
+				SignInError( 'Sign In Failed!!' );
+				ShowMessage( { message : 'Sign In Failed!!', level : 'error', } );
+				router.push( '/login' );
+			}
 		} else {
-			CreateUserError( data );
+			CreateUserError( signUpData );
 		}
 	};
 
@@ -44,11 +66,11 @@ function SignUpForm( {
 						</span>
 					</div>
 					<input required className="emailLogin__name" type="text" placeholder="name"></input>
-					{ NameError && <span className="errorMessage">{NameError}</span>}
+					{ NameError && NameError.map( ( error, index ) => <><span key={index} className="errorMessage">{error}<br /></span></> )}
 					<input required className="emailLogin__email" type="email" placeholder="email"></input>
-					{ EmailError && <span className="errorMessage">{EmailError}</span>}
+					{ EmailError && EmailError.map( ( error, index ) => <><span key={index} className="errorMessage">{error}<br /></span></> )}
 					<input required className="emailLogin__password" type="password" placeholder="password"></input>
-					{ PasswordError && <span className="errorMessage">{PasswordError}</span>}
+					{ PasswordError && PasswordError.map( ( error, index ) => <><span key={index} className="errorMessage">{error}<br /></span></> )}
 					<input required className="emailLogin__passwordConfirm" type="password" placeholder="passwordConfirm"></input>
 					<button type='submit' className="submitButton">Sign Up</button>
 					{ OnSignUp && <button className="cancelButton" onClick={ToggleSignUp}>Cancel</button>}
@@ -73,9 +95,13 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
 	return {
 		toggleSignUp : () => dispatch( toggleSignUp() ),
-		loading : () => dispatch( loading() ),
+		signUpLoading : () => dispatch( signUpLoading() ),
 		createUserSuccessful : () => dispatch( createUserSuccessful() ),
 		createUserError : ( response ) => dispatch( createUserError( response ) ),
+		signInLoading : () => dispatch( signInLoading() ),
+		signInSuccessful : ( response ) => dispatch( signInSuccessful( response ) ),
+		signInError : ( response ) => dispatch( signInError( response ) ),
+		showMessage : ( data ) => dispatch( showMessage( data ) ),
 	};
 };
 

@@ -96,8 +96,8 @@ function LoginForm( {
 						ErrorMessage !== null && <span className="emailLogin__error">{ErrorMessage}</span>
 					}
 				</form>
-				<div className="signUp">
-					<button onClick={ToggleSignUp}>Have no account? <strong>Sign Up</strong></button>
+				<div className="signUp signUpButton">
+					<button onClick={ToggleSignUp}>Have no account? <Link href='/login/signup'>Sign Up</Link></button>
 				</div>
 			</div>
 		</div>

@@ -3,7 +3,7 @@ import SignUpForm from '@components/login/SignUpForm';
 
 function signup() {
 	return (
-		<div className="signupContentRoot">
+		<div id="signupContentRoot">
 			<SignUpForm />
 		</div>
 	);

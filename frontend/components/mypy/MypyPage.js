@@ -5,13 +5,13 @@ import PrivateMypyAppList from './PrivateMypyAppList';
 import MypySideBar from './MypySideBar';
 import { connect } from 'react-redux';
 import PublicMypyAppList from './PublicMypyAppList';
-import { toggleSignUp } from '@redux/slices/auth';
-import SignUpForm from '@components/login/SignUpForm';
+// import { toggleSignUp } from '@redux/slices/auth';
+// import SignUpForm from '@components/login/SignUpForm';
 
 function MypyPage( {
 	signedIn : SignedIn,
-	onSignUp : OnSignUp,
-	toggleSignUp : ToggleSignUp,
+	// onSignUp : OnSignUp,
+	// toggleSignUp : ToggleSignUp,
 } ) {
 
 	const animationStyle = {
@@ -32,13 +32,7 @@ function MypyPage( {
 			<section className="sideBarWrapper">
 				<MypySideBar />
 				<div id="loginFormWrapper" style={animationStyle}>
-					{
-						OnSignUp ? (
-							<SignUpForm />
-						) : (
-							<LoginForm />
-						)
-					}
+					<LoginForm />
 				</div>
 			</section>
 		</div>
@@ -49,15 +43,15 @@ function MypyPage( {
 const mapStateToProps = state => {
 	return {
 		signedIn : state.auth.signedIn,
-		onSignUp : state.auth.onSignUp,
+		// onSignUp : state.auth.onSignUp,
 	};
 };
 
 const mapDispatchToProps = dispatch => {
 	return {
-		toggleSignUp : () => dispatch( toggleSignUp() ),
+		// toggleSignUp : () => dispatch( toggleSignUp() ),
 	};
 };
 
 
-export default connect( mapStateToProps, mapDispatchToProps )( MypyPage );
+export default connect( mapStateToProps, null )( MypyPage );

@@ -1,13 +1,20 @@
 
 
+export const makeSignInDataForm = ( username, password ) => {
+	const formData = new FormData();
+	formData.append( 'username', username );
+	formData.append( 'password', password );
+
+	return formData;
+};
+
+
 const SignInDataForm = ( e ) => {
 	const form = e.target;
-	const formData = new FormData();
 	const email = form.querySelector( '.emailLogin__email' ).value;
 	const password = form.querySelector( '.emailLogin__password' ).value;
 
-	formData.append( 'username', email );
-	formData.append( 'password', password );
+	const formData = makeSignInDataForm( email, password );
 
 	return formData;
 };

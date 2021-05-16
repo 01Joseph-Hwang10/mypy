@@ -28,13 +28,13 @@ export const {
 			state.loading = false;
 			state.isSuccessful = true;
 		},
-		createUserError : ( state, { error, emailError, passwordError, nameError, } ) => {
+		createUserError : ( state, { payload : { error, emailError, passwordError, nameError, }, } ) => {
 			state.loading = false;
 			state.isSuccessful = false;
 			state.error = error;
-			if ( emailError ) state.emailError = emailError;
-			if ( passwordError ) state.passwordError = passwordError;
-			if ( nameError ) state.nameError = nameError;
+			if ( emailError && emailError.length != 0 ) state.emailError = emailError;
+			if ( passwordError && passwordError.length != 0 ) state.passwordError = passwordError;
+			if ( nameError && nameError.length != 0 ) state.nameError = nameError;
 		},
 	},
 } );
@@ -57,6 +57,7 @@ export const createUser = async ( postData ) => {
 			data,
 		};
 	} catch ( error ) {
+		
 		return {
 			ok : false,
 			data : {

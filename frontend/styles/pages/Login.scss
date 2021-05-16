@@ -213,12 +213,12 @@
 
     button {
         text-align: center;
-        strong {
+        a {
             text-decoration: none;
             font-weight: bold;
-            color: $python-blue;
+            color: $teal;
         }
-        strong:hover {
+        a:hover {
             cursor: pointer;
         }
     }
@@ -238,5 +238,9 @@
         color: tomato;
         width: 100%;
         margin-bottom: 0.5rem;
+    }
+
+    .notice span {
+        color: orange;
     }
 }

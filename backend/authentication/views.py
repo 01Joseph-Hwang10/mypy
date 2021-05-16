@@ -94,25 +94,27 @@ def logout(request):
     return auth_response
 
 
-class RedirectToLoginView(TemplateView):
+# class RedirectToLoginView(TemplateView):
 
-    template_name = 'auth/login.html'
+#     template_name = 'auth/login.html'
 
 
-class SignUpView(FormView):
+# class SignUpView(FormView):
 
-    template_name = 'auth/signup.html'
-    form_class = SignUpForm
-    success_url = reverse_lazy('auth:login')
+#     template_name = 'auth/signup.html'
+#     form_class = SignUpForm
+#     success_url = reverse_lazy('auth:login')
 
-    def form_valid(self, form):
-        form.save()
-        return super().form_valid(form)
+#     def form_valid(self, form):
+#         form.save()
+#         return super().form_valid(form)
 
 
 BANNED_NAME = ['Guest']
 
 
+@api_view(['POST'])
+@permission_classes([AllowAny, ])
 def signup(request):
 
     try:
@@ -136,8 +138,8 @@ def signup(request):
 
         if password != password_confirm:
             not_able_to_signup = True
-            errors['passwordError'].append(
-                'Password and password confirmation do not match each other')
+            errors['passwordError'] = [
+                'Password and password confirmation do not match each other']
 
         user = CustomUser.objects.filter(email=email)
         if user:
@@ -169,6 +171,8 @@ def signup(request):
         return Response(status=500, data="Something went wrong")
 
 
+@api_view(['POST'])
+@permission_classes([AllowAny, ])
 def google_login(request):
 
     pass

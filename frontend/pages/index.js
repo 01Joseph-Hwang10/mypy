@@ -6,8 +6,8 @@ import LoginForm from '@components/login/LoginForm';
 import { translateDistance } from '@functions/SignIn';
 import { connect } from 'react-redux';
 import { listApp, loading, loadListError, loadListSuccessful } from '@redux/slices/list-app';
-import { toggleSignUp } from '@redux/slices/auth';
-import SignUpForm from '@components/login/SignUpForm';
+// import { toggleSignUp } from '@redux/slices/auth';
+// import SignUpForm from '@components/login/SignUpForm';
 
 
 export async function getServerSideProps( context ) {
@@ -77,13 +77,7 @@ function Home( {
 			<section className="sideBarWrapper">
 				<SideBar />
 				<div id="loginFormWrapper" style={animationStyle}>
-					{
-						OnSignUp ? (
-							<SignUpForm />
-						) : (
-							<LoginForm />
-						)
-					}
+					<LoginForm />
 				</div>
 			</section>
 		</div>
@@ -97,7 +91,7 @@ const mapStateToProps = state => {
 		isSuccessful : state.listApp.isSuccessful,
 		isLoading : state.listApp.loading,
 		errorMessage : state.listApp.errorMessage,
-		onSignUp : state.auth.onSignUp,
+		// onSignUp : state.auth.onSignUp,
 	};
 };
 
@@ -106,7 +100,7 @@ const mapDispatchToProps = dispatch => {
 		loadListSuccessful : ( appList ) => dispatch( loadListSuccessful( appList ) ),
 		loadListError : ( error ) => dispatch( loadListError( error ) ),
 		loading : () => dispatch( loading() ),
-		toggleSignUp : () => dispatch( toggleSignUp() ),
+		// toggleSignUp : () => dispatch( toggleSignUp() ),
 	};   
 };
 
