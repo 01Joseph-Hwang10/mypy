@@ -27,8 +27,7 @@ function UpdateAppSpec( {
 	const submitUpdate = async e => {
 		e.preventDefault();
 		Loading();
-		const urlSplitted = router.pathname.split( '/' );
-		const appId = urlSplitted[ urlSplitted.length - 2 ];
+		const { query : { id : appId, }, } = router;
 		const postData = updateAppDataForm( e );
 		postData.append( 'id', appId );
 		const { ok, data, } = await updateApp( postData );
@@ -43,11 +42,8 @@ function UpdateAppSpec( {
 	};
     
 	useEffect( () => {
-		if ( router?.pathname?.split( '/' )?.length >= 2 ) {
-			const urlSplitted = router.pathname.split( '/' );
-			const appId = urlSplitted[ urlSplitted.length - 2 ];
-			if ( id && id == appId ) setIsIdMatchesWithUrl( true );
-		}
+		const { query : { id : appId, }, } = router;
+		if ( id && id == appId ) setIsIdMatchesWithUrl( true );
 	} );
 
 

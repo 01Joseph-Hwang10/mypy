@@ -8,7 +8,7 @@ import io
 
 app = Flask(__name__)
 
-__MIMETYPE = '$MIMETYPE'
+__MIMETYPE = 'application/json'
 
 
 @app.route('/')
@@ -18,7 +18,7 @@ def root():
     return redirect('http://localhost:3000')
 
 
-@app.route('/$NAME', methods=["GET", "POST"])
+@app.route('/test', methods=["GET", "POST"])
 @cross_origin()
 def api():
 
@@ -91,3 +91,5 @@ def api():
         raise TypeError('Not a valid mimetype. Please re-deploy your app')
     except Exception as e:
         return Response(response=json.dumps(str(e)), status=400)
+if __name__ == "__main__":
+	app.run(debug=True)

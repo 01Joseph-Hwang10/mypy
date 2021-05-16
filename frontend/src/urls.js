@@ -17,6 +17,7 @@ export const BASE_APP_URL = `http://localhost`;
 
 // Auth
 export const SIGN_UP = `${AUTH_URL}/signup/`;
+export const GOOGLE_LOGIN = `${AUTH_URL}/signup/google/`;
 export const TOKEN = `${AUTH_URL}/token/`;
 export const REFRESH = `${AUTH_URL}/refresh/`;
 export const LOGOUT = `${AUTH_URL}/logout/`;

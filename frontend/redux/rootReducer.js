@@ -10,6 +10,7 @@ import { reducer as exportAppReducer } from '@slices/exportApp';
 import { reducer as retrieveUserReducer } from '@slices/retrieve-user';
 import { reducer as updateUserReducer } from '@slices/update-user';
 import { reducer as createUserReducer } from '@slices/create-user';
+import { reducer as updateAppReducer } from '@slices/update-app';
 
 const rootReducer = combineReducers( {
 	createApp : createAppReducer,
@@ -23,6 +24,7 @@ const rootReducer = combineReducers( {
 	retrieveUser : retrieveUserReducer,
 	updateUser : updateUserReducer,
 	createUser : createUserReducer,
+	updateApp : updateAppReducer,
 } );
 
 export default rootReducer;

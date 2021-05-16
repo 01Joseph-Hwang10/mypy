@@ -170,7 +170,7 @@ def filter_banned_codeline(codeline):
     banned_module = ['os', 'sys', 'subprocess', 'pathlib', 'tempfile']
 
     splitted_by_spaces = codeline.split()
-    if splitted_by_spaces[0] in ['from', 'import']:
+    if len(splitted_by_spaces) != 0 and splitted_by_spaces[0] in ['from', 'import']:
         splitted_by_dots = splitted_by_spaces[1].split('.')
         if splitted_by_dots[0] in banned_module:
             return False
@@ -221,14 +221,16 @@ def write_dockerfile(interface, output_type):
 
     for codeline in codelines:
         if output_type == MD:
-            interface.write(codeline.replace('__MARKDOWN', 'markdown'))
+            codeline = codeline.replace('__MARKDOWN', 'markdown')
         else:
-            interface.write(codeline.replace('__MARKDOWN', ''))
+            codeline = codeline.replace('__MARKDOWN', '')
 
         if output_type in [PNG, JPG]:
-            interface.write(codeline.replace('__PILLOW', 'pillow'))
+            codeline = codeline.replace('__PILLOW', 'pillow')
         else:
-            interface.write(codeline.replace('__PILLOW', ''))
+            codeline = codeline.replace('__PILLOW', '')
+
+        interface.write(codeline)
 
 
 def write_docker_compose(interface, port):

@@ -191,6 +191,10 @@ REST_FRAMEWORK = {
     )
 }
 
+
+# Django Rest Simple JWT
+
+
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
     'REFRESH_TOKEN_LIFETIME': timedelta(weeks=54),
@@ -207,6 +211,11 @@ SIMPLE_JWT = {
 
     'JTI_CLAIM': 'jti',
 }
+
+
+# Google OAuth
+
+GOOGLE_CLIENT_ID = '502846912783-u6geb0s3adj8f16l8qm5dqedb9r03tb9.apps.googleusercontent.com'
 
 # Django Cors
 

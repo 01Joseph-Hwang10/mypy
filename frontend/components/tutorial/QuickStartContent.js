@@ -29,7 +29,13 @@ function QuickStartContent() {
 						def main():
 					<strong> &lt;= This name is mandatory too!</strong>
 				</span>
-				<span className="comment tabbed"># we&apos;ll execute our codes here</span>
+				<span className="comment tabbed"># We&apos;ll execute our codes here</span>
+				<span className="tabbed">
+					return result
+					<strong>
+						&lt;= Return what you want from the app!
+					</strong>
+				</span>
 				<span className="breakLine"></span>
 			</CodeBox>
 			<p>

@@ -29,3 +29,12 @@ const SignUpDataForm = ( e ) => {
 
 
 export default SignUpDataForm;
+
+
+export const googleSignUpDataForm = ( id_token ) => {
+	const formData = new FormData();
+
+	formData.append( 'id_token', id_token );
+
+	return formData;
+};

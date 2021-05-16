@@ -2,12 +2,13 @@ import React from 'react';
 import Link from 'next/link';
 import { SIGN_UP } from '@src/urls';
 import { connect } from 'react-redux';
-import { loading, signInError, signInSuccessful, signIn, toggleSignUp } from '@redux/slices/auth';
+import { loading, signInError, signInSuccessful, signIn, toggleSignUp, googleSignIn as axiosGoogleSignIn } from '@redux/slices/auth';
 import SignInDataForm from '@redux/form/SignInDataForm';
 import { useRouter } from 'next/router';
 import { showMessage } from '@redux/slices/message';
 import { cleanUp } from '@functions/SignIn';
 import GoogleLogin from 'react-google-login';
+import { googleSignUpDataForm } from '@redux/form/SignUpDataForm';
 
 
 function LoginForm( {
@@ -48,12 +49,26 @@ function LoginForm( {
 	};
 
 	const googleSignIn = async ( response ) => {
-		const {
-			profileObj : {
-				email,
-				name,
-			},
-		} = response;
+		const { tokenId, } = response;
+		console.log( tokenId );
+		const postData = googleSignUpDataForm( tokenId );
+		const { ok, data, } = await axiosGoogleSignIn( postData );
+		if ( ok ) {
+			const { user_id, } = data;
+			SignInSuccessful( user_id );
+			const dividedRoute = route.split( '/' );
+			if (
+				window.matchMedia( '(min-width: 640px)' ).matches &&
+				dividedRoute[ dividedRoute.length - 1 ] !== 'login'
+			) {
+				cleanUp();
+			} else {
+				router.push( '/' );
+			}
+			ShowMessage( { message : "Hello :)", } );
+		} else {
+			SignInError( "Sign In Failed! Please try another method to login or try it later" );
+		}
 	};
 
 
@@ -75,8 +90,8 @@ function LoginForm( {
 								</button>
 							)}
 							buttonText='Login'
-							onSuccess={googleSignIn}
-							onFailure={googleSignIn}
+							onSuccess={response => googleSignIn( response )}
+							onFailure={()=>alert( 'Google sign in failed. Please try it later or try another sign in method.' )}
 							cookiePolicy={'single_host_origin'}
 						/>
 					</div>

@@ -32,12 +32,15 @@
 .mypySideBar__email {
     font-size: medium;
     font-weight: 400;
+    color: $intermediate;
 }
 
 .mypySideBar__bio {
     font-size: small;
     text-align: left;
     margin-bottom: 1rem;
+    margin-top: 0.5rem;
+
 }
 
 .mypySideBar__info button {

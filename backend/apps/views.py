@@ -83,9 +83,11 @@ class CreateAppView(CreateAPIView):
 
             # Defines port number
             max_port_app = App.objects.order_by('-port').first()
+            print(max_port_app)
             if max_port_app == None:
                 new_port = 10000
             else:
+                print(max_port_app.port)
                 new_port = int(max_port_app.port) + 1
 
             # Check whether output type is proper
@@ -106,6 +108,7 @@ class CreateAppView(CreateAPIView):
 
             # Get Id out of it
             new_id = int(self.get_serializer(new)['id'].value)
+            print(new_id)
 
             # Make media root if not exist
             if not os.path.exists(MEDIA_ROOT):
@@ -293,7 +296,7 @@ class CreateAppView(CreateAPIView):
             # shutil.copy(args_script, input_dir)
 
             # Make flask app
-            with open(os.path.join(script_directory, 'app.py'), 'w') as f:
+            with open(os.path.join(script_directory, '__app.py'), 'w') as f:
                 write_flask_app(f, name, output_type)
 
             # Make constants

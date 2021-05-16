@@ -1,6 +1,6 @@
+import json
 from django.core.checks.messages import DEBUG
-from django.urls import reverse_lazy
-from django.views.generic import FormView, TemplateView
+from config.settings import GOOGLE_CLIENT_ID
 from rest_framework import status
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
@@ -8,13 +8,16 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView
 )
+from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
+from users.constants import GOOGLE
 from users.models import CustomUser
 from common.functions import get_cookie
-from authentication.forms import SignUpForm
 from django.contrib.auth import password_validation
 from django.core.exceptions import ValidationError
+from google.oauth2 import id_token
+from google.auth.transport import requests
 
 
 class CustomTokenObtainPairView(TokenObtainPairView):
@@ -175,4 +178,50 @@ def signup(request):
 @permission_classes([AllowAny, ])
 def google_login(request):
 
-    pass
+    try:
+        post_data = request.data
+        token = post_data['id_token']
+        idinfo = id_token.verify_oauth2_token(
+            token, requests.Request(), GOOGLE_CLIENT_ID)
+        email = idinfo['email']
+        name = idinfo['name']
+        user = CustomUser.objects.filter(email=email)
+        if user:
+            if user.login_method != GOOGLE:
+                raise ValidationError(
+                    'Account with this email already exists.')
+        else:
+            user = CustomUser.objects.create(
+                email=email,
+                username=email,
+                first_name=name,
+                login_method=GOOGLE
+            )
+            user.set_unusable_password()
+            user.save()
+        refresh = RefreshToken.for_user(user)
+        user_id = int(user.id)
+        auth_response = Response(status=200, data={'user_id': user_id})
+
+        max_age_1day = 24*60*60
+        max_age_54weeks = 54*7*24*60*60
+
+        if DEBUG:
+            auth_response.set_cookie(
+                "access_token", value=str(refresh.access_token), max_age=max_age_1day, samesite='Lax')
+            auth_response.set_cookie(
+                "refresh_token", value=str(refresh), max_age=max_age_54weeks, samesite='Lax')
+            auth_response.set_cookie(
+                "user_id", value=user_id, max_age=max_age_54weeks, samesite='Lax')
+        else:
+            auth_response.set_cookie(
+                "access_token", value=str(refresh.access_token), max_age=max_age_1day, secure=True, httponly=True, samesite='Lax')
+            auth_response.set_cookie(
+                "refresh_token", value=str(refresh), max_age=max_age_54weeks, secure=True, httponly=True, samesite='Lax')
+            auth_response.set_cookie(
+                "user_id", value=user_id, max_age=max_age_54weeks, secure=True, httponly=True, samesite='Lax')
+
+        return auth_response
+    except Exception as e:
+        print(e)
+        return Response(status=400, data=json.dumps(str(e)))

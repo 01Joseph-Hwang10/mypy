@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { LOGOUT, REFRESH, TOKEN } from '@src/urls';
+import { GOOGLE_LOGIN, LOGOUT, REFRESH, TOKEN } from '@src/urls';
 import axios from 'axios';
 
 
@@ -103,5 +103,24 @@ export const signOut = async () => {
 		return { ok : true, };
 	} catch ( error ) {
 		return { ok : false, };
+	}
+};
+
+
+export const googleSignIn = async ( postData ) => {
+
+	try {
+		const { data, } = await axios
+			.post( GOOGLE_LOGIN, postData, { withCredentials : true, } );
+
+		return {
+			ok : true,
+			data,
+		};
+	} catch ( error ) {
+		return {
+			ok : false,
+			data : error.message,
+		};
 	}
 };
