@@ -8,11 +8,11 @@ const updateAppDataForm = ( e ) => {
 	const formData = new FormData();
 	formData.append( 'name', name );
 	formData.append( 'description', description );
-	if ( coverImg ) {
+	if ( coverImg?.[ 0 ] ) {
 		formData.append( 'cover_img', coverImg[ 0 ] );
 		formData.append( 'has_cover_img', true );
 	} else {
-		formData.append( 'has_cover_img', true );
+		formData.append( 'has_cover_img', false );
 	}
 
 	return formData;
@@ -20,3 +20,27 @@ const updateAppDataForm = ( e ) => {
 
 
 export default updateAppDataForm;
+
+
+export const updateInputSpecDataForm = ( e ) => {
+	const form = e.target.closest( '.formElement__root' );
+	const nameInput = form
+		.querySelector( '.name' )
+		.querySelector( 'input' )
+		.value;
+	const descriptionInput = form
+		.querySelector( '.description' )
+		.querySelector( 'textarea' )
+		.value;
+
+	const formData = new FormData();
+	formData.append( 'name', nameInput );
+	formData.append( 'description', descriptionInput );
+
+	const inputData = {
+		'name' : nameInput,
+		'description' : descriptionInput,
+	};
+
+	return [ formData, inputData, ];
+};

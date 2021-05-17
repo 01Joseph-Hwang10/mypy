@@ -18,12 +18,37 @@
                         @extend %flex-box;
                         justify-content: center;
                         padding: 0 1rem;
-                        margin-bottom: 1.5rem;
-                        span {
-                            margin: 0 0.2rem;
-                            font-weight: bold;
-                            font-size: x-large;
-                            color: $white-edge;
+                        width: 100%;
+                        .dictInputNameWrapper {
+                            @extend %flex-box;
+                            justify-content: center;
+                            width: 100%;
+                            padding: 0 1rem;
+                            div {
+                                width: 10%;
+                                @extend %flex-col;
+                                justify-content: center;
+                                padding: 0 0.5rem;
+                                margin-bottom: 1rem;
+                            }
+                            .dictInputName {
+                                width: 80%;
+                                font-size: x-large;
+                                font-weight: bold;
+                                color: $white-edge;
+                            }
+                            button {
+                                width: 100%;
+                                color: white;
+                                font-weight: 600;
+                                font-size: x-large;
+                                @extend %all-on-change;
+                            }
+                            button:hover {
+                                cursor: pointer;
+                                transform: scale(1.2);
+                                filter: brightness(1.1);
+                            }
                         }
                     }
                     .description {

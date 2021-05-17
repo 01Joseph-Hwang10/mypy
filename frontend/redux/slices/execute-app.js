@@ -54,10 +54,10 @@ export const executeApp = async ( postData, { serverNumber, port, name, } ) => {
 			ok : true,
 			data,
 		};
-	} catch ( error ) {
+	} catch ( { response : { data, }, } ) {
 		return {
 			ok : false,
-			data : error.message,
+			data,
 		};
 	}
 };

@@ -11,11 +11,17 @@ app = Flask(__name__)
 __MIMETYPE = '$MIMETYPE'
 
 
-@app.route('/')
+@app.route('/', methods=['GET'])
 def root():
 
     # Temporal redirection
     return redirect('http://localhost:3000')
+
+
+@app.route('/health_check', methods=['GET'])
+def health_check():
+
+    return Response(status=200, data='Server is on duty')
 
 
 @app.route('/$NAME', methods=["GET", "POST"])
@@ -43,16 +49,19 @@ def api():
             input_data = dict()
             input_files = dict()
 
-        result, _ = execute(input_data, input_files)
+        result, _, ok = execute(input_data, input_files)
+
+        if not ok:
+            return Response(status=500, response=json.dumps(result))
 
         if __MIMETYPE == __constants.JSON:
-            print(type(result))
             if type(result) not in __constants.TYPE_CLASSES:
                 types_allowed = ', '.join(__constants.TYPES)
                 raise TypeError(
                     f"""
-                    The return value of your app is not JSON serializable type. 
-                    The type you can return are those of follows: {types_allowed}
+                    The return value of your app is not JSON serializable type.
+                    The type you can return are those of follows: {types_allowed}. 
+                    The type your app returned is the value with following type: {type(result)}.
                     """
                 )
             data = json.dumps(result)
@@ -90,4 +99,4 @@ def api():
 
         raise TypeError('Not a valid mimetype. Please re-deploy your app')
     except Exception as e:
-        return Response(response=json.dumps(str(e)), status=400)
+        return Response(response=json.dumps(str(e)), status=500)

@@ -14,13 +14,36 @@
                     background-color: $highlight;
                     border: 2px solid $line;
                     width: 100%;
-                    .textInputName {
-                        display: block;
-                        padding: 0 1rem;
-                        font-size: x-large;
-                        font-weight: bold;
-                        color: $white-edge;
-                        margin-bottom: 1.5rem;
+                    .textInputNameWrapper {
+                        @extend %flex-box;
+                        justify-content: center;
+                        width: 100%;
+                        padding: 0 2rem;
+                        div {
+                            width: 10%;
+                            @extend %flex-col;
+                            justify-content: center;
+                            padding: 0 0.5rem;
+                            margin-bottom: 1rem;
+                        }
+                        .textInputName {
+                            width: 80%;
+                            font-size: x-large;
+                            font-weight: bold;
+                            color: $white-edge;
+                        }
+                        button {
+                            width: 100%;
+                            color: white;
+                            font-weight: 600;
+                            font-size: x-large;
+                            @extend %all-on-change;
+                        }
+                        button:hover {
+                            cursor: pointer;
+                            transform: scale(1.2);
+                            filter: brightness(1.1);
+                        }
                     }
                     .textInputDescription {
                         width: 100%;
@@ -43,7 +66,7 @@
                         padding: 1.5rem 0.5rem;
                         input {
                             @extend %rounded-lg;
-                            width: $p11-12;
+                            width: $p7-12;
                             padding: 0.5rem;
                             text-align: left;
                             border: 2px solid $intermediate;

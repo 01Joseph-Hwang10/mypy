@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import TextareaAutosize from 'react-textarea-autosize';
 import Row from './dictionary/Row';
 
 function Dictionary( {
@@ -6,8 +7,12 @@ function Dictionary( {
 		name,
 		description,
 		type,
+		variable_name,
 	},
 	allowedToModify,
+	isEditing,
+	toggleUpdate,
+	updateInputSpec,
 } ) {
 
 	const [ row, setRow, ] = useState( [ <Row key={1} id={1} />, ] );
@@ -34,13 +39,24 @@ function Dictionary( {
 	};
 
 	return (
-		<div className="formElement__dict">
+		<div className="formElement__dict formElement__root">
 			<div className="subject">
-				<span className="name">{name}</span>
-				<span>{`(${type})`}</span>
+				<div className='dictInputNameWrapper'>
+					<div></div>
+					<div className="dictInputName name">
+						{!isEditing && name}
+						{isEditing && <input defaultValue={name}></input>}
+					</div>
+					<div>
+						{allowedToModify && !isEditing && <button onClick={toggleUpdate} className="bi bi-pencil-square"></button>}
+						{allowedToModify && isEditing && <button onClick={updateInputSpec} className="bi bi-check2-circle"></button>}
+					</div>
+				</div>
+				<input type='hidden' defaultValue={variable_name}></input>
 			</div>
-			<div className='description'>
-				<p>{description}</p>
+			<div className="dictInputDescription description">
+				{!isEditing && <p>{description}</p>}
+				{isEditing && <TextareaAutosize defaultValue={description} />}
 			</div>
 			<div className="inputWrapper">
 				<div className="dict">

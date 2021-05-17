@@ -27,10 +27,11 @@ export const {
 			state.loading = false;
 			state.firstTime = false;
 		},
-		createAppError : ( state ) => {
+		createAppError : ( state, { payload, } ) => {
 			state.isSuccessful = false;
 			state.loading = false;
 			state.firstTime = false;
+			state.error = payload;
 		},
 	},
 } );
@@ -51,10 +52,10 @@ export const createApp = async ( postData ) => {
 			ok : true,
 			data,
 		};
-	} catch ( error ) {
+	} catch ( { response : { status, data, }, } ) {
 		return {
 			ok : false,
-			data : error.message,
+			data,
 		};
 	}
 };

@@ -17,3 +17,6 @@ class CustomUser(AbstractUser):
 
     def my_apps(self):
         return self.myapp.all()
+
+    def count_apps(self):
+        return int(self.myapp.count())

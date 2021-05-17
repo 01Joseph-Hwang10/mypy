@@ -41,29 +41,34 @@ import sys
 from index import main
 
 
+class ListStream:
+    def __init__(self):
+        self.data = []
+
+    def write(self, s):
+        self.data.append(s)
+
+    def __enter__(self):
+        sys.stdout = self
+        return self
+
+    def __exit__(self, ext_type, exc_value, traceback):
+        sys.stdout = sys.__stdout__
+
+
 def execute(
     global_variables,
     global_files
 ):
 
-    LOG_PATH = '/log'
-    LOG_FILE_PATH = f'{LOG_PATH}/log.txt'
+    execute_successful = True
 
-    with open(LOG_FILE_PATH, 'w') as fw:
-        sys.stdout = fw
-        sys.stderr = fw
-
-        log_array = []
+    with ListStream() as log:
         try:
             result = main(global_variables, global_files)
         except Exception as e:
-            fw.write(f'{str(e)}\n')
-            result = str(e)
-            log_array.append(str(e))
-        sys.stdout = sys.__stdout__
-        sys.stderr = sys.__stderr__
-    with open(LOG_FILE_PATH, 'r') as fr:
-        logs = fr.readlines()
-        for i in range(len(logs)):
-            log_array.append({'id': i+1, 'log': logs[i]})
-    return result, log_array
+            print(str(e))
+            execute_successful = False
+            result = log.data
+
+    return result, log.data, execute_successful

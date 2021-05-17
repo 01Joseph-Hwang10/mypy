@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { UPDATE_APP_SPEC } from "@src/urls";
+import { UPDATE_APP_SPEC, UPDATE_INPUT_SPEC } from "@src/urls";
 import axios from "axios";
 
 
@@ -53,4 +53,19 @@ export const updateApp = async ( postData ) => {
 };
 
 
-export const updateInputSpec = async () => {};
+export const updateInputSpec = async ( postData ) => {
+
+	try {
+		await axios
+			.patch( UPDATE_INPUT_SPEC, postData, { withCredentials : true, } );
+		
+		return {
+			ok : true,
+		};
+	} catch ( { response : data, } ) {
+		return {
+			ok : false,
+			data, 
+		};
+	}
+};

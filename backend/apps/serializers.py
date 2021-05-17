@@ -26,6 +26,7 @@ class InputSpecSerializer(Serializer):
     id = serializers.IntegerField()
     app = serializers.CharField()
     name = serializers.CharField(max_length=200)
+    variable_name = serializers.CharField(max_length=200)
     description = serializers.CharField()
     type = serializers.CharField(max_length=20)
 

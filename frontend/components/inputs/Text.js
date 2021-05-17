@@ -1,21 +1,36 @@
 import React from 'react';
+import TextareaAutosize from 'react-textarea-autosize';
 
 function Text( {
 	input : {
 		name,
 		description,
-		type,
+		variable_name,
 	},
 	allowedToModify,
+	isEditing,
+	toggleUpdate,
+	updateInputSpec,
 } ) {
 	return (
-		<div className="formElement__text">
-			<span className="textInputName name">{`${name}(${type})`}</span>
+		<div className="formElement__text formElement__root">
+			<div className='textInputNameWrapper'>
+				<div></div>
+				<div className="textInputName name">
+					{!isEditing && name}
+					{isEditing && <input defaultValue={name}></input>}
+				</div>
+				<div>
+					{allowedToModify && !isEditing && <button onClick={toggleUpdate} className="bi bi-pencil-square"></button>}
+					{allowedToModify && isEditing && <button onClick={updateInputSpec} className="bi bi-check2-circle"></button>}
+				</div>
+			</div>
 			<div className="textInputDescription description">
-				<p>{description}</p>
+				{!isEditing && <p>{description}</p>}
+				{isEditing && <TextareaAutosize defaultValue={description} />}
 			</div>
 			<div className="textInputWrapper">
-				<input className="textInput" name={name} placeholder={description}></input>
+				<input className="textInput" name={variable_name} placeholder={name}></input>
 			</div>
 		</div>
 	);

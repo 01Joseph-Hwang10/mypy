@@ -31,7 +31,9 @@ const executeAppDataForm = (  app, id  ) => {
 
 		listInput.forEach( element => {
 			let value = [];
-			const key = element.querySelector( '.name' ).innerText;
+			const key = element
+				.querySelector( '.subject' )
+				.querySelector( 'input' ).value;
 			const inputs = element.querySelectorAll( 'input' );
 			inputs.forEach( input => {
 				const listItem = input.value;
@@ -47,7 +49,9 @@ const executeAppDataForm = (  app, id  ) => {
 		
 		dictInput.forEach( element => {
 			let value = {};
-			const key = element.querySelector( '.name' ).innerText;
+			const key = element
+				.querySelector( '.subject' )
+				.querySelector( 'input' ).value;
 			const forms = element.querySelectorAll( '.dict__row' );
 			forms.forEach( form => {
 				const dictKey = form.querySelector( '.dict__key' ).value;

@@ -51,11 +51,10 @@ export const retrieveApp = async ( id ) => {
 			ok : true,
 			data,
 		};
-	} catch ( error ) {
-		console.error( error );
+	} catch ( { response : { data, }, } ) {
 		return {
 			ok : false,
-			data : error.message,
+			data, 
 		};
 	}
 };

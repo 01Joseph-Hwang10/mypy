@@ -1,5 +1,5 @@
 import jwt
-import subprocess
+# import subprocess
 import json
 import os
 import shutil
@@ -48,6 +48,8 @@ from apps.permissions import (
 )
 from common.functions import get_cookie
 from users.serializers import LightWeightUserSerializer
+import requests
+from time import sleep
 
 
 class CreateAppView(CreateAPIView):
@@ -81,13 +83,17 @@ class CreateAppView(CreateAPIView):
             if cover_img_source == 'undefined':
                 cover_img_source = False
 
+            # Check if user exceeded the maximum app limit
+            count_app = created_by.myapp.count()
+            if count_app > 1:
+                raise BufferError(
+                    'You exceeded the maximum limit of the number of apps.')
+
             # Defines port number
             max_port_app = App.objects.order_by('-port').first()
-            print(max_port_app)
             if max_port_app == None:
                 new_port = 10000
             else:
-                print(max_port_app.port)
                 new_port = int(max_port_app.port) + 1
 
             # Check whether output type is proper
@@ -109,7 +115,6 @@ class CreateAppView(CreateAPIView):
 
             # Get Id out of it
             new_id = int(self.get_serializer(new)['id'].value)
-            print(new_id)
 
             # Make media root if not exist
             if not os.path.exists(MEDIA_ROOT):
@@ -176,7 +181,8 @@ class CreateAppView(CreateAPIView):
                         # Create Input Specs if it exists
                         for spec in specs:
                             InputSpec.objects.create(
-                                name=spec['name'],
+                                name=f"{spec['name']}({spec['type']})",
+                                variable_name=spec['name'],
                                 description=spec['description'],
                                 type=spec['type'],
                                 app=App.objects.get(id=new_id)
@@ -267,7 +273,6 @@ class CreateAppView(CreateAPIView):
             # input_dir = os.path.join(save_directory, 'input')
             # output_dir = os.path.join(save_directory, 'output')
             # data_dir = os.path.join(save_directory, 'data')
-            static_dir = os.path.join(save_directory, 'static')
             # Make sure to support dependencies installation with requirements.txt
             # dependencies_dir = os.path.join(script_directory, '__dependencies')
             # server_dependencies_dir = os.path.join(
@@ -276,18 +281,6 @@ class CreateAppView(CreateAPIView):
             # os.mkdir(input_dir)
             # os.mkdir(output_dir)
             # os.mkdir(data_dir)
-            os.mkdir(static_dir)
-
-            # Save cover image if there is cover image
-            if cover_img_source:
-                cover_img = Image.open(cover_img_source)
-                img_extension = cover_img_source.name.split('.')[-1]
-                cover_img_directory = os.path.join(
-                    static_dir, f'cover_img.{img_extension}')
-                cover_img_uri = f'/{new_id}/static/cover_img.{img_extension}'
-                cover_img.save(cover_img_directory)
-            else:
-                cover_img_directory = False
 
             # Make __args.py which will be base of inputs
             # if DEBUG:
@@ -316,16 +309,58 @@ class CreateAppView(CreateAPIView):
 
             # Make docker-compose file
             with open(os.path.join(save_directory, 'docker-compose.yml'), 'w') as f:
-                write_docker_compose(f, new_port)
+                write_docker_compose(f, new_port, new_id)
+
+            # sleep(30)
+
+            # Zip app again
+            zip_directory = os.path.join(save_directory, 'container.zip')
+            with ZipFile(zip_directory, 'w') as zf:
+                for folderName, subfolders, filenames in os.walk(save_directory):
+                    for filename in filenames:
+                        filePath = os.path.join(folderName, filename)
+                        relativePath = filePath.replace(save_directory, '')
+                        if filePath != 'container.zip':
+                            zf.write(filePath, relativePath)
+
+            with open(zip_directory, 'rb') as zf:
+                server_url = 'http://localhost:5000/create'  # Temporal
+                app_spec = {
+                    'id': new_id,
+                    'name': name,
+                    'port': new_port,
+                    'output_type': output_type
+                }
+                request_data = {
+                    'SECRET_KEY': SECRET_KEY,
+                    'app_spec': json.dumps(app_spec)
+                }
+                result = requests.post(server_url, data=request_data, files={
+                                       'app_source': ('app.zip', zf)})
+                if result.status_code != 200:
+                    raise BufferError('Deployment failed!')
 
             # Deploy the app
-            if DEBUG:
-                subp = subprocess.Popen(
-                    ['docker-compose', 'up', '--build'], cwd=save_directory)
+            # if DEBUG:
+            #     subp = subprocess.Popen(
+            #         ['docker-compose', 'up', '--build'], cwd=save_directory)
+            # else:
+            #     subp = subprocess.Popen(
+            #         ['docker-compose', 'up', '--build', '-d'], cwd=save_directory)
+            #     subp.wait()
+
+            # Save cover image if there is cover image
+            static_dir = os.path.join(save_directory, 'static')
+            os.mkdir(static_dir)
+            if cover_img_source:
+                cover_img = Image.open(cover_img_source)
+                img_extension = cover_img_source.name.split('.')[-1]
+                cover_img_directory = os.path.join(
+                    static_dir, f'cover_img.{img_extension}')
+                cover_img_uri = f'/{new_id}/static/cover_img.{img_extension}'
+                cover_img.save(cover_img_directory)
             else:
-                subp = subprocess.Popen(
-                    ['docker-compose', 'up', '--build', '-d'], cwd=save_directory)
-                subp.wait()
+                cover_img_directory = False
 
             # Update initially created instance's app path and cover image path
             instance = App.objects.get(id=new_id)
@@ -333,6 +368,10 @@ class CreateAppView(CreateAPIView):
             if cover_img_directory:
                 instance.cover_img = cover_img_uri
             instance.save()
+
+            #
+            # shutil.rmtree(server_directory)
+            # os.remove(os.path.join(save_directory, 'docker-compose.yml'))
 
             # Return id which will be used at retrieve on frontend
             data = {
@@ -348,7 +387,7 @@ class CreateAppView(CreateAPIView):
                 shutil.rmtree(save_directory)
             if new_id:
                 App.objects.filter(id=new_id).delete()
-            return Response(status=400, data=json.dumps(e))
+            return Response(status=400, data=json.dumps(str(e)))
 
 
 class ListAppView(ListAPIView):
@@ -416,7 +455,10 @@ class UpdateAppView(UpdateAPIView):
             name = post_data['name']
             description = post_data['description']
 
-            app = App.objects.filter(id=app_id)[0]
+            app = App.objects.filter(id=app_id)
+            if not app:
+                raise ValueError('App with this id does not exists')
+            app = app[0]
             app.name = name
             app.description = description
 
@@ -445,7 +487,26 @@ class UpdateInputSpecView(UpdateAPIView):
     permission_classes = (AllowedToModifyInputSpec,)
 
     def patch(self, request, *args, **kwargs):
-        return super().patch(request, *args, **kwargs)
+        try:
+            post_data = request.data
+            input_spec_id = int(post_data['id'])
+            name = post_data['name']
+            description = post_data['description']
+
+            input_spec = InputSpec.objects.filter(id=input_spec_id)
+            print(input_spec)
+            if not input_spec:
+                raise ValueError('Input spec with this id does not exists')
+            input_spec = input_spec[0]
+            input_spec.name = name
+            input_spec.description = description
+
+            input_spec.save()
+
+            return Response(status=200, data='app successfully updated')
+        except Exception as e:
+            print(e)
+            return Response(status=400, data="app update failed!")
 
 
 class DeleteAppView(DestroyAPIView):
@@ -460,10 +521,15 @@ class DeleteAppView(DestroyAPIView):
             # Delete every source of app
             id = int(self.request.query_params.get('id'))
             save_directory = os.path.join(MEDIA_ROOT, f'{id}/')
-            subp = subprocess.Popen(
-                ['docker-compose', 'down'], cwd=save_directory
-            )
-            subp.wait()
+            server_url = f'http://localhost:5000/delete'
+            # subp = subprocess.Popen(
+            #     ['docker-compose', 'down'], cwd=save_directory
+            # )
+            # subp.wait()
+            result = requests.post(
+                server_url, data={'id': id, 'SECRET_KEY': SECRET_KEY})
+            if result.status_code != 200:
+                raise BufferError('Deletion failed!')
             shutil.rmtree(save_directory)
             App.objects.filter(id=id)[0].delete()
             return Response(status=200, data='app successfully deleted')

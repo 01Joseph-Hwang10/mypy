@@ -74,7 +74,7 @@ function MypySideBar( {
 					<div className="mypySideBar__guestLogin">
 						<span>Sign up and access to your imported app list at any device!</span>
 						<div className="sideBar__buttons">
-							<Link href={SIGN_UP}>
+							<Link href='/login/signup'>
 								<button className="buttonRipple">Sign Up</button>
 							</Link>
 						</div>

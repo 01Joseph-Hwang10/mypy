@@ -33,16 +33,16 @@ OUTPUT_TYPES = (
     PDF,
 )
 
-STR_TYPE = str()
-INT_TYPE = int()
-FLOAT_TYPE = float()
-COMPLEX_TYPE = complex()
-LIST_TYPE = list()
-TUPLE_TYPE = tuple()
-DICT_TYPE = dict()
-SET_TYPE = set()
-FROZENSET_TYPE = frozenset()
-BOOL_TYPE = bool()
+STR_TYPE = type(str())
+INT_TYPE = type(int())
+FLOAT_TYPE = type(float())
+COMPLEX_TYPE = type(complex())
+LIST_TYPE = type(list())
+TUPLE_TYPE = type(tuple())
+DICT_TYPE = type(dict())
+SET_TYPE = type(set())
+FROZENSET_TYPE = type(frozenset())
+BOOL_TYPE = type(bool())
 
 TYPE_CLASSES = (
     STR_TYPE,

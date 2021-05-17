@@ -43,7 +43,7 @@ function create( {
 			button.disabled = false;
 			router.push( `/app/${id}` );
 		} else {
-			CreateAppError();
+			CreateAppError( data );
 			button.disabled = false;
 		}
 	};
@@ -75,8 +75,8 @@ function create( {
 							<option value="text/plain">Plain text</option>
 						</select>
 					</div>
+					{ !IsSuccessful && <span className="errorMessage">{Error}</span> }
 					<button>{IsLoading ? 'Creating...' : 'Create'}</button>
-					{ !SignedIn && <span className="errorMessage">{Error}</span> }
 				</form>
 			</div>
 		</div>
@@ -102,7 +102,7 @@ const mapDispatchToProps = ( dispatch ) => {
 	return {
 		loading : () => dispatch( loading() ),
 		createAppSuccessful : () => dispatch( createAppSuccessful() ),
-		createAppError : () => dispatch( createAppError() ),
+		createAppError : ( response ) => dispatch( createAppError( response ) ),
 	};
 };
 

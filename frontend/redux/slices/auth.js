@@ -68,10 +68,10 @@ export const signIn = async postData => {
 			ok : true,
 			data,
 		};
-	} catch ( error ) {
+	} catch ( { response : { data, }, } ) {
 		return {
 			ok : false,
-			data : error.message,
+			data,
 		};
 	}
 };

@@ -4,17 +4,21 @@
 
 <!-- - Social login(Just do only google) -->
 
-- Needa fix the bug first
+<!-- - Needa fix the bug first -->
 
-- Modify app view, input spec view (Needa make update input spec slices)
+<!-- - Modify app view, input spec view (Needa make update input spec slices) -->
 
-- Needa give a constraint of 2 of the number of the apps
+<!-- - Needa give a constraint of 2 of the number of the apps -->
 
 - Test various output types
 
+- Check if function that removes os, etc works properly
+
+<!-- - Add sqlite to server -->
+
 - Needa know how to add the environment variable at browser (Later)
 
-- Add sqlite to server
+- Add admin page to server (Later)
 
 <!-- - Text file output of md and txt and Image outpout -->
 

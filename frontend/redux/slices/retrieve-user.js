@@ -51,10 +51,10 @@ export const retrieveUser = async ( userId ) => {
 			ok : true,
 			data,
 		};
-	} catch ( error ) {
+	} catch ( { response : { data, }, } ) {
 		return {
 			ok : false,
-			data : error.message,
+			data, 
 		};
 	}
 

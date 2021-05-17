@@ -11,11 +11,17 @@ app = Flask(__name__)
 __MIMETYPE = 'application/json'
 
 
-@app.route('/')
+@app.route('/', methods=['GET'])
 def root():
 
     # Temporal redirection
     return redirect('http://localhost:3000')
+
+
+@app.route('/health_check', methods=['GET'])
+def health_check():
+
+    return Response(status=200, data='Server is on duty')
 
 
 @app.route('/test', methods=["GET", "POST"])

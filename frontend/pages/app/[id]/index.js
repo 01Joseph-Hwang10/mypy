@@ -92,7 +92,7 @@ function AppDetail( {
 			const { ok, data, } = await axiosDeleteApp( id );
 			if ( ok ) {
 				DeleteAppSuccessful();
-				router.push( '/' );
+				router.push( `/mypy/${UserId}` );
 			} else {
 				DeleteAppError( data );
 			}

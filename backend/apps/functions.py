@@ -233,10 +233,12 @@ def write_dockerfile(interface, output_type):
         interface.write(codeline)
 
 
-def write_docker_compose(interface, port):
+def write_docker_compose(interface, port, app_id):
 
     with open(os.path.join(STATIC_PATH, 'flask_server/docker-compose.yml'), 'r') as f:
         codelines = f.readlines()
 
     for codeline in codelines:
-        interface.write(codeline.replace('__PORT', str(port)))
+        interface.write(
+            codeline.replace('__PORT', str(port)).replace('__ID', str(app_id))
+        )

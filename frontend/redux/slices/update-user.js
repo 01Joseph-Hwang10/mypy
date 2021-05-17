@@ -43,10 +43,10 @@ export const updateUser = async ( id, postData ) => {
 		return {
 			ok : true,
 		};
-	} catch ( error ) {
+	} catch ( { response : { data, }, } ) {
 		return {
 			ok : false,
-			data : error.message,
+			data, 
 		};
 	}
 };

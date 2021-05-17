@@ -1,4 +1,5 @@
 import json
+from django.contrib import auth
 from django.core.checks.messages import DEBUG
 from config.settings import GOOGLE_CLIENT_ID
 from rest_framework import status
@@ -9,7 +10,7 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView
 )
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 from users.constants import GOOGLE
 from users.models import CustomUser
@@ -88,6 +89,7 @@ class CustomTokenRefreshView(TokenRefreshView):
 
 @api_view(['GET'])
 @permission_classes([AllowAny, ])
+@authentication_classes([])
 def logout(request):
 
     auth_response = Response(status=status.HTTP_200_OK)
@@ -118,6 +120,7 @@ BANNED_NAME = ['Guest']
 
 @api_view(['POST'])
 @permission_classes([AllowAny, ])
+@authentication_classes([])
 def signup(request):
 
     try:
@@ -158,7 +161,7 @@ def signup(request):
             errors['nameError'] = []
 
         if not_able_to_signup:
-            return Response(status=200, data=errors)
+            raise ValueError()
 
         new_user = CustomUser.objects.create(
             first_name=first_name,
@@ -171,11 +174,12 @@ def signup(request):
         return response
     except Exception as e:
         print(e)
-        return Response(status=500, data="Something went wrong")
+        return Response(status=400, data=errors)
 
 
 @api_view(['POST'])
 @permission_classes([AllowAny, ])
+@authentication_classes([])
 def google_login(request):
 
     try:

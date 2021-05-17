@@ -25,5 +25,6 @@ class InputSpec(TimeStampedModel):
     app = models.ForeignKey(App, on_delete=models.CASCADE,
                             related_name='input_spec')
     name = models.CharField(max_length=200)
+    variable_name = models.CharField(max_length=200)
     description = models.TextField(null=True, blank=True)
     type = models.CharField(max_length=20)

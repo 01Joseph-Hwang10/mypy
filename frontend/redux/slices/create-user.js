@@ -43,26 +43,18 @@ export const {
 export const createUser = async ( postData ) => {
 
 	try {
-		const { status, data, } = await axios
+		const {  data, } = await axios
 			.post( SIGN_UP, postData, { withCredentials : true, } );
 
-		if ( status == 201 ) {
-			return {
-				ok : true,
-				data,
-			};
-		}
 		return {
-			ok : false,
+			ok : true,
 			data,
 		};
-	} catch ( error ) {
+	} catch ( { response : { data, }, } ) {
 		
 		return {
 			ok : false,
-			data : {
-				error : error.message,
-			},
+			data, 
 		};
 	}
 };
