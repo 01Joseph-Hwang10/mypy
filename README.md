@@ -14,6 +14,8 @@
 
 - Needa know how to add the environment variable at browser (Later)
 
+- Add sqlite to server
+
 <!-- - Text file output of md and txt and Image outpout -->
 
 <!-- - More specific tutorial -->

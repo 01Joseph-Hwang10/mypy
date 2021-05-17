@@ -101,7 +101,8 @@ class CreateAppView(CreateAPIView):
                 created_by=created_by,
                 app='',
                 cover_img=None,
-                server_number=SERVER_NUMBER,
+                # For temporary
+                server_number=1,
                 port=new_port,
                 output_type=output_type
             )
