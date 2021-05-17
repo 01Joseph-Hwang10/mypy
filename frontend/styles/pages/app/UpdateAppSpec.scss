@@ -19,9 +19,25 @@
             @extend %shadow-lg;
             padding: 1.5rem;
 
+            @include small {
+                width: $p9-12;
+            }
+
+            @include medium {
+                width: $p7-12;
+            }
+
+            @include large {
+                width: $p5-12;
+            }
+
+            @include x-large {
+                width: $p4-12;
+            }
+
             label {
                 width: 100%;
-                margin-top: 1.5rem;
+                margin-top: 0.25rem;
                 font-weight: 600;
                 text-align: left;
             }
@@ -46,16 +62,24 @@
             }
     
             button {
-                @extend %basic-button;
+                @extend %base-basic-button;
                 @extend %rounded-lg;
+                width: 100%;
+                font-weight: 600;
                 transition: all 0.2s ease;
+                padding: 0.5rem 0;
                 font-size: large;
                 background-color: $teal;
+                margin-top: 0.25rem;
             }
     
             button:hover {
                 cursor: pointer;
                 filter: brightness(1.1)
+            }
+
+            .cancelButton {
+                background-color: gray;
             }
 
             .errorMessage {

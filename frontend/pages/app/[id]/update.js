@@ -11,6 +11,7 @@ function UpdateAppSpec( {
 		id,
 		name,
 		description,
+		created_by_id,
 	},
 	isLoading : IsLoading,
 	isSuccessful : IsSuccessful,
@@ -18,11 +19,10 @@ function UpdateAppSpec( {
 	updateAppSuccessful : UpdateAppSuccessful,
 	updateAppError : UpdateAppError,
 	loading : Loading,
+	userId : UserId,
 } ) {
 
 	const router = useRouter();
-
-	const [ isIdMatchesWithUrl, setIsIdMatchesWithUrl, ] = useState( false );
     
 	const submitUpdate = async e => {
 		e.preventDefault();
@@ -40,10 +40,17 @@ function UpdateAppSpec( {
 			showMessage( { message : data, level : 'error', } );
 		}
 	};
+	
+	const backToAppPage = () => {
+		const { query : { id : appId, }, } = router;
+		router.push( `/app/${appId}` );
+	};
     
 	useEffect( () => {
-		const { query : { id : appId, }, } = router;
-		if ( id && id == appId ) setIsIdMatchesWithUrl( true );
+		if ( Number( created_by_id ) !== Number( UserId ) ) {
+			router.push( `/` );
+			showMessage( { message : "No permission to modify app", level : 'error', } );
+		}
 	} );
 
 
@@ -51,12 +58,13 @@ function UpdateAppSpec( {
 		<div id='appRoot'>
 			<div className="updateAppSpecFormWrapper">
 				<form onSubmit={submitUpdate}>
-					<input defaultValue={isIdMatchesWithUrl && name} className="name" name='name' placeholder='name'></input>
-					<TextareaAutosize defaultValue={isIdMatchesWithUrl && description} className="description" name='description' placeholder='description' />
+					<input defaultValue={name} className="name" name='name' placeholder='name'></input>
+					<TextareaAutosize defaultValue={description} className="description" name='description' placeholder='description' />
 					<label htmlFor="cover_img">App Cover Image</label>
 					<input className="coverImg" name="cover_img" type="file" accept="image/*" />
-					<button>Update</button>
+					<button className="submitButton" type='submit'>Update</button>
 					{ErrorMessage && !IsSuccessful && <span className="errorMessage">{ErrorMessage}</span>}
+					<button className="cancelButton" onClick={backToAppPage}>Cancel</button>
 				</form>
 			</div>
 		</div>
@@ -69,6 +77,7 @@ const mapStateToProps = state => {
 		isLoading : state.updateApp.loading,
 		isSuccessful : state.updateApp.isSuccessful,
 		errorMessage : state.updateApp.errorMessage,
+		userId : state.auth.userId,
 	};
 };
 
