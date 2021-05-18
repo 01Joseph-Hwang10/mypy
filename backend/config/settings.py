@@ -12,8 +12,14 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 import os
 from datetime import timedelta
-
 from pathlib import Path
+import environ
+
+# Initialise environment variable
+
+env = environ.Env()
+
+environ.Env().read_env()
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -24,7 +30,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '#08y$puf(yn%@a#-%!l0o2anef9rl(+n%_3a!$zp_zjfo+aeyh'
+SECRET_KEY = env('SECRET_KEY')
 
 ALGORITHM = 'HS256'
 
@@ -32,7 +38,7 @@ ALGORITHM = 'HS256'
 SERVER_NUMBER = 0
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = bool(os.environ.get('DEBUG') != 'False')
+DEBUG = bool(env('DEBUG') != 'False')
 
 
 # Application definition
@@ -215,33 +221,24 @@ SIMPLE_JWT = {
 
 # Google OAuth
 
-GOOGLE_CLIENT_ID = '502846912783-u6geb0s3adj8f16l8qm5dqedb9r03tb9.apps.googleusercontent.com'
+GOOGLE_CLIENT_ID = env('GOOGLE_CLIENT_ID')
 
 # Django Cors
 
 CORS_ALLOW_CREDENTIALS = True
 
-ALLOWED_HOSTS = (  # This is not the django cors headers property,
-    # It's django property
-    'localhost',
-    '127.0.0.1',
-)
+ALLOWED_HOSTS = [
+    host for host in env('ALLOWED_HOSTS').split('\n') if len(host) != 0
+]
 
-CORS_ORIGIN_WHITELIST = (
-    'http://localhost:3000',
-    'http://127.0.0.1:3000',
-    'https://localhost:3000',
-    'https://127.0.0.1:3000'
-)
+CORS_ORIGIN_WHITELIST = [
+    host for host in env('CORS_ORIGIN_WHITELIST').split('\n') if len(host) != 0
+]
 
-CORS_ALLOWED_ORIGINS = (
-    'http://localhost:3000',
-    'http://127.0.0.1:3000',
-    'https://localhost:3000',
-    'https://127.0.0.1:3000'
-)
+CORS_ALLOWED_ORIGINS = [
+    host for host in env('CORS_ALLOWED_ORIGINS').split('\n') if len(host) != 0
+]
 
-CSRF_TRUSTED_ORIGINS = (
-    'localhost:3000',
-    '127.0.0.1:3000',
-)
+CSRF_TRUSTED_ORIGINS = [
+    host for host in env('CSRF_TRUSTED_ORIGINS').split('\n') if len(host) != 0
+]

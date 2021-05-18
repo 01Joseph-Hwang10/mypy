@@ -1,22 +1,19 @@
 import os
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
-SERVER_NUMBER = 1
-SERVER_ADDRESS = 'http://localhost'
+SERVER_NUMBER = int(os.environ.get('SERVER_NUMBER'))
+SERVER_ADDRESS = os.environ.get('SERVER_ADDRESS')
 
-DEBUG = True
+DEBUG = DEBUG = bool(os.environ.get('DEBUG') != 'False')
 
-SECRET_KEY = '#08y$puf(yn%@a#-%!l0o2anef9rl(+n%_3a!$zp_zjfo+aeyh'
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 UPLOAD_ROOT = os.path.join(BASE_DIR, 'uploads/')
 
 # Cors
 
 CROSS_ORIGIN_WHITELIST = [
-    'http://localhost:3000',
-    'http://127.0.0.1:3000',
-    'https://localhost:3000',
-    'https://127.0.0.1:3000'
+    host for host in os.environ.get('CROSS_ORIGIN_WHITELIST').split('\n') if len(host) != 0
 ]
 
 # DB

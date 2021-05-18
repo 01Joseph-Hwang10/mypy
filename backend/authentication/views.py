@@ -205,7 +205,7 @@ def google_login(request):
             user.save()
         refresh = RefreshToken.for_user(user)
         user_id = int(user.id)
-        auth_response = Response(status=200, data={'user_id': user_id})
+        auth_response = Response(status=201, data={'user_id': user_id})
 
         max_age_1day = 24*60*60
         max_age_54weeks = 54*7*24*60*60

@@ -369,9 +369,10 @@ class CreateAppView(CreateAPIView):
                 instance.cover_img = cover_img_uri
             instance.save()
 
-            #
-            # shutil.rmtree(server_directory)
-            # os.remove(os.path.join(save_directory, 'docker-compose.yml'))
+            # Clean up
+            shutil.rmtree(server_directory)
+            os.remove(os.path.join(save_directory, 'docker-compose.yml'))
+            os.remove(os.path.join(save_directory, 'container.zip'))
 
             # Return id which will be used at retrieve on frontend
             data = {

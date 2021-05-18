@@ -3,7 +3,17 @@ import re
 import subprocess
 from flask import Flask, redirect, request, Response
 from requests.exceptions import ProxyError
-from config import CROSS_ORIGIN_WHITELIST, DEBUG, SECRET_KEY, SERVER_ADDRESS, SERVER_NUMBER, SQLALCHEMY_COMMIT_ON_TEARDOWN, SQLALCHEMY_DATABASE_URI, SQLALCHEMY_TRACK_MODIFICATIONS, UPLOAD_ROOT
+from config import (
+    CROSS_ORIGIN_WHITELIST,
+    DEBUG,
+    SECRET_KEY,
+    SERVER_ADDRESS,
+    SERVER_NUMBER,
+    SQLALCHEMY_COMMIT_ON_TEARDOWN,
+    SQLALCHEMY_DATABASE_URI,
+    SQLALCHEMY_TRACK_MODIFICATIONS,
+    UPLOAD_ROOT
+)
 from flask_cors import cross_origin
 import json
 from zipfile import ZipFile
@@ -173,10 +183,12 @@ def delete_app():
         return Response(status=500, response="Something went wrong")
 
 
-app.config['SECRET_KEY'] = SECRET_KEY
-app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
-app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = SQLALCHEMY_COMMIT_ON_TEARDOWN
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = SQLALCHEMY_TRACK_MODIFICATIONS
+app.config.update(
+    SECRET_KEY=SECRET_KEY,
+    SQLALCHEMY_DATABASE_URI=SQLALCHEMY_DATABASE_URI,
+    SQLALCHEMY_COMMIT_ON_TEARDOWN=SQLALCHEMY_COMMIT_ON_TEARDOWN,
+    SQLALCHEMY_TRACK_MODIFICATIONS=SQLALCHEMY_TRACK_MODIFICATIONS,
+)
 
 db.init_app(app)
 db.app = app

@@ -11,6 +11,7 @@ django-cors-headers = "*"
 djangorestframework-simplejwt = "*"
 requests = "*"
 google-api-python-client = "*"
+django-environ = "*"
 
 [dev-packages]
 
