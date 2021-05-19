@@ -25,6 +25,11 @@ function usingAsAPI() {
 							Customizing App Page <i className="bi bi-arrow-left-circle"></i>
 						</span>
 					</Link>
+					<Link href='/tutorial/ch7'>
+						<span>
+							Using Modules <i className="bi bi-arrow-right-circle"></i>
+						</span>
+					</Link>
 				</div>
 			</div>
 		</TutorialLayout>

@@ -30,7 +30,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env('SECRET_KEY')
+SECRET_KEY = env('SECRET_KEY')[1:-1]
 
 ALGORITHM = 'HS256'
 
@@ -228,17 +228,17 @@ GOOGLE_CLIENT_ID = env('GOOGLE_CLIENT_ID')
 CORS_ALLOW_CREDENTIALS = True
 
 ALLOWED_HOSTS = [
-    host for host in env('ALLOWED_HOSTS').split('\n') if len(host) != 0
+    host for host in env('ALLOWED_HOSTS')[1:-1].split('\n') if len(host) != 0
 ]
 
 CORS_ORIGIN_WHITELIST = [
-    host for host in env('CORS_ORIGIN_WHITELIST').split('\n') if len(host) != 0
+    host for host in env('CORS_ORIGIN_WHITELIST')[1:-1].split('\n') if len(host) != 0
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    host for host in env('CORS_ALLOWED_ORIGINS').split('\n') if len(host) != 0
+    host for host in env('CORS_ALLOWED_ORIGINS')[1:-1].split('\n') if len(host) != 0
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    host for host in env('CSRF_TRUSTED_ORIGINS').split('\n') if len(host) != 0
+    host for host in env('CSRF_TRUSTED_ORIGINS')[1:-1].split('\n') if len(host) != 0
 ]

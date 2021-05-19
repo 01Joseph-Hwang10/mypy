@@ -173,7 +173,8 @@ def filter_banned_codeline(codeline):
     if len(splitted_by_spaces) != 0 and splitted_by_spaces[0] in ['from', 'import']:
         splitted_by_dots = splitted_by_spaces[1].split('.')
         if splitted_by_dots[0] in banned_module:
-            return False
+            raise ValidationError(
+                f'Your app is trying to import banned python module: {", ".join(banned_module)}')
 
     return codeline
 

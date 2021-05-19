@@ -130,3 +130,12 @@ OUTPUT_TYPES_CHOICES = (
     (WEBP, '.webp'),
     (PDF, '.pdf')
 )
+
+
+SINGLE_CHOICE = 'SINGLE_CHOICE'
+MULTIPLE_CHOICE = 'MULTIPLE_CHOICE'
+
+INPUT_EXTRATYPES = [
+    (SINGLE_CHOICE, 'Single Choice'),
+    (MULTIPLE_CHOICE, 'Multiple Choice')
+]

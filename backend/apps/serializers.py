@@ -29,6 +29,7 @@ class InputSpecSerializer(Serializer):
     variable_name = serializers.CharField(max_length=200)
     description = serializers.CharField()
     type = serializers.CharField(max_length=20)
+    extra_type = serializers.CharField(max_length=30)
 
     class Meta:
         model = InputSpec

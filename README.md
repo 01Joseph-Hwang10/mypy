@@ -12,9 +12,11 @@
 
 - Test various output types
 
-- Check if function that removes os, etc works properly
+<!-- - Check if function that removes os, etc works properly -->
 
 - Make able string input and list input as selection
+
+- Write documentation about modules and dependencies
 
 <!-- - Add sqlite to server -->
 

@@ -1,5 +1,5 @@
 from django.db import models
-from apps.constants import JSON, OUTPUT_TYPES_CHOICES
+from apps.constants import INPUT_EXTRATYPES, JSON, OUTPUT_TYPES_CHOICES
 from common.models import TimeStampedModel
 from config.settings import SERVER_NUMBER
 from users.models import CustomUser
@@ -28,3 +28,5 @@ class InputSpec(TimeStampedModel):
     variable_name = models.CharField(max_length=200)
     description = models.TextField(null=True, blank=True)
     type = models.CharField(max_length=20)
+    extra_type = models.CharField(
+        'extra_type', choices=INPUT_EXTRATYPES, null=True, blank=True, max_length=30)

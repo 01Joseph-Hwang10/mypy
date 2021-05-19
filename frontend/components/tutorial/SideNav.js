@@ -35,6 +35,9 @@ function SideNav() {
 			<Link onClick href='/tutorial/ch6'>
 				<button className="btn6" onClick={indicatePage}>Using as API</button>
 			</Link>
+			<Link onClick href='/tutorial/ch7'>
+				<button className="btn7" onClick={indicatePage}>Using Modules</button>
+			</Link>
 		</div>
 	);
 }
