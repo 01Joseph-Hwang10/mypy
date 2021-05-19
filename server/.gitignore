@@ -3,3 +3,4 @@
 .test.env
 .dev.env
 .production.env
+.env
