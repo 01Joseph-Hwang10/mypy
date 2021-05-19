@@ -14,6 +14,8 @@
 
 - Check if function that removes os, etc works properly
 
+- Make able string input and list input as selection
+
 <!-- - Add sqlite to server -->
 
 - Needa know how to add the environment variable at browser (Later)
