@@ -215,7 +215,7 @@ def write_constants(interface):
         interface.write(codelines)
 
 
-def write_dockerfile(interface, output_type):
+def write_dockerfile(interface, output_type, has_dependencies):
 
     with open(os.path.join(STATIC_PATH, 'flask_server/server/Dockerfile'), 'r') as f:
         codelines = f.readlines()
@@ -230,6 +230,14 @@ def write_dockerfile(interface, output_type):
             codeline = codeline.replace('__PILLOW', 'pillow')
         else:
             codeline = codeline.replace('__PILLOW', '')
+
+        if codeline == '__INSTALL_DEPENDENCIES\n':
+            if has_dependencies:
+                docker_command = 'RUN pip install -r requirements.txt'
+                codeline = codeline.replace(
+                    '__INSTALL_DEPENDENCIES', docker_command)
+            else:
+                codeline = ''
 
         interface.write(codeline)
 

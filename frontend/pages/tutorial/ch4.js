@@ -15,24 +15,36 @@ function logAndOutput() {
 				<p>
 					If the app is executed, every message from &quot;print&quot; function will be logged and displayed at your app page.
 					It would be easier to understand that you&apos;ll going to see every message at the log as if it is like a python console.
+				</p> */}
+				<h3>#1 Error</h3>
+				<p>
+					If an error occured at the application, the error message will be printed out at result section of app page.
+					Also if that is the case, every output from &quot;print&quot; function will be logged and be displayed at your result section of your app.
 				</p>
 				<CodeBox>
 					<span>from some.where import some_func</span>
 					<span className="breakLine"></span>
+					<span>some_input=str()</span>
+					<span className="breakLine"></span>
 					<span>def main():</span>
 					<span className="breakLine"></span>
-					<span className="tabbed">result = some_func()</span>
-					<span className="tabbed">
-						print(&quot;Result successfully calculated!!&quot;) <strong>&lt;= This will be logged</strong>
+					<span className='tabbed'>if len(some_input) &gt; 100:</span>
+					<span className="doubleTabbed">
+						print(&quot;Too long input!!&quot;)
+						<strong>&lt;= This will be logged</strong>
+					</span>
+					<span className="doubleTabbed">
+						raise ValueError(&quot;A length of the input should not be greater than 100&quot;)
+						<strong>&lt;= This will be logged too!</strong>
 					</span>
 					<span className="breakLine"></span>
+					<span className="tabbed">result = some_func()</span>
 					<span className="tabbed">return result</span>
 					<span className="breakLine"></span>
-				</CodeBox> */}
-				<h3>#1 Error</h3>
+				</CodeBox>
 				<p>
-					If an error occured at the application, the error message will be printed out at result section of app page.
-					Since mypy is in prototype stage, we apologize that we don&quot;t really have great tool for logging and error handling.
+					It is recommended to predict the error which might occur because of unwanted user input, and handle the error manually.
+					Also it is recommended to test your code before deploying it to mypy since the deployment might take some time.
 				</p>
 				<h3>#2 Output</h3>
 				<p>

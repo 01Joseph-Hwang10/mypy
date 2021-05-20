@@ -191,6 +191,7 @@ def google_login(request):
         name = idinfo['name']
         user = CustomUser.objects.filter(email=email)
         if user:
+            user = user[0]
             if user.login_method != GOOGLE:
                 raise ValidationError(
                     'Account with this email already exists.')

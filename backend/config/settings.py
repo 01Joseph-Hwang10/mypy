@@ -14,13 +14,13 @@ import os
 from datetime import timedelta
 from pathlib import Path
 import environ
+import inspect
 
 # Initialise environment variable
 
 env = environ.Env()
 
 environ.Env().read_env()
-
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -30,12 +30,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env('SECRET_KEY')[1:-1]
+SECRET_KEY = str(env('SECRET_KEY'))
 
 ALGORITHM = 'HS256'
 
 # Set it with environment variable at deployment
 SERVER_NUMBER = 0
+
+MAX_SERVER_NUMBER = int(env('MAX_SERVER_NUMBER'))
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(env('DEBUG') != 'False')
@@ -221,24 +223,24 @@ SIMPLE_JWT = {
 
 # Google OAuth
 
-GOOGLE_CLIENT_ID = env('GOOGLE_CLIENT_ID')
+GOOGLE_CLIENT_ID = str(env('GOOGLE_CLIENT_ID'))
 
 # Django Cors
 
 CORS_ALLOW_CREDENTIALS = True
 
 ALLOWED_HOSTS = [
-    host for host in env('ALLOWED_HOSTS')[1:-1].split('\n') if len(host) != 0
+    host for host in env('ALLOWED_HOSTS').split(' ') if len(host) != 0
 ]
 
 CORS_ORIGIN_WHITELIST = [
-    host for host in env('CORS_ORIGIN_WHITELIST')[1:-1].split('\n') if len(host) != 0
+    host for host in env('CORS_ORIGIN_WHITELIST').split(' ') if len(host) != 0
 ]
 
-CORS_ALLOWED_ORIGINS = [
-    host for host in env('CORS_ALLOWED_ORIGINS')[1:-1].split('\n') if len(host) != 0
-]
+# CORS_ALLOWED_ORIGINS = [
+#     host for host in env('CORS_ALLOWED_ORIGINS')[1:-1].split('\n') if len(host) != 0
+# ]
 
-CSRF_TRUSTED_ORIGINS = [
-    host for host in env('CSRF_TRUSTED_ORIGINS')[1:-1].split('\n') if len(host) != 0
-]
+# CSRF_TRUSTED_ORIGINS = [
+#     host for host in env('CSRF_TRUSTED_ORIGINS')[1:-1].split('\n') if len(host) != 0
+# ]

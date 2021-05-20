@@ -289,6 +289,17 @@ class CreateAppView(CreateAPIView):
             #     args_script = os.path.join(STATIC_ROOT, '__args.py')
             # shutil.copy(args_script, input_dir)
 
+            # Check if there is requirements.txt file
+            requirements_path = os.path.join(
+                script_directory, 'requirements.txt')
+            if os.path.isfile(requirements_path):
+                has_dependencies = True
+                new_requirements_path = os.path.join(
+                    save_directory, 'requirements.txt')
+                shutil.move(requirements_path, new_requirements_path)
+            else:
+                has_dependencies = False
+
             # Make flask app
             with open(os.path.join(script_directory, '__app.py'), 'w') as f:
                 write_flask_app(f, name, output_type)
@@ -305,7 +316,7 @@ class CreateAppView(CreateAPIView):
 
             # Make api Dockerfile
             with open(os.path.join(server_directory, 'Dockerfile'), 'w') as f:
-                write_dockerfile(f, output_type)
+                write_dockerfile(f, output_type, has_dependencies)
 
             # Make docker-compose file
             with open(os.path.join(save_directory, 'docker-compose.yml'), 'w') as f:
