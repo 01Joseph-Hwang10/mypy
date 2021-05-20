@@ -5,7 +5,7 @@ from config.settings import DEBUG, STATICFILES_DIRS, STATIC_ROOT
 STR = 'str'
 INT = 'int'
 FLOAT = 'float'
-COMPLEX = 'complex'
+# COMPLEX = 'complex'
 LIST = 'list'
 TUPLE = 'tuple'
 DICT = 'dict'
@@ -17,7 +17,7 @@ TYPES = [
     STR,
     INT,
     FLOAT,
-    COMPLEX,
+#     COMPLEX,
     LIST,
     TUPLE,
     DICT,
@@ -29,7 +29,7 @@ TYPES = [
 STR_TYPE = str()
 INT_TYPE = int()
 FLOAT_TYPE = float()
-COMPLEX_TYPE = complex()
+# COMPLEX_TYPE = complex()
 LIST_TYPE = list()
 TUPLE_TYPE = tuple()
 DICT_TYPE = dict()
@@ -41,7 +41,7 @@ TYPE_CLASSES = [
     STR_TYPE,
     INT_TYPE,
     FLOAT_TYPE,
-    COMPLEX_TYPE,
+#     COMPLEX_TYPE,
     LIST_TYPE,
     TUPLE_TYPE,
     DICT_TYPE,
@@ -55,7 +55,7 @@ TYPES_CHOICES = (
     (STR, 'String'),
     (INT, 'Integer'),
     (FLOAT, 'Float'),
-    (COMPLEX, 'Complex Number'),
+#     (COMPLEX, 'Complex Number'),
     (LIST, 'List'),
     (TUPLE, 'Tuple'),
     (DICT, 'Dictionary'),
