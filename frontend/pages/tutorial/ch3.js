@@ -22,7 +22,7 @@ function input() {
 					Among these, data types mypy supports are those of followings.
 				</p>
 				<h4>
-					Text / Numeric Types: str, int, float, complex <br />
+					Text / Numeric Types: str, int, float <br />
 					Sequence / Set Types: list, tuple, set, frozenset <br />
 					Mapping Type: dict <br />
 					Boolean Type: bool <br />
