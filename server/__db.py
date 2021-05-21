@@ -1,4 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
+# from app import app
 
 db = SQLAlchemy()
 
@@ -18,3 +19,8 @@ class App(db.Model):
     #     self.name = name
     #     self.port = port
     #     self.output_type = output_type
+
+
+# db.init_app(app)
+# db.app = app
+# db.create_all()

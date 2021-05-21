@@ -139,7 +139,7 @@ function logAndOutput() {
 					<span>def main():</span>
 					<span className="breakLine"></span>
 					<span className='tabbed'>markdown = &quot;&quot;&quot;</span>
-					<span className="tabbed"># This is sample markdown example!!\n</span>
+					<span className="tabbed"># This is sample markdown example!!\n\n</span>
 					<span className="tabbed">lorem ipsum dolor met ... \n</span>
 					<span className="tabbed">&quot;&quot;&quot;</span>
 					<span className="breakLine"></span>
@@ -198,9 +198,8 @@ function logAndOutput() {
 				</CodeBox>
 				<h3>#2.4 TXT output</h3>
 				<p>
-					Text output only returns result text at the app result. 
-					It is quite clean way to display the result since it does not have
-					any UI support or logging support. Just text at the result section at your app page.
+					Text output returns result text at the app result. 
+					It is quite clean way to display the result. 
 					<br /> <br />
 					At &quot;main&quot; function at &quot;index.py&quot;, string type value is recommended 
 					since otherwise the thing will not go on as you expected.

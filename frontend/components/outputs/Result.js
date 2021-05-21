@@ -1,5 +1,6 @@
-import { JSON } from '@src/constants';
+import { JSON, MD } from '@src/constants';
 import React from 'react';
+import ReactMarkdown from 'react-markdown';
 
 function ResultWrapper( {
 	outputType,
@@ -8,6 +9,7 @@ function ResultWrapper( {
 
 	if ( !outputType || !result ) return <></>;
 	if ( outputType == JSON ) return result.toString();
+	if ( outputType == MD ) return <ReactMarkdown>{result}</ReactMarkdown>;
 	return result;
 }
 

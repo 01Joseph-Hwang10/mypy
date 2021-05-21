@@ -6,9 +6,9 @@ from __config import (
     SQLALCHEMY_DATABASE_URI,
     SQLALCHEMY_TRACK_MODIFICATIONS,
 )
-from __db import db
-# from flask_apscheduler import APScheduler
+from flask_apscheduler import APScheduler
 from routes import delete, status, health_check, create
+from __db import db
 
 app = Flask(__name__)
 
@@ -37,7 +37,13 @@ db.init_app(app)
 db.app = app
 db.create_all()
 
-# scheduler = APScheduler(app)
+scheduler = APScheduler(app)
+
+
+@scheduler.task('interval', hour=1, id='storage_manager')
+def storage_manager():
+    # Needa make disk space validator
+    pass
 
 
 if __name__ == '__main__':

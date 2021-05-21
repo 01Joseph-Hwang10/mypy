@@ -71,7 +71,7 @@ def api():
             if type(result) != type(str()):
                 raise TypeError(
                     'The type of return value of your app should be "str"')
-            data = markdown(result)
+            data = result
             return Response(response=data, status=200, mimetype='text/html')
 
         if __MIMETYPE in [__constants.JPG, __constants.PNG]:

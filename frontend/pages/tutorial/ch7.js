@@ -8,7 +8,8 @@ function UsingModules() {
 		<TutorialLayout>
 			<div className="tutorialContent__root tutorial_usingModules">
 				<h1>Using Modules</h1>
-				<h2>We&apos;ll learn about how to install dependencies and to implement modules to your app</h2>
+				<h2>We&apos;ll learn about how to install dependencies and to implement modules to your app, and also going to see prohibited modules among python built in modules</h2>
+				<h3>#1. Dependencies</h3>
 				<p>
                     To install dependencies, you should
                     (1) Create requirements.txt file
@@ -41,6 +42,65 @@ function UsingModules() {
 				<CodeBox>
 					<span>&gt;&gt; pip freeze &gt; requirements.txt</span>
 				</CodeBox>
+				<h3>#2. Prohibited modules</h3>
+				<p>
+					There are some prohibited modules for security reasons, which are the followings: 
+					&quot;sys&quot;, &quot;subprocess&quot;. <br /> <br />
+					Also, following functions, data, and a class from &quot;os&quot;module are also prohibited to use
+				</p>
+				<p>
+					os.ctermid <br />
+					os.environ <br />
+					os.environb <br />
+					os.chdir <br />
+					os.fchdir <br />
+					os.getcwd <br />
+					os.fsencode <br />
+					os.fsdecode <br />
+					os.fspath <br />
+					os.PathLike <br />
+					os.getenv <br />
+					os.getenvb <br />
+					os.get_exec_path <br />
+					os.getegid <br />
+					os.geteuid <br />
+					os.getgid <br />
+					os.getgrouplist <br />
+					os.getgroups <br />
+					os.getlogin <br />
+					os.getpgid <br />
+					os.getpgrp <br />
+					os.getpid <br />
+					os.getppid <br />
+					os.getpriority <br />
+					os.PRIO_PROCESS <br />
+					os.PRIO_PGRP <br />
+					os.PRIO_USER <br />
+					os.getresuid <br />
+					os.getresgid <br />
+					os.getuid <br />
+					os.initgroups <br />
+					os.putenv <br />
+					os.setegid <br />
+					os.seteuid <br />
+					os.setgid <br />
+					os.setgroups <br />
+					os.setpgrp <br />
+					os.setpgid <br />
+					os.setpriority <br />
+					os.setregid <br />
+					os.setresgid <br />
+					os.setresuid <br />
+					os.setreuid <br />
+					os.getsid <br />
+					os.setsid <br />
+					os.setuid <br />
+					os.strerror <br />
+					os.supports_bytes_environ <br />
+					os.umask <br />
+					os.uname <br />
+					os.unsetenv <br />
+				</p>
 				<div className="tutorial_onContentNavigation">
 					<Link href='/tutorial/ch6'>
 						<span>
