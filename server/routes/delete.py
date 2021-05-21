@@ -1,9 +1,9 @@
 from flask import Blueprint, request, Response
-from ..config import CROSS_ORIGIN_WHITELIST, SECRET_KEY, UPLOAD_ROOT
+from __config import CROSS_ORIGIN_WHITELIST, SECRET_KEY, UPLOAD_ROOT
 import subprocess
 import os
 import shutil
-from ..db import db, App
+from __db import db, App
 from flask_cors import CORS
 
 bp = Blueprint('delete', __name__, url_prefix='/delete')

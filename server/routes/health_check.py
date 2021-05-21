@@ -1,8 +1,8 @@
 from flask import Blueprint, Response, request
-from ..config import CROSS_ORIGIN_WHITELIST, SERVER_ADDRESS
+from __config import CROSS_ORIGIN_WHITELIST, SERVER_ADDRESS
 from flask_cors import CORS
 import requests
-from ..db import App
+from __db import App
 from requests.exceptions import ProxyError
 
 

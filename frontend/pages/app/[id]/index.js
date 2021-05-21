@@ -148,7 +148,7 @@ function AppDetail( {
 					) )
 				}
 				<div className="runButtonWrapper">
-					<button className="runButton" onClick={executeApp}>{ExecuteIsLoading ? 'Loading...' : 'Run'}</button>
+					<button className="runButton" onClick={executeApp}>Run</button>
 				</div>
 			</section>
 			<section className="outputContainer">
@@ -156,7 +156,7 @@ function AppDetail( {
 					<h2 className="subject">Result</h2>
 					<div className="resultWrapper">
 						{
-							ExecuteIsLoading ? (
+							ExecuteIsLoading && Result !== null ? (
 								<div className="outputContainer__loading">Loading...</div>
 							) : (
 								<ResultWrapper 

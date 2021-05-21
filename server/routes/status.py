@@ -1,7 +1,7 @@
 from flask import Blueprint, Response
 import json
-from ..config import CROSS_ORIGIN_WHITELIST, SERVER_NUMBER
-from ..db import App
+from __config import CROSS_ORIGIN_WHITELIST, SERVER_NUMBER
+from __db import App
 from flask_cors import CORS
 
 bp = Blueprint('status', __name__, url_prefix='/status')

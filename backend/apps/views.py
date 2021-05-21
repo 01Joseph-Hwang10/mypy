@@ -335,7 +335,7 @@ class CreateAppView(CreateAPIView):
                             zf.write(filePath, relativePath)
 
             with open(zip_directory, 'rb') as zf:
-                server_url = 'http://localhost:5000/create'  # Temporal
+                server_url = 'http://localhost:5000/create/'  # Temporal
                 app_spec = {
                     'id': new_id,
                     'name': name,
@@ -533,7 +533,7 @@ class DeleteAppView(DestroyAPIView):
             # Delete every source of app
             id = int(self.request.query_params.get('id'))
             save_directory = os.path.join(MEDIA_ROOT, f'{id}/')
-            server_url = f'http://localhost:5000/delete'
+            server_url = f'http://localhost:5000/delete/'
             # subp = subprocess.Popen(
             #     ['docker-compose', 'down'], cwd=save_directory
             # )

@@ -1,13 +1,13 @@
 from flask import Blueprint, Response, request
-from ..config import CROSS_ORIGIN_WHITELIST, UPLOAD_ROOT, SECRET_KEY
+from __config import CROSS_ORIGIN_WHITELIST, UPLOAD_ROOT, SECRET_KEY
 import subprocess
-from ..functions import extract_recursively
+from __functions import extract_recursively
 import json
 from flask_cors import CORS
 import os
 from zipfile import ZipFile
 import re
-from ..db import App, db
+from __db import App, db
 import shutil
 
 
