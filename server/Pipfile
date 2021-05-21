@@ -9,6 +9,7 @@ flask-cors = "*"
 flask-sqlalchemy = "*"
 requests = "*"
 python-dotenv = "*"
+flask-apscheduler = "*"
 
 [dev-packages]
 

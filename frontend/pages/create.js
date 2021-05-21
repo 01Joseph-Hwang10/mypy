@@ -43,6 +43,7 @@ function create( {
 			button.disabled = false;
 			router.push( `/app/${id}` );
 		} else {
+			alert( data );
 			CreateAppError( data );
 			button.disabled = false;
 		}

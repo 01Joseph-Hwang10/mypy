@@ -47,8 +47,6 @@ function AppDetail( {
 	deleteAppSuccessful : DeleteAppSuccessful,
 	deleteAppError : DeleteAppError,
 	cleanAppPage : CleanAppPage,
-	ok,
-	data,
 } ) {
     
 	const router = useRouter();
@@ -150,7 +148,7 @@ function AppDetail( {
 					) )
 				}
 				<div className="runButtonWrapper">
-					<button className="runButton" onClick={executeApp}>Run</button>
+					<button className="runButton" onClick={executeApp}>{ExecuteIsLoading ? 'Loading...' : 'Run'}</button>
 				</div>
 			</section>
 			<section className="outputContainer">
@@ -158,7 +156,7 @@ function AppDetail( {
 					<h2 className="subject">Result</h2>
 					<div className="resultWrapper">
 						{
-							ExecuteIsLoading && Result !== null ? (
+							ExecuteIsLoading ? (
 								<div className="outputContainer__loading">Loading...</div>
 							) : (
 								<ResultWrapper 

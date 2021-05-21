@@ -22,6 +22,7 @@ from functions import extract_recursively
 import shutil
 import requests
 from time import sleep
+from flask_apscheduler import APScheduler
 
 app = Flask(__name__)
 
@@ -193,6 +194,8 @@ app.config.update(
 db.init_app(app)
 db.app = app
 db.create_all()
+
+scheduler = APScheduler(app)
 
 
 if __name__ == '__main__':

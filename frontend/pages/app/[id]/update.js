@@ -62,7 +62,7 @@ function UpdateAppSpec( {
 					<TextareaAutosize defaultValue={description} className="description" name='description' placeholder='description' />
 					<label htmlFor="cover_img">App Cover Image</label>
 					<input className="coverImg" name="cover_img" type="file" accept="image/*" />
-					<button className="submitButton" type='submit'>Update</button>
+					<button className="submitButton" type='submit'>{IsLoading ? 'Loading...' : 'Update'}</button>
 					{ErrorMessage && !IsSuccessful && <span className="errorMessage">{ErrorMessage}</span>}
 					<button className="cancelButton" onClick={backToAppPage}>Cancel</button>
 				</form>

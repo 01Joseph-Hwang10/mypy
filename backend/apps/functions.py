@@ -167,7 +167,23 @@ def filter_banned_syntax(codeline):
 
 def filter_banned_codeline(codeline):
 
-    banned_module = ['os', 'sys', 'subprocess', 'pathlib', 'tempfile']
+    src_directory = os.path.join(STATIC_PATH, 'src')
+
+    banned_module = ['sys', 'subprocess']
+    banned_os_module = []
+    warning_os_module = []
+
+    with open(os.path.join(src_directory, 'os_banned_list.txt'), 'r') as f:
+        for item in f:
+            item = item.replace('\n', '')
+            if len(item) != 0:
+                banned_os_module.append(str(item))
+
+    with open(os.path.join(src_directory, 'os_banned_warning_list.txt'), 'r') as f:
+        for item in f:
+            item = item.replace('\n', '')
+            if len(item) != 0:
+                warning_os_module.append(str(item))
 
     splitted_by_spaces = codeline.split()
     if len(splitted_by_spaces) != 0 and splitted_by_spaces[0] in ['from', 'import']:
@@ -175,6 +191,20 @@ def filter_banned_codeline(codeline):
         if splitted_by_dots[0] in banned_module:
             raise ValidationError(
                 f'Your app is trying to import banned python module: {", ".join(banned_module)}')
+
+    for item in banned_os_module:
+        regex = re.compile(item)
+        banned_syntax = regex.search(codeline)
+        if banned_syntax:
+            raise ValidationError(
+                f'Your app is trying to use banned os module\'s function, object, or data: {item}')
+
+    for item in warning_os_module:
+        regex = re.compile(item)
+        banned_syntax = regex.search(codeline)
+        if banned_syntax:
+            raise ValidationError(
+                f'Your app is trying to use banned os module\'s function, object, or data: {item}')
 
     return codeline
 
