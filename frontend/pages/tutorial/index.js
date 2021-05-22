@@ -24,6 +24,31 @@ function Tutorial() {
 							Quick Start <i className="bi bi-arrow-right-circle"></i>
 						</span>
 					</Link>
+					<Link href='/tutorial/ch2'>
+						<span>
+							Deploying on mypy <i className="bi bi-arrow-right-circle"></i>
+						</span>
+					</Link>
+					<Link href='/tutorial/ch3'>
+						<span>
+							Input <i className="bi bi-arrow-right-circle"></i>
+						</span>
+					</Link>
+					<Link href='/tutorial/ch4'>
+						<span>
+							Error and Output <i className="bi bi-arrow-right-circle"></i>
+						</span>
+					</Link>
+					<Link href='/tutorial/ch5'>
+						<span>
+							Customize app page <i className="bi bi-arrow-right-circle"></i>
+						</span>
+					</Link>
+					<Link href='/tutorial/ch7'>
+						<span>
+							Using Modules <i className="bi bi-arrow-right-circle"></i>
+						</span>
+					</Link>
 				</div>
 			</div>
 		</TutorialLayout>

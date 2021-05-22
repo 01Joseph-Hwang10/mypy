@@ -1,15 +1,46 @@
 @use '../../transition';
+@use '../../base';
+@use '../../shadow';
 
 #navigation {
+    .logoWrapper {
+        flex-grow: 1;
+    }
     .popUpMenu {
-        button {
+        position: relative;
+        .popUpMenuButton {
             font-size: 2rem;
             margin-right: 0.5rem;
-            // @extend %all-on-change;
         }
-        button:hover {
+        .popUpMenuButton:hover {
             cursor: pointer;
-            // transform: scale(1.25);
+        }
+        .popUpMenuItems {
+            @extend %shadow-lg;
+            display: flex;
+            flex-direction: column;
+            justify-items: start;
+            align-items: center;
+            position: fixed;
+            transform-origin: top center;
+            top: 4.1rem;
+            z-index: 3;
+            right: 0;
+            width: 100vw;
+            background-color: $white-edge;
+            transform: rotateX(-90deg);
+            @extend %transform-on-change;
+            button {
+                width: 100%;
+                height: 2.5rem;
+                font-size: large;
+                color: $highlight;
+                border-bottom: 1px solid $line;
+                @extend %all-on-change;
+            }
+            button:focus {
+                background-color: $line;
+            }
         }
     }
 }

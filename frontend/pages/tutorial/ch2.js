@@ -15,10 +15,15 @@ function deployingOnMypy() {
 				<p>
 					Before start, be aware that mypy is currently not for serving server like flask, django, etc.
 					Mypy currently is focused at serving python written IPO apps.(IPO stands for Input-Process-Output)
+					<br /> <br />
 					The fundamental purpose of mypy is to help users focus on their app&apos;s functionality by 
 					automatically generate input UI and to simplify the deployment process which can be used at personal app using,
-					prototyping, etc. So in sum, mypy is a platform for uploading python written IPO apps which recieve input by python console, 
+					prototyping, etc. 
+					<br /> <br />
+					So in sum, mypy is a platform for uploading python written IPO apps which recieve input by python console, 
 					automatically generating UI and simplifing the deployment process.
+					<br /> <br />
+					Also, currently creating the app is available only in desktop, PC. 
 				</p>
 				<h3>#1. Set Up The Entry Point</h3>
 				<p>

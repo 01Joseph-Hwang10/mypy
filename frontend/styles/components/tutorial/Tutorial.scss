@@ -10,16 +10,14 @@ $tutorial-content-lg: 80%;
 
 .tutorialContentRoot {
     .tutorialContent {
-        width: $tutorial-content-xs;
-    }
-
-    .tutorialSideBarWrapper {
-        width: calc(100% - #{$tutorial-content-xs});
+        width: 100%;
+        padding: 1.5rem 0.5rem;
     }
 }
 
 @include small {
     .tutorialContentRoot {
+        padding: 2rem;
         .tutorialContent {
             width: $tutorial-content-sm;
         }
@@ -58,7 +56,6 @@ $tutorial-content-lg: 80%;
     @extend %flex-box;
     justify-content: end;
     position: relative;
-    padding: 2rem;
 
     .tutorialSideBarWrapper {
         @extend %flex-box;

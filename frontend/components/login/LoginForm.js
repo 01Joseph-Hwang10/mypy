@@ -63,7 +63,7 @@ function LoginForm( {
 			) {
 				cleanUp();
 			} else {
-				router.push( '/' );
+				router.push( '/mypy' );
 			}
 			ShowMessage( { message : "Hello :)", } );
 		} else {

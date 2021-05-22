@@ -15,3 +15,7 @@
 %all-on-change {
     transition: all 0.2s ease;
 }
+
+%transform-on-change {
+    transition: transform 0.2s ease
+}

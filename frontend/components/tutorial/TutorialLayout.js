@@ -7,9 +7,13 @@ function TutorialLayout( {
 
 	return (
 		<div className='tutorialContentRoot'>
-			<section className='tutorialSideBarWrapper'>
-				<SideNav />
-			</section>
+			{
+				typeof window === 'object' && window?.matchMedia( '(min-width: 640px)' )?.matches && (
+					<section className='tutorialSideBarWrapper'>
+						<SideNav />
+					</section>
+				)
+			}
 			<section className="tutorialContent">
 				{children}
 			</section>
