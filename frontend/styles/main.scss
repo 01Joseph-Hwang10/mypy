@@ -5,11 +5,10 @@ $main-content-lg: 70%;
 
 #contentRoot {
     width: 100%;
-    padding-right: 1rem;
     padding-top: 2rem;
-    padding-left: 1rem;
     @extend %flex-box;
     justify-content: start;
+    flex-direction: column-reverse;
 }
 
 .mainContent {
@@ -21,12 +20,19 @@ $main-content-lg: 70%;
 
 // Temporary, change when building mobile UI
 .mainContent {
-    width: $main-content-sm;
+    width: 100%;
+    padding: 0 0.5rem;
 }
 
 @include small {
+    #contentRoot {
+        padding-left: 1rem;
+        padding-right: 1rem;
+        flex-direction: row;
+    }
     .mainContent {
         width: $main-content-sm;
+        padding: 0 0.5rem;
     }
 }
 
@@ -34,6 +40,12 @@ $main-content-lg: 70%;
     .mainContent {
         width: $main-content-lg;
     }
+}
+
+.mobileSideBarWrapper {
+    width: 100%;
+    padding: 0 0.5rem;
+    margin-bottom: 1rem;
 }
 
 .sideBarWrapper {
@@ -52,6 +64,7 @@ $main-content-lg: 70%;
 @include small {
     .sideBarWrapper {
         width: calc(100% - #{$main-content-sm});
+        margin-top: 6rem;
     }
 }
 

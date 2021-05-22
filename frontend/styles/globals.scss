@@ -78,13 +78,16 @@ textarea {
 
 @import 'mixins/truncate';
 @import 'mixins/codeBox';
+@import 'mixins/default';
 
 @import 'components/NavBar';
+@import 'components/mobile/MobileNavBar';
 @import 'pages/Home';
 @import 'pages/Login';
 @import 'pages/Feedback';
 @import 'pages/app/AppDetail';
 @import 'pages/app/UpdateAppSpec';
+@import 'components/output/result';
 @import 'components/Search';
 @import 'components/AppList';
 @import 'components/AppCard';

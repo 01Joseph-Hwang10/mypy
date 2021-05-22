@@ -6,7 +6,7 @@ function LayoutManager( {
 	children,
 } ) {
 
-	if ( typeof window === 'object' && !window.matchMedia( '(min-width: 640px)' ).matches ) {
+	if ( typeof window === 'object' && !window?.matchMedia( '(min-width: 640px)' )?.matches ) {
 		return (
 			<MobileLayout>
 				{children}

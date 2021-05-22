@@ -223,8 +223,8 @@ def write_flask_app(interface, name, output_type):
     with open(os.path.join(STATIC_PATH, 'flask_server/server/app/__app.py'), 'r') as f:
         codelines = f.readlines()
 
-    if output_type == MD:
-        interface.write('from markdown import markdown\n')
+    # if output_type == MD:
+    #     interface.write('from markdown import markdown\n')
 
     for codeline in codelines:
         new_codeline = codeline.replace('$NAME', str(

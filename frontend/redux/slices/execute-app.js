@@ -32,7 +32,7 @@ export const {
 		executeAppError : ( state, { payload, } ) => {
 			state.isSuccessful = false;
 			state.loading = false;
-			state.error = payload;
+			state.result = payload;
 		},
 		cleanAppPage : ( state ) => {
 			state.result = null;
@@ -57,7 +57,7 @@ export const executeApp = async ( postData, { serverNumber, port, name, } ) => {
 	} catch ( { response : { data, }, } ) {
 		return {
 			ok : false,
-			data,
+			data : data,
 		};
 	}
 };

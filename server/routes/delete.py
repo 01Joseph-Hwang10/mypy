@@ -20,7 +20,7 @@ def delete_app():
         if secret_key != SECRET_KEY:
             raise ValueError('Unauthorized request')
         app_id = request.form['id']
-        save_directory = os.path.join(UPLOAD_ROOT, app_id)
+        save_directory = os.path.join(UPLOAD_ROOT, str(app_id))
         if os.path.exists(save_directory):
             subp = subprocess.Popen(
                 ['docker-compose', 'down'], cwd=save_directory

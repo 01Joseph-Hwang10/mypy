@@ -13,7 +13,8 @@ function customizeAppPage() {
 					<br /> <br />
 					If you are the author of the app, you will have the access to the button 
 					&quot;Update&quot; and &quot;Delete&quot;. By clicking update, you can change 
-					input description, app cover image, app description, etc.
+					app cover image, app description, etc. 
+					Also, you can click pencil button with square on it to edit input name and input description.
 				</p>
 				<div className="tutorial_onContentNavigation">
 					<Link href='/tutorial/ch4'>
@@ -21,9 +22,9 @@ function customizeAppPage() {
 							Log and Output <i className="bi bi-arrow-left-circle"></i>
 						</span>
 					</Link>
-					<Link href='/tutorial/ch6'>
+					<Link href='/tutorial/ch7'>
 						<span>
-							Using As API <i className="bi bi-arrow-right-circle"></i>
+							Using Modules <i className="bi bi-arrow-right-circle"></i>
 						</span>
 					</Link>
 				</div>

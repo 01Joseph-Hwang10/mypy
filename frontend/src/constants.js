@@ -38,3 +38,5 @@ export const PYTHON_YELLOW = '#ffd343';
 export const JSON = 'application/json';
 export const TXT = 'text/plain';
 export const MD = 'text/markdown';
+export const JPG = 'image/jpeg';
+export const PNG = 'image/png';

@@ -29,12 +29,20 @@ function MypyPage( {
 					)
 				}
 			</section>
-			<section className="sideBarWrapper">
-				<MypySideBar />
-				<div id="loginFormWrapper" style={animationStyle}>
-					<LoginForm />
-				</div>
-			</section>
+			{
+				typeof window === 'object' && !window?.matchMedia( '(min-width: 640px)' )?.matches ? (
+					<section className="mobileSideBarWrapper">
+						<MypySideBar />
+					</section>
+				) : (
+					<section className="sideBarWrapper">
+						<MypySideBar />
+						<div id="loginFormWrapper" style={animationStyle}>
+							<LoginForm />
+						</div>
+					</section>
+				)
+			}
 		</div>
 	);
 }

@@ -56,14 +56,16 @@ function PrivateMypyAppList( {
 					header={
 						<>
 							<AppListHeader name={'My Apps'} />
-							<Link href='/create'>
-								<button className="createButton buttonRipple">
-									<div>
-									Create new app
-									</div>
-									<i className="bi bi-plus-circle-fill"></i>
-								</button>
-							</Link>
+							{
+								typeof window === 'object' && window?.matchMedia( '(min-width: 640px)' )?.matches && ( <Link href='/create'>
+									<button className="createButton buttonRipple">
+										<div>
+											Create new app
+										</div>
+										<i className="bi bi-plus-circle-fill"></i>
+									</button>
+								</Link> )
+							}
 						</>
 					}
 				/>

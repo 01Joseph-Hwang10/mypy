@@ -4,6 +4,7 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { propagateNewItems, mapStorageItemsToProps } from '@slices/exportApp';
 import { showMessage } from '@redux/slices/message';
+import { useRouter } from 'next/router';
 
 function Initialize( {
 	logout : Logout,
@@ -17,6 +18,8 @@ function Initialize( {
 	retrieveUserLoading : RetrieveUserLoading,
 } ) {
 
+	const router = useRouter();
+
 	useEffect( async () => {
 		AuthLoading();
 		RetrieveUserLoading();
@@ -29,6 +32,9 @@ function Initialize( {
 				RetrieveMeSuccessful( data );
 				const { imported, } = data;
 				PropagateNewItems( imported );
+				if ( typeof window === 'object' && !window?.matchMedia( '(min-width: 640px)' )?.matches ) {
+					router.push( '/mypy/' );
+				}
 			} else {
 				signOut();
 				Logout();

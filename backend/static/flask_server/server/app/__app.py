@@ -5,6 +5,7 @@ from flask_cors import cross_origin
 from __main import execute
 import __constants
 import io
+import base64
 
 app = Flask(__name__)
 
@@ -75,7 +76,7 @@ def api():
             return Response(response=json.dumps(data), status=200)
 
         if __MIMETYPE in [__constants.JPG, __constants.PNG]:
-            if type(result) == type(bytes):
+            if type(result) == type(bytes()):
                 data = result
             else:
                 try:
@@ -83,14 +84,16 @@ def api():
                     ext = __MIMETYPE.split('/')[1].upper()
                     result.save(temp, format=ext)
                     data = temp.getvalue()
-                except:
+                except Exception as e:
                     raise TypeError(
-                        """
+                        f"""
+                        {str(e)}\n
                         Not a valid type of return value of your app. 
                         The return value of your app should be either 
                         Image object provided by PIL library or bytes.
                         """
                     )
+                data = base64.b64encode(data)
             return Response(response=data, status=200, mimetype=__MIMETYPE)
 
         if __MIMETYPE in __constants.OUTPUT_TYPES:

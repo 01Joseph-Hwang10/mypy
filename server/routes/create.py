@@ -1,5 +1,5 @@
 from flask import Blueprint, Response, request
-from __config import CROSS_ORIGIN_WHITELIST, UPLOAD_ROOT, SECRET_KEY
+from __config import CROSS_ORIGIN_WHITELIST, UPLOAD_ROOT, SECRET_KEY, DEBUG
 import subprocess
 from __functions import extract_recursively
 import json
@@ -41,48 +41,54 @@ def create_app():
 
         # sleep(30)
 
-        subp1 = subprocess.Popen(
-            ['docker-compose', 'up', '--build', '-d'],
-            cwd=save_directory,
-        )
-        subp1.wait()
-
-        subp2 = subprocess.Popen(
-            ['docker', 'ps'],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT
-        )
-        subp2.wait()
-
-        process_output, _ = subp2.communicate()
-        process_output = process_output.decode('utf-8')
-
-        output_lines = process_output.split('\n')
-        del output_lines[0]
-
         port = app_spec['port']
-        deployment_successful = False
-        if output_lines and len(output_lines) != 0:
-            for output in output_lines:
-                output_names = output.split()
-                if not output_names:
-                    continue
-                splitted = output_names[-1].split('_')
-                regex = re.compile('server')
-                server_app_id = False
-                for i in splitted:
-                    does_exist = regex.search(i)
-                    if does_exist:
-                        app_id_target = i.replace('server', '')
-                        try:
-                            server_app_id = int(app_id_target)
-                        except:
-                            pass
-                if str(server_app_id) == str(app_id):
-                    deployment_successful = True
+        if DEBUG:
+            subp1 = subprocess.Popen(
+                ['docker-compose', 'up', '--build'],
+                cwd=save_directory,
+            )
+        else:
+            subp1 = subprocess.Popen(
+                ['docker-compose', 'up', '--build', '-d'],
+                cwd=save_directory,
+            )
+            subp1.wait()
 
-        if not deployment_successful:
-            raise BufferError('Deployment failed! Please try it later')
+            subp2 = subprocess.Popen(
+                ['docker', 'ps'],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT
+            )
+            subp2.wait()
+
+            process_output, _ = subp2.communicate()
+            process_output = process_output.decode('utf-8')
+
+            output_lines = process_output.split('\n')
+            del output_lines[0]
+
+            deployment_successful = False
+            if output_lines and len(output_lines) != 0:
+                for output in output_lines:
+                    output_names = output.split()
+                    if not output_names:
+                        continue
+                    splitted = output_names[-1].split('_')
+                    regex = re.compile('server')
+                    server_app_id = False
+                    for i in splitted:
+                        does_exist = regex.search(i)
+                        if does_exist:
+                            app_id_target = i.replace('server', '')
+                            try:
+                                server_app_id = int(app_id_target)
+                            except:
+                                pass
+                    if str(server_app_id) == str(app_id):
+                        deployment_successful = True
+
+            if not deployment_successful:
+                raise BufferError('Deployment failed! Please try it later')
 
         name = app_spec['name']
         output_type = app_spec['output_type']

@@ -102,9 +102,9 @@ function UsingModules() {
 					os.unsetenv <br />
 				</p>
 				<div className="tutorial_onContentNavigation">
-					<Link href='/tutorial/ch6'>
+					<Link href='/tutorial/ch5'>
 						<span>
-							Using As API <i className="bi bi-arrow-left-circle"></i>
+							Customize app page <i className="bi bi-arrow-left-circle"></i>
 						</span>
 					</Link>
 				</div>

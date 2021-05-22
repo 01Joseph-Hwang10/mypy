@@ -95,23 +95,27 @@ function MypySideBar( {
 					!UpdateIsSuccessful && <span className="mypySideBar__errorMessage">{UpdateError}</span>
 				}
 			</div>
-			<div className="mypySideBar__extraContent">
-				<div className="sideBar__aboutApp">
-					<span>MYPY: Python app everywhere!</span>
-					<span>
-						MYPY serves your python app online! 
-						<Link href='/about'>Learn more!</Link>
-					</span>
-				</div>
-				<div className="sideBar__buttons">
-					<Link href='/create'>
-						<button className="buttonRipple">Create new</button>
-					</Link>
-					<Link href='/tutorial'>
-						<button className="buttonRipple">Tutorial</button>
-					</Link>
-				</div>
-			</div>
+			{
+				typeof window === 'object' && window?.matchMedia( '(min-width: 640px)' )?.matches && (
+					<div className="mypySideBar__extraContent">
+						<div className="sideBar__aboutApp">
+							<span>MYPY: Python app everywhere!</span>
+							<span>
+								MYPY serves your python app online! 
+								<Link href='/tutorial/ch0'>Learn more!</Link>
+							</span>
+						</div>
+						<div className="sideBar__buttons">
+							<Link href='/create'>
+								<button className="buttonRipple">Create new</button>
+							</Link>
+							<Link href='/tutorial'>
+								<button className="buttonRipple">Tutorial</button>
+							</Link>
+						</div>
+					</div>
+				)
+			}
 		</div>
 	);
 }

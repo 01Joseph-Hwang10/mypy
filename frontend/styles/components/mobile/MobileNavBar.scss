@@ -1,0 +1,15 @@
+@use '../../transition';
+
+#navigation {
+    .popUpMenu {
+        button {
+            font-size: 2rem;
+            margin-right: 0.5rem;
+            // @extend %all-on-change;
+        }
+        button:hover {
+            cursor: pointer;
+            // transform: scale(1.25);
+        }
+    }
+}

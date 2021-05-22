@@ -50,6 +50,7 @@ from common.functions import get_cookie
 from users.serializers import LightWeightUserSerializer
 import requests
 from time import sleep
+from django.core.exceptions import ValidationError
 
 
 class CreateAppView(CreateAPIView):
@@ -162,6 +163,21 @@ class CreateAppView(CreateAPIView):
             # Read code
             with open(os.path.join(script_directory, 'index.py'), 'r') as f:
                 codelines = f.readlines()
+            for i in range(len(codelines)):
+                if detect_main_function(codelines[i]):
+                    j = 1
+                    while len(codelines[i+j].replace(' ', '').replace('\n', '')) == 0:
+                        j += 1
+                    indented_codeline = codelines[i+j]
+                    print(indented_codeline)
+                    indentation = ''
+                    for k in range(len(indented_codeline)):
+                        if indented_codeline[k] in [' ', '\t']:
+                            indentation += indented_codeline[k]
+                        else:
+                            break
+                    break
+
             # Modify code
             with open(os.path.join(script_directory, 'index.py'), 'w') as f:
                 # f.write('import os\n')
@@ -207,16 +223,21 @@ class CreateAppView(CreateAPIView):
                     spec_name = spec['name']
                     spec_type = spec['type']
                     if spec_type in TYPES:
-                        new_line = f"\t{spec_name}={spec_type}(__variables['{spec_name}'])\n"
+                        new_line = f"{indentation}{spec_name}={spec_type}(__variables['{spec_name}'])\n"
                     else:
-                        new_line = f"\t{spec_name}=__files['{spec_name}']"
+                        new_line = f"{indentation}{spec_name}=__files['{spec_name}']"
                     to_inject.append(new_line)
+                main_func_exists = False
                 for codeline in codelines:
                     if detect_main_function(codeline):
+                        main_func_exists = True
                         for injecting_codeline in to_inject:
                             f.write(injecting_codeline)
                     else:
                         f.write(codeline)
+                if not main_func_exists:
+                    raise ValidationError(
+                        'Cannot detect main function which should be in index.py')
 
             for file_path in py_dirs:
                 with open(os.path.join(script_directory, file_path), 'r') as f:
@@ -294,9 +315,9 @@ class CreateAppView(CreateAPIView):
                 script_directory, 'requirements.txt')
             if os.path.isfile(requirements_path):
                 has_dependencies = True
-                new_requirements_path = os.path.join(
-                    save_directory, 'requirements.txt')
-                shutil.move(requirements_path, new_requirements_path)
+                # new_requirements_path = os.path.join(
+                #     server_directory, 'requirements.txt')
+                # shutil.move(requirements_path, new_requirements_path)
             else:
                 has_dependencies = False
 

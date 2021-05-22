@@ -1,0 +1,15 @@
+@use '../../borderRadius';
+
+.resultWrapper {
+    min-height: 4rem;
+    .result__md {
+        width: 100%;
+        height: 100%;
+        background-color: $white-edge;
+        @extend %rounded-lg;
+        padding: 1rem;
+    }
+    .result__json, .result__other {
+        padding: 1rem;
+    }
+}

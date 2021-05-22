@@ -1,6 +1,7 @@
 import os
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+print(BASE_DIR)
 SERVER_NUMBER = int(os.environ.get('SERVER_NUMBER'))
 SERVER_ADDRESS = os.environ.get('SERVER_ADDRESS')
 

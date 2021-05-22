@@ -71,8 +71,8 @@ function create( {
 						<select className="outputType" name="output_type">
 							<option value="application/json" selected>JSON</option>
 							<option value="text/markdown">Markdown</option>
-							<option value="image/jpeg">JPG/JPEG</option>
-							<option value="image/png">PNG</option>
+							{/* <option value="image/jpeg">JPG/JPEG</option> */}
+							{/* <option value="image/png">PNG</option> */}
 							<option value="text/plain">Plain text</option>
 						</select>
 					</div>

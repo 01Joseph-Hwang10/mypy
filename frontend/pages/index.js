@@ -36,7 +36,6 @@ function Home( {
 	toggleSignUp : ToggleSignUp,
 } ) {
 
-
 	const animationStyle = {
 		transform : `translateX(${translateDistance}rem)`,
 	};
@@ -64,22 +63,30 @@ function Home( {
 	return (
 		<div id="contentRoot">
 			<section className="mainContent">
-				<Link href='/create'>
-					<button className="createButton buttonRipple">
-						<div>
+				{
+					typeof window === 'object' && window?.matchMedia( '(min-width: 640px)' )?.matches && (
+						<Link href='/create'>
+							<button className="createButton buttonRipple">
+								<div>
 							Create new app
-						</div>
-						<i className="bi bi-plus-circle-fill"></i>
-					</button>
-				</Link>
+								</div>
+								<i className="bi bi-plus-circle-fill"></i>
+							</button>
+						</Link>
+					)
+				}
 				<AppList {...appListProps} />
 			</section>
-			<section className="sideBarWrapper">
-				<SideBar />
-				<div id="loginFormWrapper" style={animationStyle}>
-					<LoginForm />
-				</div>
-			</section>
+			{
+				typeof window === 'object' && window?.matchMedia( '(min-width: 640px)' )?.matches && (
+					<section className="sideBarWrapper">
+						<SideBar />
+						<div id="loginFormWrapper" style={animationStyle}>
+							<LoginForm />
+						</div>
+					</section>
+				)
+			}
 		</div>
 	);
 }
