@@ -72,7 +72,7 @@ def api():
                 raise TypeError(
                     'The type of return value of your app should be "str"')
             data = result
-            return Response(response=data, status=200, mimetype='text/html')
+            return Response(response=json.dumps(data), status=200)
 
         if __MIMETYPE in [__constants.JPG, __constants.PNG]:
             if type(result) == type(bytes):

@@ -12,9 +12,9 @@
 
 - Test various output types
 
-- Set disk space limit
+<!-- - Set disk space limit -->
 
-- Server ochestration
+- Server ochestration (Do it after server deployment)
 
 <!-- - Check if function that removes os, etc works properly -->
 

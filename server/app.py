@@ -1,4 +1,4 @@
-from flask import Flask, redirect
+from flask import Flask
 from __config import (
     DEBUG,
     SECRET_KEY,
@@ -6,20 +6,19 @@ from __config import (
     SQLALCHEMY_DATABASE_URI,
     SQLALCHEMY_TRACK_MODIFICATIONS,
 )
-from flask_apscheduler import APScheduler
-from routes import delete, status, health_check, create
+from routes import (
+    delete,
+    status,
+    health_check,
+    create,
+    root
+)
 from __db import db
+from __scheduler import scheduler, storage_manager
 
 app = Flask(__name__)
 
-
-@app.route('/', methods=['GET'])
-def root():
-
-    # Temporal redirection
-    return redirect('http://localhost:3000')
-
-
+app.register_blueprint(root.bp)
 app.register_blueprint(status.bp)
 app.register_blueprint(health_check.bp)
 app.register_blueprint(create.bp)
@@ -37,13 +36,8 @@ db.init_app(app)
 db.app = app
 db.create_all()
 
-scheduler = APScheduler(app)
-
-
-@scheduler.task('interval', hour=1, id='storage_manager')
-def storage_manager():
-    # Needa make disk space validator
-    pass
+scheduler.init_app(app)
+scheduler.start()
 
 
 if __name__ == '__main__':
