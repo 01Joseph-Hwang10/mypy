@@ -116,7 +116,7 @@ function AppDetail( {
 					<div className='infoWrapper'>
 						<h2>{name}</h2>
 						<h3>Exports: {exports}</h3>
-						<span className="link">API Endpoint: <i>{`${BASE_APP_URL}:${port}/${name}`}</i></span>
+						{/*<span className="link">API Endpoint: <i>{`${BASE_APP_URL}:${port}/${name}`}</i></span>*/}
 						<h4>Created by: {CreatedUserName}</h4>
 					</div>
 					<div className="buttonWrapper">
